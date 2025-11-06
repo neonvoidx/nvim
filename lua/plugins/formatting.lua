@@ -20,6 +20,7 @@ return {
         json = { "prettierd" },
         yaml = { "prettierd" },
         lua = { "stylua" },
+        kdl = { "kdlfmt" },
         python = { "isort", "black" },
         markdown = { "prettierd", "markdownlint-cli2", "markdown-toc" },
         ["markdown.mdx"] = { "prettierd", "markdownlint-cli2", "markdown-toc" },

@@ -259,6 +259,7 @@ return {
           "prettierd",
           "markdownlint-cli2",
           "markdown-toc",
+          "kdlfmt",
         },
       })
     end,
@@ -285,6 +286,7 @@ return {
         "clangd",
         "zls",
         "emmet_language_server",
+        "fish_lsp",
       },
     },
     dependencies = { "mason-org/mason.nvim", "neovim/nvim-lspconfig" },
