@@ -89,14 +89,14 @@ return {
             },
             ["cmd_runner"] = { opts = { requires_approval = false } },
           },
-          roles = {
-            user = " ",
-            llm = function(_)
-              return " "
-            end,
-          },
         },
         inline = { adapter = "copilot" },
+        roles = {
+          user = " ",
+          llm = function(_)
+            return " "
+          end,
+        },
       },
       adapters = {
         http = {
