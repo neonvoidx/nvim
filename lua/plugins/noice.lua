@@ -4,135 +4,19 @@ return {
     "MunifTanjim/nui.nvim",
   },
   opts = {
-    cmdline = {
-      enabled = true, -- enables the Noice cmdline UI
-      view = "cmdline_popup", -- view for rendering the cmdline. Change to `cmdline` to get a classic cmdline at the bottom
-      opts = {}, -- global options for the cmdline. See section on views
-      format = {
-        cmdline = { pattern = "^:", icon = "", lang = "vim" },
-        search_down = { kind = "search", pattern = "^/", icon = " ", lang = "regex" },
-        search_up = { kind = "search", pattern = "^%?", icon = " ", lang = "regex" },
-        filter = { pattern = "^:%s*!", icon = "$", lang = "bash" },
-        lua = { pattern = { "^:%s*lua%s+", "^:%s*lua%s*=%s*", "^:%s*=%s*" }, icon = "", lang = "lua" },
-        help = { pattern = "^:%s*he?l?p?%s+", icon = "" },
-        input = { view = "cmdline_input", icon = "󰥻 " }, -- Used by input()
-      },
-    },
-    messages = {
-      -- NOTE: If you enable messages, then the cmdline is enabled automatically.
-      -- This is a current Neovim limitation.
-      enabled = true, -- enables the Noice messages UI
-      view = "notify", -- default view for messages
-      view_error = "notify", -- view for errors
-      view_warn = "notify", -- view for warnings
-      view_history = "messages", -- view for :messages
-      view_search = "virtualtext", -- view for search count messages. Set to `false` to disable
-    },
-    popupmenu = {
-      enabled = true, -- enables the Noice popupmenu UI
-      backend = "nui", -- backend to use to show regular cmdline completions
-      ---@type NoicePopupmenuItemKind|false
-      -- Icons for completion item kinds (see defaults at noice.config.icons.kinds)
-      kind_icons = {}, -- set to `false` to disable icons
-    },
-    -- default options for require('noice').redirect
-    -- see the section on Command Redirection
-    ---@type NoiceRouteConfig
-    redirect = {
-      view = "popup",
-      filter = { event = "msg_show" },
-    },
-    commands = {
-      history = {
-        -- options for the message history that you get with `:Noice`
-        view = "split",
-        opts = { enter = true, format = "details" },
-        filter = {
-          any = {
-            { event = "notify" },
-            { error = true },
-            { warning = true },
-            { event = "msg_show", kind = { "" } },
-            { event = "lsp", kind = "message" },
-          },
-        },
-      },
-      -- :Noice last
-      last = {
-        view = "popup",
-        opts = { enter = true, format = "details" },
-        filter = {
-          any = {
-            { event = "notify" },
-            { error = true },
-            { warning = true },
-            { event = "msg_show", kind = { "" } },
-            { event = "lsp", kind = "message" },
-          },
-        },
-        filter_opts = { count = 1 },
-      },
-      -- :Noice errors
-      errors = {
-        -- options for the message history that you get with `:Noice`
-        view = "popup",
-        opts = { enter = true, format = "details" },
-        filter = { error = true },
-        filter_opts = { reverse = true },
-      },
-      all = {
-        -- options for the message history that you get with `:Noice`
-        view = "split",
-        opts = { enter = true, format = "details" },
-        filter = {},
-      },
-    },
-    notify = {
-      enabled = true,
-      view = "notify",
-    },
     lsp = {
-      progress = {
-        enabled = true,
-        -- Lsp Progress is formatted using the builtins for lsp_progress. See config.format.builtin
-        -- See the section on formatting for more details on how to customize.
-        --- @type NoiceFormat|string
-        format = "lsp_progress",
-        --- @type NoiceFormat|string
-        format_done = "lsp_progress_done",
-        throttle = 1000 / 30, -- frequency to update lsp progress message
-        view = "mini",
-      },
-      signature = {
-        enabled = true,
-        auto_open = {
-          enabled = true,
-          trigger = true, -- Automatically show signature help when typing a trigger character from the LSP
-          luasnip = true, -- Will open signature help when jumping to Luasnip insert nodes
-          throttle = 50, -- Debounce lsp signature help request by 50ms
-        },
-        view = nil, -- when nil, use defaults from documentation
-        ---@type NoiceViewOptions
-        opts = {}, -- merged with defaults from documentation
-      },
-      message = {
-        -- Messages shown by lsp servers
-        enabled = true,
-        view = "notify",
-        opts = {},
+      progress = { enabled = true },
+      override = {
+        ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
+        ["vim.lsp.util.stylize_markdown"] = true,
       },
     },
-    health = {
-      checker = true, -- Disable if you don't want health checks to run
-    },
-    ---@type NoicePresets
     presets = {
-      bottom_search = true, -- use a classic bottom cmdline for search
-      command_palette = true, -- position the cmdline and popupmenu together
-      long_message_to_split = true, -- long messages will be sent to a split
-      inc_rename = false, -- enables an input dialog for inc-rename.nvim
-      lsp_doc_border = true, -- add a border to hover docs and signature help
+      bottom_search = true,
+      command_palette = true,
+      inc_rename = true,
+      lsp_doc_border = true,
+      long_message_to_split = false,
     },
-    throttle = 1000 / 30, -- how frequently does Noice need to check for ui updates? This has no effect when in blocking mode.
   },
 }
