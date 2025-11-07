@@ -52,6 +52,22 @@ return {
     input = { enabled = true },
     lazygit = { enabled = true },
     picker = {
+      layout = {
+        layout = {
+          backdrop = false,
+          width = 0.99,
+          min_width = 80,
+          height = 0.99,
+          min_height = 30,
+          box = "vertical",
+          border = true,
+          title = "{title} {live} {flags}",
+          title_pos = "center",
+          { win = "input", height = 1, border = "bottom" },
+          { win = "list", border = "none", height = 0.4, wo = { wrap = true } },
+          { win = "preview", title = "{preview}", height = 0.6, border = "top" },
+        },
+      },
       enabled = true,
       actions = {
         qflist_append = function(picker)
@@ -373,14 +389,14 @@ return {
         desc = "Commands",
       },
       {
-        "<leader>sd",
+        "<leader>xX",
         function()
           Snacks.picker.diagnostics()
         end,
         desc = "Diagnostics",
       },
       {
-        "<leader>sD",
+        "<leader>xx",
         function()
           Snacks.picker.diagnostics_buffer()
         end,

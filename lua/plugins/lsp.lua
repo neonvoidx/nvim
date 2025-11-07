@@ -302,19 +302,20 @@ return {
     "folke/trouble.nvim",
     opts = {
       modes = {
-        mydiags = {
+        diagnostics_buffer = {
           mode = "diagnostics", -- inherit from diagnostics mode
+          preview = {
+            type = "float",
+            relative = "editor",
+            border = "rounded",
+            title = "Preview",
+            title_pos = "center",
+            position = { 0, -2 },
+            size = { width = 0.4, height = 0.4 },
+            zindex = 200,
+          },
           filter = {
-            any = {
-              buf = 0, -- current buffer
-              {
-                severity = vim.diagnostic.severity.ERROR, -- errors only
-                -- limit to files in the current project
-                function(item)
-                  return item.filename:find((vim.loop or vim.uv).cwd(), 1, true)
-                end,
-              },
-            },
+            buf = 0,
           },
         },
       },
@@ -330,16 +331,16 @@ return {
         },
       })
       return {
-        {
-          "<leader>xx",
-          "<cmd>Trouble diagnostics toggle<cr>",
-          desc = "Diagnostics (Trouble)",
-        },
-        {
-          "<leader>xX",
-          "<cmd>Trouble diagnostics toggle filter.buf=0<cr>",
-          desc = "Buffer Diagnostics (Trouble)",
-        },
+        -- {
+        --   "<leader>xX",
+        --   "<cmd>Trouble diagnostics toggle<cr>",
+        --   desc = "Diagnostics (Trouble)",
+        -- },
+        -- {
+        --   "<leader>xx",
+        --   "<cmd>Trouble diagnostics toggle filter.buf=0<cr>",
+        --   desc = "Buffer Diagnostics (Trouble)",
+        -- },
         {
           "<leader>cs",
           "<cmd>Trouble symbols toggle focus=false<cr>",
@@ -351,12 +352,12 @@ return {
           desc = "LSP Definitions / references / ... (Trouble)",
         },
         {
-          "<leader>xL",
+          "<leader>xl",
           "<cmd>Trouble loclist toggle<cr>",
           desc = "Location List (Trouble)",
         },
         {
-          "<leader>xQ",
+          "<leader>xq",
           "<cmd>Trouble qflist toggle<cr>",
           desc = "Quickfix List (Trouble)",
         },
