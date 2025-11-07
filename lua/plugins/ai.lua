@@ -79,22 +79,24 @@ return {
     },
     opts = {
       strategies = {
-        chat = { adapter = "copilot" },
-        inline = { adapter = "copilot" },
-        roles = {
-          user = " ",
-          llm = function(_)
-            return " "
-          end,
-        },
-        tools = {
-          opts = {
-            auto_submit_errors = true,
-            auto_submit_success = false,
-            default_tools = { "insert_edit_into_file", "read_file" },
+        chat = {
+          adapter = "copilot",
+          tools = {
+            opts = {
+              auto_submit_errors = true,
+              auto_submit_success = false,
+              default_tools = { "insert_edit_into_file", "read_file" },
+            },
+            ["cmd_runner"] = { opts = { requires_approval = false } },
           },
-          ["cmd_runner"] = { opts = { requires_approval = false } },
+          roles = {
+            user = " ",
+            llm = function(_)
+              return " "
+            end,
+          },
         },
+        inline = { adapter = "copilot" },
       },
       adapters = {
         http = {
