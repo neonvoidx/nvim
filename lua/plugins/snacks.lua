@@ -495,7 +495,7 @@ return {
       {
         "gr",
         function()
-          Snacks.picker.lsp_references({ auto_confirm = true })
+          Snacks.picker.lsp_references()
         end,
         nowait = true,
         desc = "References",
