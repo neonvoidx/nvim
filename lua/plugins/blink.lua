@@ -29,7 +29,7 @@ return {
         ripgrep = {
           module = "blink-ripgrep",
           name = "ripgrep",
-          score_offset = 2,
+          score_offset = 4,
           opts = {
             project_root_markers = { ".git", "package.json", ".root" },
           },
@@ -41,30 +41,30 @@ return {
               return vim.fn.getcwd()
             end,
           },
-          score_offset = 1,
+          score_offset = 5,
         },
         copilot = {
           name = "copilot",
           module = "blink-copilot",
-          score_offset = 100,
+          score_offset = 4,
           async = true,
         },
         lazydev = {
           name = "LazyDev",
           module = "lazydev.integrations.blink",
-          score_offset = 98,
+          score_offset = 6,
         },
         lsp = {
           name = "LSP",
           module = "blink.cmp.sources.lsp",
-          score_offset = 99,
+          score_offset = 7,
         },
         snippets = {
           name = "snippets",
           opts = {
             search_paths = { snippet_path },
           },
-          score_offset = 98,
+          score_offset = 3,
         },
       },
       per_filetype = {
