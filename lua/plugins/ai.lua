@@ -85,7 +85,7 @@ return {
             opts = {
               auto_submit_errors = true,
               auto_submit_success = false,
-              default_tools = { "insert_edit_into_file", "read_file" },
+              default_tools = { "insert_edit_into_file" },
             },
             ["cmd_runner"] = { opts = { requires_approval = false } },
           },
