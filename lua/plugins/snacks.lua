@@ -102,14 +102,26 @@ return {
     },
     dashboard = {
       enabled = true,
+      preset = {
+        header = [[
+░   ░░░  ░░        ░░░      ░░░  ░░░░  ░░        ░░  ░░░░  ░
+▒    ▒▒  ▒▒  ▒▒▒▒▒▒▒▒  ▒▒▒▒  ▒▒  ▒▒▒▒  ▒▒▒▒▒  ▒▒▒▒▒   ▒▒   ▒
+▓  ▓  ▓  ▓▓      ▓▓▓▓  ▓▓▓▓  ▓▓▓  ▓▓  ▓▓▓▓▓▓  ▓▓▓▓▓        ▓
+█  ██    ██  ████████  ████  ████    ███████  █████  █  █  █
+█  ███   ██        ███      ██████  █████        ██  ████  █
+]],
+      },
       sections = {
         {
-          section = "terminal",
-          cmd = "cat ~/.config/nvim/logo.txt; sleep .1",
-          height = 17,
-          padding = 1,
-          indent = 9,
+          section = "header",
         },
+        -- {
+        --   section = "terminal",
+        --   cmd = "cat ~/.config/nvim/logo.txt; sleep .1",
+        --   height = 17,
+        --   padding = 1,
+        --   indent = 9,
+        -- },
         { section = "keys", gap = 1, padding = 1 },
         {
           pane = 2,
