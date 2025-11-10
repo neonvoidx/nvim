@@ -1,13 +1,27 @@
 return {
   {
     "zbirenbaum/copilot.lua",
+    dependencies = {
+      "copilotlsp-nvim/copilot-lsp",
+    },
     event = "InsertEnter",
-    config = function()
-      require("copilot").setup({
-        filetypes = { markdown = false, help = false },
-        copilot_node_command = vim.fn.expand("$FNM_DIR") .. "/node-versions/v24.11.0/installation/bin/node",
-      })
-    end,
+    cmd = "Copilot",
+    opts = {
+      filetypes = {
+        markdown = false,
+        help = false,
+        sh = function()
+          if string.match(vim.fs.basename(vim.api.nvim_buf_get_name(0)), "^%.env.*") then
+            return false
+          end
+          return true
+        end,
+      },
+      nes = {
+        enabled = false,
+      },
+      copilot_node_command = vim.fn.expand("$FNM_DIR") .. "/node-versions/v24.11.0/installation/bin/node",
+    },
   },
   {
     "AndreM222/copilot-lualine",
@@ -131,13 +145,6 @@ return {
         },
       }
     end,
-  },
-  {
-    "ellisonleao/dotenv.nvim",
-    opts = {
-      enable_on_load = true,
-      verbose = false,
-    },
   },
   -- {
   --   "folke/sidekick.nvim",
