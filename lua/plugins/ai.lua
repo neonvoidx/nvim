@@ -23,10 +23,10 @@ return {
       copilot_node_command = vim.fn.expand("$FNM_DIR") .. "/node-versions/v24.11.0/installation/bin/node",
     },
   },
-  {
-    "AndreM222/copilot-lualine",
-    dependencies = { "zbirenbaum/copilot.lua" },
-  },
+  -- {
+  --   "AndreM222/copilot-lualine",
+  --   dependencies = { "zbirenbaum/copilot.lua" },
+  -- },
   -- Using codecompanion now, leaving here in case I switch back
   -- {
   --   "CopilotC-Nvim/CopilotChat.nvim",
@@ -168,9 +168,9 @@ return {
       {
         "<leader>aa",
         function()
-          require("sidekick.cli").toggle()
+          require("sidekick.cli").toggle({ name = "copilot" })
         end,
-        desc = "Sidekick Toggle CLI",
+        desc = "Sidekick Toggle Copilot",
       },
       {
         "<leader>as",
