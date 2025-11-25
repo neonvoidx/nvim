@@ -25,10 +25,20 @@ return {
   },
   {
     "folke/sidekick.nvim",
+    ---@class sidekick.Config
     opts = {
       nes = { enabled = false },
       mux = {
         enabled = false,
+      },
+      nes = {
+        enabled = false,
+      },
+      ---@type table<string, sidekick.cli.Config|{}>
+      cli = {
+        tools = {
+          aider = { cmd = { "ocaider", "--watch-files" } },
+        },
       },
     },
     keys = {
@@ -46,9 +56,10 @@ return {
       {
         "<leader>aa",
         function()
-          require("sidekick.cli").toggle({ name = "copilot" })
+          require("sidekick.cli").toggle({ name = "aider" })
+          require("sidekick.cli").toggle()
         end,
-        desc = "Sidekick Toggle Copilot",
+        desc = "Sidekick Toggle",
       },
       {
         "<leader>as",
