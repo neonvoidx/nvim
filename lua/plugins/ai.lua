@@ -37,7 +37,7 @@ return {
       ---@type table<string, sidekick.cli.Config|{}>
       cli = {
         tools = {
-          aider = { cmd = { "ocaider", "--watch-files" } },
+          aider = { cmd = { "ocaider", "--watch-files", "--model oca/gpt5" } },
         },
       },
     },
@@ -56,18 +56,22 @@ return {
       {
         "<leader>aa",
         function()
-          require("sidekick.cli").toggle({ name = "aider" })
-          require("sidekick.cli").toggle()
+          require("sidekick.cli").toggle({ name = "copilot" })
         end,
-        desc = "Sidekick Toggle",
+        desc = "Sidekick Toggle Copilot",
+      },
+      {
+        "<leader>aA",
+        function()
+          require("sidekick.cli").toggle({ name = "aider" })
+        end,
+        desc = "Sidekick Toggle Aider",
       },
       {
         "<leader>as",
         function()
-          require("sidekick.cli").select()
+          require("sidekick.cli").select({ filter = { installed = true } })
         end,
-        -- Or to select only installed tools:
-        -- require("sidekick.cli").select({ filter = { installed = true } })
         desc = "Select CLI",
       },
       {
@@ -102,12 +106,6 @@ return {
         mode = { "n", "x", "i", "t" },
         desc = "Sidekick Switch Focus",
       },
-      -- Example of a keybinding to open Claude directly
-      -- {
-      --   "<leader>ac",
-      --   function() require("sidekick.cli").toggle({ name = "claude", focus = true }) end,
-      --   desc = "Sidekick Toggle Claude",
-      -- },
     },
   },
 }
