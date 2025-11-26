@@ -400,20 +400,20 @@ return {
         end,
         desc = "Commands",
       },
-      {
-        "<leader>xX",
-        function()
-          Snacks.picker.diagnostics()
-        end,
-        desc = "Diagnostics",
-      },
-      {
-        "<leader>xx",
-        function()
-          Snacks.picker.diagnostics_buffer()
-        end,
-        desc = "Buffer Diagnostics",
-      },
+      -- {
+      --   "<leader>xX",
+      --   function()
+      --     Snacks.picker.diagnostics()
+      --   end,
+      --   desc = "Diagnostics",
+      -- },
+      -- {
+      --   "<leader>xx",
+      --   function()
+      --     Snacks.picker.diagnostics_buffer()
+      --   end,
+      --   desc = "Buffer Diagnostics",
+      -- },
       {
         "<leader>sh",
         function()

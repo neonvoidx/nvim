@@ -11,26 +11,27 @@ return {
       "<leader>e",
       mode = { "n", "v" },
       "<cmd>Yazi<cr>",
-      desc = "Open yazi at the current file",
+      desc = "Yazi (current location)",
     },
     {
       -- Open in the current working directory
       "<leader>E",
       "<cmd>Yazi cwd<cr>",
-      desc = "Open the file manager in nvim's working directory",
+      desc = "Yazi (cwd)",
     },
   },
   opts = {
     -- if you want to open yazi instead of netrw, see below for more info
     open_for_directories = true,
+    pick_window_implementation = "snacks.picker",
+    integrations = {
+      grep_in_directory = "snacks.picker",
+    },
     keymaps = {
       show_help = "<f1>",
     },
   },
   init = function()
-    -- mark netrw as loaded so it's not loaded at all.
-    --
-    -- More details: https://github.com/mikavilpas/yazi.nvim/issues/802
     vim.g.loaded_netrwPlugin = 1
   end,
 }
