@@ -20,7 +20,6 @@ return {
       nes = {
         enabled = false,
       },
-      copilot_node_command = vim.fn.expand("$FNM_DIR") .. "/node-versions/v24.11.0/installation/bin/node",
     },
   },
   {
