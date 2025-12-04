@@ -95,8 +95,6 @@ opt.winminwidth = 5 -- Minimum window width
 opt.wrap = false -- Disable line wrap
 
 opt.autochdir = false
--- opt.statuscolumn = "%s%#AbsoluteColumn#%l%1*│%{v:lnum<line('.')?'-':''}%r "
--- opt.statuscolumn = "%s%#AbsoluteColumn#%l%1*│%r "
 opt.relativenumber = true
 
 if vim.fn.has("nvim-0.10") == 1 then
@@ -107,19 +105,11 @@ end
 opt.fillchars = {
   foldopen = "",
   foldclose = "",
-  -- fold = "⸱",
   fold = " ",
   foldsep = " ",
   diff = "╱",
   eob = " ",
 }
--- Overridden by nvim-ufo
--- opt.foldlevel = 99
--- opt.foldmethod = "expr"
--- opt.foldexpr = "v:lua.require'util'.foldtext()"
--- opt.foldtext = ""
-
-vim.opt.clipboard = "unnamedplus" -- allows neovim to access the system clipboard
 
 --      _ _                             _   _
 --   __| (_) __ _  __ _ _ __   ___  ___| |_(_) ___ ___
