@@ -228,11 +228,11 @@ return {
         desc = "Command History",
       },
       {
-        "<leader>n",
+        "<leader>nd",
         function()
-          Snacks.picker.notifications()
+          Snacks.notifier.hide()
         end,
-        desc = "Notification History",
+        desc = "Notifications hide",
       },
       -- find
       {
@@ -586,7 +586,7 @@ return {
         desc = "Select Scratch Buffer",
       },
       {
-        "<leader>n",
+        "<leader>nn",
         function()
           Snacks.notifier.show_history()
         end,
