@@ -15,13 +15,30 @@ return {
       require("illuminate").configure(opts)
     end,
   },
+  --  _     ____  ____     ____             __ _
+  -- | |   / ___||  _ \   / ___|___  _ __  / _(_) __ _
+  -- | |   \___ \| |_) | | |   / _ \| '_ \| |_| |/ _` |
+  -- | |___ ___) |  __/  | |__| (_) | | | |  _| | (_| |
+  -- |_____|____/|_|      \____\___/|_| |_|_| |_|\__, |
+  --                                              |___/
   {
-    "neovim/nvim-lspconfig",
-    opts = {
-      inlay_hints = true,
-    },
+    "lsp-native-config",
+    dir = vim.fn.stdpath("config"),
+    name = "lsp-native-config",
+    priority = 1000,
     config = function()
+      -- Setup folding range capabilities for nvim-ufo
+      local folding_capabilities = {
+        textDocument = {
+          foldingRange = {
+            dynamicRegistration = false,
+            lineFoldingOnly = true,
+          },
+        },
+      }
+
       vim.lsp.config("vtsls", {
+        capabilities = folding_capabilities,
         settings = {
           complete_function_calls = true,
           vtsls = {
@@ -71,9 +88,9 @@ return {
           "build.ninja",
           ".git",
         },
-        capabilities = {
+        capabilities = vim.tbl_deep_extend("force", folding_capabilities, {
           offsetEncoding = { "utf-16" },
-        },
+        }),
         cmd = {
           "clangd",
           "--background-index",
@@ -120,6 +137,29 @@ return {
           end,
         },
       })
+
+      -- Enable other LSP servers with default config and folding capabilities
+      local default_servers = {
+        "bashls",
+        "jsonls",
+        "gopls",
+        "lua_ls",
+        "basedpyright",
+        "yamlls",
+        "docker_compose_language_service",
+        "dockerls",
+        "neocmake",
+        "terraformls",
+        "zls",
+        "emmet_language_server",
+        "fish_lsp",
+      }
+
+      for _, server in ipairs(default_servers) do
+        vim.lsp.config(server, {
+          capabilities = folding_capabilities,
+        })
+      end
 
       --  _     ____  ____    _  __
       -- | |   / ___||  _ \  | |/ /___ _   _ _ __ ___   __ _ _ __  ___
@@ -194,25 +234,6 @@ return {
         end,
       })
 
-      --     _         _                           _
-      --    / \  _   _| |_ ___   ___ _ __ ___   __| |___
-      --   / _ \| | | | __/ _ \ / __| '_ ` _ \ / _` / __|
-      --  / ___ \ |_| | || (_) | (__| | | | | | (_| \__ \
-      -- /_/   \_\__,_|\__\___/ \___|_| |_| |_|\__,_|___/
-      --
-      -- vim.api.nvim_create_autocmd("BufWritePre", {
-      --   group = vim.api.nvim_create_augroup("organize_imports", { clear = true }),
-      --   pattern = { "*.ts", "*.tsx", "*.js", "*.jsx" },
-      --   callback = function()
-      --     vim.lsp.buf.code_action({
-      --       apply = true,
-      --       context = { only = { "source.addMissingImports" }, diagnostics = {} },
-      --     })
-      --     -- Doesn't work well with both, have to save twice in a row for both to work
-      --     -- vim.lsp.buf.code_action({ apply = true, context = { only = { "source.removeUnused.ts" }, diagnostics = {} } })
-      --   end,
-      -- })
-
       -- End of config function
     end,
   },
@@ -266,30 +287,6 @@ return {
     keys = {
       { "<leader>Lm", "<cmd>Mason<cr>", { desc = "Mason" } },
     },
-  },
-  {
-    "mason-org/mason-lspconfig.nvim",
-    opts = {
-      automatic_enable = true,
-      ensure_installed = {
-        "bashls",
-        "jsonls",
-        "gopls",
-        "lua_ls",
-        "basedpyright",
-        "yamlls",
-        "docker_compose_language_service",
-        "dockerls",
-        "neocmake",
-        "vtsls",
-        "terraformls",
-        "clangd",
-        "zls",
-        "emmet_language_server",
-        "fish_lsp",
-      },
-    },
-    dependencies = { "mason-org/mason.nvim", "neovim/nvim-lspconfig" },
   },
 
   --  ____  _                             _   _
@@ -420,16 +417,4 @@ return {
       mode = "symbol",
     },
   },
-  -- {
-  --   "zeioth/garbage-day.nvim",
-  --   dependencies = "neovim/nvim-lspconfig",
-  --   event = "VeryLazy",
-  --   opts = {
-  --     grace_period = 60 * 15,
-  --     wakeup_delay = 0,
-  --     notifactions = true,
-  --     retries = 3,
-  --     timeout = 1000, -- retry timeout
-  --   },
-  -- },
 }
