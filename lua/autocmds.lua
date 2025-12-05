@@ -106,28 +106,6 @@ vim.api.nvim_create_user_command("MasonUpgrade", function()
   vim.cmd("doautocmd User MasonUpgradeComplete")
 end, { force = true })
 
--- vim.api.nvim_create_autocmd("BufWritePre", {
---   group = group,
---   pattern = { "*.ts", "*.tsx" },
---   callback = function(args)
---     local bufnr = args.buf
---
---     local function apply_code_action(kind, cb)
---       vim.lsp.buf.code_action({
---         context = { only = { kind }, diagnostics = {} },
---         apply = true,
---       })
---       if cb then
---         cb()
---       end
---     end
---
---     apply_code_action("source.addMissingImports.ts", function()
---       apply_code_action("source.removeUnused.ts")
---     end)
---   end,
--- })
-
 local numtogGrp = vim.api.nvim_create_augroup("NumberToggle", { clear = true })
 vim.api.nvim_create_autocmd({ "InsertLeave" }, {
   pattern = "*",
@@ -207,4 +185,3 @@ vim.api.nvim_create_autocmd("BufReadPre", {
     })
   end,
 })
---
