@@ -1,0 +1,5 @@
+require("opts")
+require("keymaps")
+require("autocommands")
+require("plugins")
+require("statusline")
