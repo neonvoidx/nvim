@@ -1,23 +1,23 @@
 return {
   "akinsho/bufferline.nvim",
   version = "*",
-  -- enabled = false,
-  dependencies = { "nvim-tree/nvim-web-devicons", "folke/which-key.nvim"},
+  dependencies = { "nvim-tree/nvim-web-devicons", "folke/which-key.nvim" },
   event = { "BufReadPost", "BufAdd", "BufNewFile" },
   opts = {
     options = {
       themable = true,
       mode = "buffers",
       indicator = {
-        style = "underline",
+        style = "none",
       },
       color_icons = true,
       separator_style = "thin",
       show_tab_indicators = false,
       show_buffer_icons = true,
+      show_duplicate_prefix = false,
       max_name_length = 16,
       max_prefix_length = 10,
-      tab_size = 20,
+      tab_size = 25,
       name_formatter = function(buf)
         local name = buf.name or ""
         return name:gsub("intent%.[%w_]+%.", "🛈")
@@ -35,17 +35,6 @@ return {
         options = {
           toggle_hidden_on_enter = true,
         },
-        -- items = {
-        --   {
-        --     name = "Tests", -- Mandatory
-        --     highlight = { underline = true }, -- Optional
-        --     priority = 4, -- determines where it will appear relative to other groups (Optional)
-        --     icon = " ", -- Optional
-        --     matcher = function(buf) -- Mandatory
-        --       return buf.ge:match("%.(test|spec)%.tsx?$")
-        --     end,
-        --   },
-        -- },
       },
     },
   },
