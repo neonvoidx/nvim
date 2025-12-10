@@ -1,3 +1,4 @@
+{ pkgs, ... }:
 {
   # Editing plugins configuration
   

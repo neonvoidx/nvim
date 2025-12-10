@@ -1,3 +1,4 @@
+{ pkgs, ... }:
 {
   # Neovim options ported from lua/config/opts.lua
   

@@ -1,3 +1,4 @@
+{ pkgs, ... }:
 {
   # LSP configuration ported from lua/plugins/lsp.lua
   

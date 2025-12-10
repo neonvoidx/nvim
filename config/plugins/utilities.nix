@@ -1,3 +1,4 @@
+{ pkgs, ... }:
 {
   # Utilities plugins configuration
   
@@ -25,30 +26,26 @@
     promise-async
     # Overseer - task runner
     overseer-nvim
-    # Snacks.nvim
-    {
-      plugin = pkgs.vimUtils.buildVimPlugin {
-        name = "snacks.nvim";
-        src = pkgs.fetchFromGitHub {
-          owner = "folke";
-          repo = "snacks.nvim";
-          rev = "main";
-          sha256 = "";  # Will need to be filled
-        };
-      };
-    }
-    # Sidekick - sidebar utilities (for AI CLI)
-    {
-      plugin = pkgs.vimUtils.buildVimPlugin {
-        name = "sidekick.nvim";
-        src = pkgs.fetchFromGitHub {
-          owner = "liubianshi";
-          repo = "sidekick.nvim";
-          rev = "main";
-          sha256 = "";  # Will need to be filled
-        };
-      };
-    }
+    # Snacks.nvim - commented out until sha256 is provided
+    # (pkgs.vimUtils.buildVimPlugin {
+    #   name = "snacks.nvim";
+    #   src = pkgs.fetchFromGitHub {
+    #     owner = "folke";
+    #     repo = "snacks.nvim";
+    #     rev = "main";
+    #     sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+    #   };
+    # })
+    # Sidekick - sidebar utilities (for AI CLI) - commented out until sha256 is provided
+    # (pkgs.vimUtils.buildVimPlugin {
+    #   name = "sidekick.nvim";
+    #   src = pkgs.fetchFromGitHub {
+    #     owner = "liubianshi";
+    #     repo = "sidekick.nvim";
+    #     rev = "main";
+    #     sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+    #   };
+    # })
   ];
   
   # Additional configuration

@@ -1,3 +1,4 @@
+{ pkgs, ... }:
 {
   # Keymaps ported from lua/config/keymaps.lua
   

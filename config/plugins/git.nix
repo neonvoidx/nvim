@@ -1,3 +1,4 @@
+{ pkgs, ... }:
 {
   # Git plugins configuration
   
@@ -65,30 +66,26 @@
   extraPlugins = with pkgs.vimPlugins; [
     # Git blame
     git-blame-nvim
-    # Merge conflict resolver
-    {
-      plugin = pkgs.vimUtils.buildVimPlugin {
-        name = "resolved.nvim";
-        src = pkgs.fetchFromGitHub {
-          owner = "noamsto";
-          repo = "resolved.nvim";
-          rev = "main";
-          sha256 = "";  # Will need to be filled
-        };
-      };
-    }
-    # Git scripts (for vault auto-commit)
-    {
-      plugin = pkgs.vimUtils.buildVimPlugin {
-        name = "git-scripts.nvim";
-        src = pkgs.fetchFromGitHub {
-          owner = "declancm";
-          repo = "git-scripts.nvim";
-          rev = "main";
-          sha256 = "";  # Will need to be filled
-        };
-      };
-    }
+    # Merge conflict resolver - commented out until sha256 is provided
+    # (pkgs.vimUtils.buildVimPlugin {
+    #   name = "resolved.nvim";
+    #   src = pkgs.fetchFromGitHub {
+    #     owner = "noamsto";
+    #     repo = "resolved.nvim";
+    #     rev = "main";
+    #     sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+    #   };
+    # })
+    # Git scripts (for vault auto-commit) - commented out until sha256 is provided
+    # (pkgs.vimUtils.buildVimPlugin {
+    #   name = "git-scripts.nvim";
+    #   src = pkgs.fetchFromGitHub {
+    #     owner = "declancm";
+    #     repo = "git-scripts.nvim";
+    #     rev = "main";
+    #     sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+    #   };
+    # })
   ];
   
   # Additional git configuration

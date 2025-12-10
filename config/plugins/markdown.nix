@@ -1,3 +1,4 @@
+{ pkgs, ... }:
 {
   # Markdown plugins configuration
   
@@ -92,32 +93,28 @@
     };
   };
   
-  # Additional markdown plugins via extraPlugins
+  # Additional markdown plugins via extraPlugins - commented out until sha256 is provided
   extraPlugins = with pkgs.vimPlugins; [
     # Markdown TOC generator
-    {
-      plugin = pkgs.vimUtils.buildVimPlugin {
-        name = "markdown-toc.nvim";
-        src = pkgs.fetchFromGitHub {
-          owner = "hedyhli";
-          repo = "markdown-toc.nvim";
-          rev = "main";
-          sha256 = "";  # Will need to be filled
-        };
-      };
-    }
+    # (pkgs.vimUtils.buildVimPlugin {
+    #   name = "markdown-toc.nvim";
+    #   src = pkgs.fetchFromGitHub {
+    #     owner = "hedyhli";
+    #     repo = "markdown-toc.nvim";
+    #     rev = "main";
+    #     sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+    #   };
+    # })
     # Presentation mode
-    {
-      plugin = pkgs.vimUtils.buildVimPlugin {
-        name = "presenting.nvim";
-        src = pkgs.fetchFromGitHub {
-          owner = "sotte";
-          repo = "presenting.nvim";
-          rev = "main";
-          sha256 = "";  # Will need to be filled
-        };
-      };
-    }
+    # (pkgs.vimUtils.buildVimPlugin {
+    #   name = "presenting.nvim";
+    #   src = pkgs.fetchFromGitHub {
+    #     owner = "sotte";
+    #     repo = "presenting.nvim";
+    #     rev = "main";
+    #     sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+    #   };
+    # })
   ];
   
   # Additional configuration

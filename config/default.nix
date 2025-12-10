@@ -1,3 +1,4 @@
+{ pkgs, ... }:
 {
   # Nixvim configuration for neonvoidx/nvim
   # Ported from lazy.nvim configuration

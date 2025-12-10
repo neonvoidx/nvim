@@ -1,3 +1,4 @@
+{ pkgs, ... }:
 {
   # Completion configuration ported from lua/plugins/blink.lua
   
@@ -6,31 +7,28 @@
     # We'll need to configure it as an extra plugin
   };
   
-  extraPlugins = [
+  extraPlugins = with pkgs.vimPlugins; [
     # Blink.cmp - completion engine
-    {
-      plugin = pkgs.vimUtils.buildVimPlugin {
-        name = "blink.cmp";
-        src = pkgs.fetchFromGitHub {
-          owner = "saghen";
-          repo = "blink.cmp";
-          rev = "v1.0.0";  # Use appropriate version
-          sha256 = ""; # Will need to be filled
-        };
-      };
-    }
+    # Note: Commented out until sha256 is provided
+    # (pkgs.vimUtils.buildVimPlugin {
+    #   name = "blink.cmp";
+    #   src = pkgs.fetchFromGitHub {
+    #     owner = "saghen";
+    #     repo = "blink.cmp";
+    #     rev = "v1.0.0";
+    #     sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+    #   };
+    # })
     # Blink-copilot
-    {
-      plugin = pkgs.vimUtils.buildVimPlugin {
-        name = "blink-copilot";
-        src = pkgs.fetchFromGitHub {
-          owner = "fang2hou";
-          repo = "blink-copilot";
-          rev = "main";
-          sha256 = ""; # Will need to be filled
-        };
-      };
-    }
+    # (pkgs.vimUtils.buildVimPlugin {
+    #   name = "blink-copilot";
+    #   src = pkgs.fetchFromGitHub {
+    #     owner = "fang2hou";
+    #     repo = "blink-copilot";
+    #     rev = "main";
+    #     sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+    #   };
+    # })
   ];
   
   # Blink.cmp configuration

@@ -1,3 +1,4 @@
+{ pkgs, ... }:
 {
   # UI plugins configuration
   

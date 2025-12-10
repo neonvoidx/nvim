@@ -1,3 +1,4 @@
+{ pkgs, ... }:
 {
   # AI and Copilot plugins configuration
   
@@ -49,20 +50,18 @@
     };
   };
   
-  # Additional AI plugins via extraPlugins
+  # Additional AI plugins via extraPlugins - commented out until sha256 is provided
   extraPlugins = with pkgs.vimPlugins; [
     # Copilot LSP
-    {
-      plugin = pkgs.vimUtils.buildVimPlugin {
-        name = "copilot-lsp";
-        src = pkgs.fetchFromGitHub {
-          owner = "copilotlsp-nvim";
-          repo = "copilot-lsp";
-          rev = "main";
-          sha256 = "";  # Will need to be filled
-        };
-      };
-    }
+    # (pkgs.vimUtils.buildVimPlugin {
+    #   name = "copilot-lsp";
+    #   src = pkgs.fetchFromGitHub {
+    #     owner = "copilotlsp-nvim";
+    #     repo = "copilot-lsp";
+    #     rev = "main";
+    #     sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+    #   };
+    # })
   ];
   
   # Sidekick configuration (from utilities.nix but AI-specific keymaps here)

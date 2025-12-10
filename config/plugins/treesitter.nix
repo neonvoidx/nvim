@@ -1,3 +1,4 @@
+{ pkgs, ... }:
 {
   # Treesitter configuration ported from lua/plugins/treesitter.lua
   

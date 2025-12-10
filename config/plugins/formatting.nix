@@ -1,3 +1,4 @@
+{ pkgs, ... }:
 {
   # Formatting and linting configuration
   

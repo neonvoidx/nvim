@@ -1,3 +1,4 @@
+{ pkgs, ... }:
 {
   # Autocommands ported from lua/config/autocmds.lua
   

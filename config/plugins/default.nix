@@ -1,3 +1,4 @@
+{ pkgs, ... }:
 {
   # Main plugins configuration
   # This file imports all plugin configurations
