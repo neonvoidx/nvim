@@ -46,7 +46,7 @@ return {
       -- Check if the current working directory is within the vault
       local cwd = vim.fn.getcwd()
       local vault_path = vim.fn.expand("~/vault")
-      local blog_path = vim.fn.expand("~/homepage/")
+      local blog_path = vim.fn.expand("~/homepage")
       return vim.startswith(cwd, vault_path) or vim.startswith(cwd, blog_path)
     end,
     config = function(_, opts)
