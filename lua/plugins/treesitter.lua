@@ -25,7 +25,7 @@ return {
       },
     },
     config = function()
-      require("nvim-treesitter.configs").setup({
+      require("nvim-treesitter").setup({
         endwise = {
           enable = true,
         },
