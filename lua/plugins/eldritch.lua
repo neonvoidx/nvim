@@ -1,9 +1,8 @@
 return {
   "eldritch-theme/eldritch.nvim",
-  -- dir = "~/dev/eldritch.nvim",
+  dir = "~/dev/eldritch.nvim",
   lazy = false,
   priority = 1000,
-  opts = {},
   config = function()
     vim.cmd([[colorscheme eldritch]])
   end,
