@@ -180,11 +180,11 @@ return {
           end, vim.tbl_extend("force", opts, { desc = "Code action (buffer)" }))
           vim.keymap.set(
             { "n" },
-            "<leader>li",
+            "<leader>Li",
             "<cmd>LspInfo<cr>",
             vim.tbl_extend("force", opts, { desc = "LSP Info" })
           )
-          vim.keymap.set({ "n" }, "<leader>ll", "<cmd>LspLog<cr>", vim.tbl_extend("force", opts, { desc = "LSP Logs" }))
+          vim.keymap.set({ "n" }, "<leader>Ll", "<cmd>LspLog<cr>", vim.tbl_extend("force", opts, { desc = "LSP Logs" }))
           vim.keymap.set(
             { "n" },
             "<leader>r",
@@ -281,7 +281,7 @@ return {
       })
     end,
     keys = {
-      { "<leader>lm", "<cmd>Mason<cr>", { desc = "Mason" } },
+      { "<leader>Lm", "<cmd>Mason<cr>", { desc = "Mason" } },
     },
   },
   {
