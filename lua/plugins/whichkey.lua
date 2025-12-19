@@ -38,7 +38,7 @@ return {
           icon = { icon = " " },
         },
         {
-          "<leader>l",
+          "<leader>L",
           group = "+LSP",
           icon = { icon = " " },
         },

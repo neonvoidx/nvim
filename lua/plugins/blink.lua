@@ -108,12 +108,6 @@ return {
                 return hl
               end,
             },
-            source_name = {
-              highlight = function()
-                local highlight = "BlinkCmpLabel"
-                return highlight
-              end,
-            },
             label_description = {
               width = {
                 fill = true,

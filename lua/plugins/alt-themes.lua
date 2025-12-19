@@ -3,6 +3,7 @@ return {
   {
     "folke/tokyonight.nvim",
   },
+  { "Mofiqul/dracula.nvim" },
   {
     "navarasu/onedark.nvim",
   },

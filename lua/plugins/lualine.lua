@@ -2,7 +2,7 @@ return {
   "nvim-lualine/lualine.nvim",
   vscode = false,
   dependences = {
-    "f-person/git-blame.nvim"
+    "f-person/git-blame.nvim",
   },
   opts = function()
     vim.g.gitblame_display_virtual_text = 0
