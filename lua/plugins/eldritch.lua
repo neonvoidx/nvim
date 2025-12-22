@@ -1,6 +1,6 @@
 return {
   "eldritch-theme/eldritch.nvim",
-  dir = "~/dev/eldritch.nvim",
+  -- dir = "~/dev/eldritch.nvim",
   cache = false,
   lazy = false,
   priority = 1000,

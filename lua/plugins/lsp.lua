@@ -258,6 +258,7 @@ return {
           "zls",
           "emmet_language_server",
           "fish_lsp",
+          "typos_lsp",
           -- Linters
           "mmdc",
           "pylint",
