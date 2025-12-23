@@ -3,6 +3,10 @@
 A modern, feature-rich Neovim configuration built with Lua and powered by [lazy.nvim](https://github.com/folke/lazy.nvim).
 (ya I made AI generate this README)
 
+> **📦 NEW: Nixvim Port Available!**  
+> This configuration is now available as a [nixvim](https://nix-community.github.io/nixvim/) port on the `nixvim` branch.  
+> See [NIXVIM.md](NIXVIM.md) for details on using the Nix-based configuration.
+
 ## 📋 Requirements
 
 - Neovim >= 0.11.5
