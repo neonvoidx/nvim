@@ -1,0 +1,94 @@
+{
+  "nodes": {
+    "nixCats": {
+      "locked": {
+        "lastModified": 1767604542,
+        "narHash": "sha256-Gfzh+dgNRxCncn3kGfSvJk4IDn/9cu6hw1zKtHtrzNQ=",
+        "owner": "BirdeeHub",
+        "repo": "nixCats-nvim",
+        "rev": "57a3bba442f1606f6dd5406fbb8fee9900b3f61a",
+        "type": "github"
+      },
+      "original": {
+        "owner": "BirdeeHub",
+        "repo": "nixCats-nvim",
+        "type": "github"
+      }
+    },
+    "nixpkgs": {
+      "locked": {
+        "lastModified": 1767364772,
+        "narHash": "sha256-fFUnEYMla8b7UKjijLnMe+oVFOz6HjijGGNS1l7dYaQ=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "16c7794d0a28b5a37904d55bcca36003b9109aaa",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "ref": "nixpkgs-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "plugins-blink-cmp": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1736000000,
+        "narHash": "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
+        "owner": "Saghen",
+        "repo": "blink.cmp",
+        "rev": "0000000000000000000000000000000000000000",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Saghen",
+        "repo": "blink.cmp",
+        "type": "github"
+      }
+    },
+    "plugins-blink-copilot": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1736000000,
+        "narHash": "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
+        "owner": "giuxtaposition",
+        "repo": "blink-copilot",
+        "rev": "0000000000000000000000000000000000000000",
+        "type": "github"
+      },
+      "original": {
+        "owner": "giuxtaposition",
+        "repo": "blink-copilot",
+        "type": "github"
+      }
+    },
+    "plugins-copilot-lsp": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1736000000,
+        "narHash": "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
+        "owner": "zbirenbaum",
+        "repo": "copilot-cmp",
+        "rev": "0000000000000000000000000000000000000000",
+        "type": "github"
+      },
+      "original": {
+        "owner": "zbirenbaum",
+        "repo": "copilot-cmp",
+        "type": "github"
+      }
+    },
+    "root": {
+      "inputs": {
+        "nixCats": "nixCats",
+        "nixpkgs": "nixpkgs",
+        "plugins-blink-cmp": "plugins-blink-cmp",
+        "plugins-blink-copilot": "plugins-blink-copilot",
+        "plugins-copilot-lsp": "plugins-copilot-lsp"
+      }
+    }
+  },
+  "root": "root",
+  "version": 7
+}

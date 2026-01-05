@@ -3,7 +3,8 @@ return {
     "iamcco/markdown-preview.nvim",
     cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
     ft = { "markdown" },
-    build = "cd app && yarn install",
+    -- NOTE: nixCats: use lazyAdd to only run build steps if nix wasnt involved.
+    build = require('nixCatsUtils').lazyAdd("cd app && yarn install"),
     init = function()
       vim.g.mkdp_filetypes = { "markdown" }
     end,

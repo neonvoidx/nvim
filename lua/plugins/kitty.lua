@@ -8,9 +8,10 @@ return {
       end
       return false
     end,
-    build = {
+    -- NOTE: nixCats: use lazyAdd to only run build steps if nix wasnt involved.
+    build = require('nixCatsUtils').lazyAdd({
       "cp ./*.py ~/.config/kitty/",
-    },
+    }),
   },
   {
     "mikesmithgh/kitty-scrollback.nvim",
