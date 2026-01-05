@@ -9,20 +9,12 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     nixCats.url = "github:BirdeeHub/nixCats-nvim";
 
-    # Plugin inputs that aren't in nixpkgs
-    # For plugins not in nixpkgs, name them "plugins-<name>"
-    plugins-blink-cmp = {
-      url = "github:Saghen/blink.cmp";
-      flake = false;
-    };
-    plugins-blink-copilot = {
-      url = "github:giuxtaposition/blink-copilot";
-      flake = false;
-    };
-    plugins-copilot-lsp = {
-      url = "github:zbirenbaum/copilot-cmp";
-      flake = false;
-    };
+    # NOTE: If you need plugins not in nixpkgs, add them here with "plugins-<name>"
+    # Example:
+    # plugins-someplugin = {
+    #   url = "github:author/repo";
+    #   flake = false;
+    # };
   };
 
   outputs = { self, nixpkgs, nixCats, ... }@inputs: let

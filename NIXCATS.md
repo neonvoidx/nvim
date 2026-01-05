@@ -36,6 +36,16 @@ Mason will automatically install LSPs and other tools.
 
 ## Using With Nix
 
+### First Time Setup
+
+If you're building from a fresh clone, regenerate the lock file:
+
+```bash
+nix flake lock
+```
+
+This will update `flake.lock` with the latest versions of all dependencies.
+
 ### Option 1: Build and Run
 
 ```bash
