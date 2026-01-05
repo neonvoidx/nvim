@@ -1,13 +1,86 @@
 # Neonvoid's Neovim Configuration
 
 A modern, feature-rich Neovim configuration built with Lua and powered by [lazy.nvim](https://github.com/folke/lazy.nvim).
-(ya I made AI generate this README)
+Now with [nixCats](https://github.com/BirdeeHub/nixCats-nvim) support for reproducible, Nix-managed builds!
 
 ## 📋 Requirements
 
+### Without Nix
 - Neovim >= 0.11.5
 - Git
 - A Nerd Font (for icons)
+
+### With Nix
+- Nix with flakes enabled
+- That's it! All dependencies managed by Nix
+
+## 🔧 Installation
+
+### Traditional (without Nix)
+```bash
+git clone https://github.com/neonvoidx/nvim ~/.config/nvim
+nvim
+```
+
+Mason will automatically install LSPs, formatters, and linters on first launch.
+
+### With Nix (Recommended for Reproducibility)
+
+#### As a standalone package
+```bash
+# Build the package
+nix build github:neonvoidx/nvim
+
+# Run directly
+./result/bin/nvim
+
+# Or install to your profile
+nix profile install github:neonvoidx/nvim
+```
+
+#### In your NixOS configuration
+Add to your `flake.nix`:
+```nix
+{
+  inputs = {
+    nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
+    nvim.url = "github:neonvoidx/nvim";
+  };
+
+  outputs = { nixpkgs, nvim, ... }: {
+    nixosConfigurations.yourhost = nixpkgs.lib.nixosSystem {
+      modules = [
+        nvim.nixosModules.default
+        {
+          nixCats.nvim.enable = true;
+        }
+      ];
+    };
+  };
+}
+```
+
+#### In Home Manager
+```nix
+{
+  inputs = {
+    nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
+    home-manager.url = "github:nix-community/home-manager";
+    nvim.url = "github:neonvoidx/nvim";
+  };
+
+  outputs = { nixpkgs, home-manager, nvim, ... }: {
+    homeConfigurations."youruser" = home-manager.lib.homeManagerConfiguration {
+      modules = [
+        nvim.homeModules.default
+        {
+          nixCats.nvim.enable = true;
+        }
+      ];
+    };
+  };
+}
+```
 
 ## 🚀 Features
 
@@ -110,6 +183,14 @@ A modern, feature-rich Neovim configuration built with Lua and powered by [lazy.
 - [sidekick.nvim](https://github.com/liubianshi/sidekick.nvim) - Sidebar utilities
 - [guess-indent.nvim](https://github.com/NMAC427/guess-indent.nvim) - Auto-detect indent
 
+### 🐱 nixCats Integration
+
+- [nixCats](https://github.com/BirdeeHub/nixCats-nvim) - Nix-based package manager for Neovim
+- Works with both Nix and traditional installations
+- Automatic plugin management through Nix
+- Mason disabled when using Nix (replaced by Nix package management)
+- Reproducible builds across systems
+
 ### 🐱 Kitty Integration
 
 - [vim-kitty](https://github.com/fladson/vim-kitty) - Kitty config syntax
@@ -177,6 +258,32 @@ A modern, feature-rich Neovim configuration built with Lua and powered by [lazy.
 
 - Automatic session management
 - Restore last session on startup
+
+## 🐱 nixCats Details
+
+This configuration uses [nixCats](https://nixcats.org) to provide both Nix-managed and traditional lazy.nvim installations from the same codebase.
+
+### How it works
+
+- **lua/nixCatsUtils/**: Contains utilities to detect if running under Nix and adapt behavior
+- **flake.nix**: Defines all dependencies (LSPs, formatters, linters, plugins) for Nix builds
+- **Dual compatibility**: Works both with and without Nix
+  - With Nix: Mason is disabled, all tools managed by Nix
+  - Without Nix: Mason installs tools automatically via lazy.nvim
+
+### Benefits of using Nix
+
+- **Reproducible**: Same setup on every machine
+- **Declarative**: All dependencies in one place (flake.nix)
+- **No installation steps**: Everything built by Nix
+- **Version pinning**: Lock file ensures consistent versions
+- **System integration**: Can be managed via NixOS or Home Manager
+
+### For more information
+
+- [nixCats Documentation](https://nixcats.org)
+- [nixCats Lua Utils](https://nixcats.org/nixCats_luaUtils.html)
+- [nixCats GitHub](https://github.com/BirdeeHub/nixCats-nvim)
 
 ## 📝 License
 

@@ -226,6 +226,9 @@ return {
   {
     "mason-org/mason.nvim",
     dependencies = { "WhoIsSethDaniel/mason-tool-installer.nvim" },
+    -- NOTE: nixCats: use lazyAdd to only enable mason if nix wasnt involved.
+    -- because we will be using nix to download things instead.
+    enabled = require('nixCatsUtils').lazyAdd(true, false),
     config = function()
       local mason = require("mason")
       local tool = require("mason-tool-installer")
@@ -290,6 +293,9 @@ return {
     opts = {
       automatic_enable = true,
     },
+    -- NOTE: nixCats: use lazyAdd to only enable mason if nix wasnt involved.
+    -- because we will be using nix to download things instead.
+    enabled = require('nixCatsUtils').lazyAdd(true, false),
     dependencies = { "mason-org/mason.nvim", "neovim/nvim-lspconfig" },
   },
 

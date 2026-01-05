@@ -1,7 +1,9 @@
 return {
   {
     "nvim-treesitter/nvim-treesitter",
-    build = ":TSUpdate",
+    -- NOTE: nixCats: use lazyAdd to only run build steps if nix wasnt involved.
+    -- because nix already did this.
+    build = require('nixCatsUtils').lazyAdd(':TSUpdate'),
     dependencies = {
       "RRethy/nvim-treesitter-endwise", -- Auto adds `end` to things like lua functions
       "JoosepAlviste/nvim-ts-context-commentstring", -- Allows commenting in things like HTML inside Vue etc

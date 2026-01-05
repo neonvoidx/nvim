@@ -1,0 +1,9 @@
+# Nix build outputs
+result
+result-*
+
+# Lazy.nvim
+.lazy.lua
+
+# Neovim
+.luarc.json
