@@ -21,6 +21,31 @@ return {
       inlay_hints = true,
     },
     config = function()
+      -- Auto-enable all LSPs when using nixCats (since mason-lspconfig is disabled)
+      if require("nixCatsUtils").isNixCats then
+        local lsp_servers = {
+          "lua_ls",
+          "nil_ls",
+          "bashls",
+          "jsonls",
+          "html",
+          "cssls",
+          "eslint",
+          "ts_ls",
+          "gopls",
+          "basedpyright",
+          "yamlls",
+          "dockerls",
+          "docker_compose_language_service",
+          "terraformls",
+          "clangd",
+          "zls",
+        }
+        for _, server in ipairs(lsp_servers) do
+          vim.lsp.enable(server)
+        end
+      end
+
       vim.lsp.config("vtsls", {
         settings = {
           complete_function_calls = true,
