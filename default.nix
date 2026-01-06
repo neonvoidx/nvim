@@ -36,7 +36,7 @@ in
 
           # LSPs
           lua-language-server
-          nil # or nixd
+          nil
           stylua
           nodePackages.bash-language-server
           nodePackages.vscode-langservers-extracted # json, html, css, eslint
