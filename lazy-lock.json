@@ -14,7 +14,7 @@
   "friendly-snippets": { "branch": "main", "commit": "572f5660cf05f8cd8834e096d7b4c921ba18e175" },
   "git-blame.nvim": { "branch": "main", "commit": "5c536e2d4134d064aa3f41575280bc8a2a0e03d7" },
   "git-scripts.nvim": { "branch": "master", "commit": "e02c502118d9d24c733c22ec361a44cd873dfa29" },
-  "gitsigns.nvim": { "branch": "main", "commit": "dfac404ac94b0eb1461bd7da32279e16950dfd67" },
+  "gitsigns.nvim": { "branch": "main", "commit": "30e5c516f03e0a0a4f71300c52abad481ee90337" },
   "guess-indent.nvim": { "branch": "main", "commit": "84a4987ff36798c2fc1169cbaff67960aed9776f" },
   "helpview.nvim": { "branch": "main", "commit": "518789535a0cb146224a428edf93a70f98b795db" },
   "hmts.nvim": { "branch": "main", "commit": "a32cd413f7d0a69d7f3d279c631f20cb117c8d30" },
@@ -28,7 +28,7 @@
   "markdown-toc.nvim": { "branch": "main", "commit": "869af35bce0c27e2006f410fa3f706808db4843d" },
   "mason-lspconfig.nvim": { "branch": "main", "commit": "4cfe411526a7a99c18281135e8b4765ae6330d15" },
   "mason-tool-installer.nvim": { "branch": "main", "commit": "517ef5994ef9d6b738322664d5fdd948f0fdeb46" },
-  "mason.nvim": { "branch": "main", "commit": "57e5a8addb8c71fb063ee4acda466c7cf6ad2800" },
+  "mason.nvim": { "branch": "main", "commit": "44d1e90e1f66e077268191e3ee9d2ac97cc18e65" },
   "mini.pairs": { "branch": "main", "commit": "d5a29b6254dad07757832db505ea5aeab9aad43a" },
   "mini.surround": { "branch": "main", "commit": "cc7b9d0a056b5fa6915ffac1cb91f29bf7c96f69" },
   "nightfox.nvim": { "branch": "main", "commit": "ba47d4b4c5ec308718641ba7402c143836f35aa9" },
@@ -67,5 +67,5 @@
   "vim-kitty-navigator": { "branch": "master", "commit": "081c6f8f9eb17cddb4ff4cd1ad44db48aa76fe03" },
   "which-key.nvim": { "branch": "main", "commit": "3aab2147e74890957785941f0c1ad87d0a44c15a" },
   "yanky.nvim": { "branch": "main", "commit": "04fc42b94305d94948c9c197f679336668af3292" },
-  "yazi.nvim": { "branch": "main", "commit": "ba8aa934dcb932efb5c9b3f869470baaedaad068" }
+  "yazi.nvim": { "branch": "main", "commit": "7c2a2c3511f8790b8de749a04d37563d77478c17" }
 }

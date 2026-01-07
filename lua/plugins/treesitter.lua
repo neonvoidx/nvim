@@ -25,6 +25,7 @@ if nixCatsUtils.isNixCats then
       "nvim-treesitter/nvim-treesitter-context",
       dir = nixCats.pawsible.allPlugins.opt["nvim-treesitter-context"],
       build = false,
+      lazy = false,
       opts = {
         enable = true,
         multiwindow = true,
@@ -109,15 +110,18 @@ return {
   },
   {
     "RRethy/nvim-treesitter-endwise",
+    lazy = false,
     dependencies = { "nvim-treesitter/nvim-treesitter" },
   },
   {
     "JoosepAlviste/nvim-ts-context-commentstring",
+    lazy = false,
     dependencies = { "nvim-treesitter/nvim-treesitter" },
   },
   {
     "nvim-treesitter/nvim-treesitter-context",
     dependencies = { "nvim-treesitter/nvim-treesitter" },
+    lazy = false,
     opts = {
       enable = true,
       multiwindow = true,
