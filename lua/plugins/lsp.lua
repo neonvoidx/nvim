@@ -306,7 +306,7 @@ return {
           "markdownlint-cli2",
           "markdown-toc",
           "kdlfmt",
-          "nixpkg-fmt",
+          "nixpkgs-fmt",
           "nixfmt",
         },
       })
