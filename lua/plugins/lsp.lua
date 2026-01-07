@@ -25,7 +25,7 @@ return {
       if require("nixCatsUtils").isNixCats then
         local lsp_servers = {
           "lua_ls",
-          "nil_ls",
+          "nixd",
           "bashls",
           "jsonls",
           "html",
@@ -287,7 +287,6 @@ return {
           "emmet_language_server",
           "fish_lsp",
           "typos_lsp",
-          "nil",
           -- Linters
           "mmdc",
           "pylint",
