@@ -89,6 +89,11 @@ return {
           { win = "preview", title = "{preview}", height = 0.6, border = "top" },
         },
       },
+      formatters = {
+        file = {
+          filename_first = true,
+        },
+      },
       enabled = true,
       actions = {
         qflist_append = function(picker)

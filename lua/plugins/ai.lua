@@ -22,4 +22,5 @@ return {
       },
     },
   },
+  { "leisurelicht/lualine-copilot.nvim" },
 }
