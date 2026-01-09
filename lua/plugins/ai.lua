@@ -7,7 +7,12 @@ return {
     event = "InsertEnter",
     cmd = "Copilot",
     opts = {
-      copilot_node_command = vim.fn.expand("$HOME") .. "/.local/share/mise/installs/node/24.12.0/bin/node",
+      copilot_node_command = function()
+        local nixCatsUtils = require("nixCatsUtils")
+        if not nixCatsUtils.isNixCats then
+          return vim.fn.expand("$HOME") .. "/.local/share/mise/installs/node/24.12.0/bin/node"
+        end
+      end,
       filetypes = {
         markdown = false,
         help = false,
