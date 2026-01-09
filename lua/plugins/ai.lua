@@ -7,6 +7,7 @@ return {
     event = "InsertEnter",
     cmd = "Copilot",
     opts = {
+      copilot_node_command = vim.fn.expand("$HOME") .. "/.local/share/mise/installs/node/24.12.0/bin/node",
       filetypes = {
         markdown = false,
         help = false,
