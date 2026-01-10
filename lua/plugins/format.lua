@@ -24,8 +24,8 @@ return {
         python = { "isort", "black" },
         markdown = { "prettierd", "markdownlint-cli2", "markdown-toc" },
         ["markdown.mdx"] = { "prettierd", "markdownlint-cli2", "markdown-toc" },
-        zig = { "zls" },
-        nix = { "nixfmt", "nixpkgs-fmt" },
+        zig = { "zigfmt" },
+        nix = { "nixfmt" },
       },
       notify_on_error = false,
       formatters = {
