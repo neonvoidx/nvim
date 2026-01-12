@@ -33,7 +33,7 @@ return {
           "eslint",
           "ts_ls",
           "gopls",
-          "gdtoolkit",
+          "gdscript",
           "basedpyright",
           "yamlls",
           "dockerls",
