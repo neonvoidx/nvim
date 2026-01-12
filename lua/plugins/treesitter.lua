@@ -83,6 +83,7 @@ return {
           "cpp",
           "cmake",
           "diff",
+          "gdscript",
           "html",
           "javascript",
           "jsdoc",

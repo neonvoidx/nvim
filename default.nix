@@ -41,6 +41,7 @@ in
           nodePackages.bash-language-server
           nodePackages.vscode-langservers-extracted # json, html, css, eslint
           nodePackages.typescript-language-server
+          gdtoolkit_4
           gopls
           basedpyright
           yaml-language-server
