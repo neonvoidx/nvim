@@ -26,6 +26,7 @@ return {
         ["markdown.mdx"] = { "prettierd", "markdownlint-cli2", "markdown-toc" },
         zig = { "zigfmt" },
         nix = { "nixfmt" },
+        gdscript = { "gdformat" },
       },
       notify_on_error = false,
       formatters = {
