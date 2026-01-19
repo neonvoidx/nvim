@@ -75,10 +75,6 @@ return {
                   if dev_icon then
                     icon = dev_icon
                   end
-                else
-                  icon = require("lspkind").symbolic(ctx.kind, {
-                    mode = "symbol",
-                  })
                 end
 
                 local override_icons = {
