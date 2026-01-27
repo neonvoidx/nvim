@@ -31,6 +31,15 @@ if nixCatsUtils.isNixCats then
         multiwindow = true,
         max_lines = 0,
         separator = "▔",
+        mode = "cursor",
+        on_attach = function(bufnr)
+          -- Disable for invalid buffers
+          local bufname = vim.api.nvim_buf_get_name(bufnr)
+          if bufname == "" or not vim.api.nvim_buf_is_valid(bufnr) then
+            return false
+          end
+          return true
+        end,
       },
       keys = {
         {
@@ -128,6 +137,15 @@ return {
       multiwindow = true,
       max_lines = 0,
       separator = "▔",
+      mode = "cursor",
+      on_attach = function(bufnr)
+        -- Disable for invalid buffers
+        local bufname = vim.api.nvim_buf_get_name(bufnr)
+        if bufname == "" or not vim.api.nvim_buf_is_valid(bufnr) then
+          return false
+        end
+        return true
+      end,
     },
     keys = {
       {
