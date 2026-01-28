@@ -80,7 +80,7 @@ in
               owner = "nvim-treesitter";
               repo = "nvim-treesitter-context";
               rev = "64dd4cf3f6fd0ab17622c5ce15c91fc539c3f24a";
-              hash = "sha256-0dmcpn7l1f4bxvfa4li9sw8k1a5gh0r9zslflb5yrnax1ww71nyw";
+              hash = "sha256-3NtwOA9d2ezLoo7qnzKAr6gwEdcpUqLc7ou4QI+9rDY=";
             };
           }))
           nvim-ts-context-commentstring
