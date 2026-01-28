@@ -1,5 +1,5 @@
 # nixCats neovim configuration
-{ pkgs, inputs, ... }:
+{ inputs, ... }:
 let
   inherit (inputs.nixCats) utils;
   luaPath = ./.;
@@ -75,7 +75,14 @@ in
         general = [
           (nvim-treesitter.withAllGrammars)
           nvim-treesitter-endwise
-          nvim-treesitter-context
+          (nvim-treesitter-context.overrideAttrs (old: {
+            src = pkgs.fetchFromGitHub {
+              owner = "nvim-treesitter";
+              repo = "nvim-treesitter-context";
+              rev = "64dd4cf3f6fd0ab17622c5ce15c91fc539c3f24a";
+              hash = "sha256-0dmcpn7l1f4bxvfa4li9sw8k1a5gh0r9zslflb5yrnax1ww71nyw";
+            };
+          }))
           nvim-ts-context-commentstring
         ];
       };
