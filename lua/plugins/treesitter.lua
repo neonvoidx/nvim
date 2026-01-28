@@ -26,21 +26,28 @@ if nixCatsUtils.isNixCats then
       dir = nixCats.pawsible.allPlugins.opt["nvim-treesitter-context"],
       build = false,
       lazy = false,
-      opts = {
-        enable = true,
-        multiwindow = true,
-        max_lines = 0,
-        separator = "▔",
-        mode = "cursor",
-        on_attach = function(bufnr)
-          -- Disable for invalid buffers
-          local bufname = vim.api.nvim_buf_get_name(bufnr)
-          if bufname == "" or not vim.api.nvim_buf_is_valid(bufnr) then
-            return false
+      config = function()
+        require("treesitter-context").setup({
+          enable = true,
+          multiwindow = true,
+          max_lines = 0,
+          separator = "▔",
+          mode = "cursor",
+        })
+        
+        -- Wrap the update function to catch errors
+        local ts_context = require("treesitter-context")
+        local original_update = ts_context.update
+        ts_context.update = function(...)
+          local ok, err = pcall(original_update, ...)
+          if not ok then
+            -- Silently ignore errors from invalid buffers
+            if not string.match(tostring(err), "must be given") then
+              vim.notify("treesitter-context error: " .. tostring(err), vim.log.levels.ERROR)
+            end
           end
-          return true
-        end,
-      },
+        end
+      end,
       keys = {
         {
           "[c",
@@ -132,21 +139,28 @@ return {
     "nvim-treesitter/nvim-treesitter-context",
     dependencies = { "nvim-treesitter/nvim-treesitter" },
     lazy = false,
-    opts = {
-      enable = true,
-      multiwindow = true,
-      max_lines = 0,
-      separator = "▔",
-      mode = "cursor",
-      on_attach = function(bufnr)
-        -- Disable for invalid buffers
-        local bufname = vim.api.nvim_buf_get_name(bufnr)
-        if bufname == "" or not vim.api.nvim_buf_is_valid(bufnr) then
-          return false
+    config = function()
+      require("treesitter-context").setup({
+        enable = true,
+        multiwindow = true,
+        max_lines = 0,
+        separator = "▔",
+        mode = "cursor",
+      })
+      
+      -- Wrap the update function to catch errors
+      local ts_context = require("treesitter-context")
+      local original_update = ts_context.update
+      ts_context.update = function(...)
+        local ok, err = pcall(original_update, ...)
+        if not ok then
+          -- Silently ignore errors from invalid buffers
+          if not string.match(tostring(err), "must be given") then
+            vim.notify("treesitter-context error: " .. tostring(err), vim.log.levels.ERROR)
+          end
         end
-        return true
-      end,
-    },
+      end
+    end,
     keys = {
       {
         "[c",
