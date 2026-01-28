@@ -35,18 +35,20 @@ if nixCatsUtils.isNixCats then
           mode = "cursor",
         })
         
-        -- Wrap the update function to catch errors
-        local ts_context = require("treesitter-context")
-        local original_update = ts_context.update
-        ts_context.update = function(...)
-          local ok, err = pcall(original_update, ...)
-          if not ok then
-            -- Silently ignore errors from invalid buffers
-            if not string.match(tostring(err), "must be given") then
-              vim.notify("treesitter-context error: " .. tostring(err), vim.log.levels.ERROR)
+        -- Patch the context module to handle invalid buffers
+        vim.schedule(function()
+          local context = require("treesitter-context.context")
+          local original_get = context.get
+          
+          context.get = function(bufnr, winid)
+            local ok, result = pcall(original_get, bufnr, winid)
+            if not ok then
+              -- Return empty context on error
+              return nil
             end
+            return result
           end
-        end
+        end)
       end,
       keys = {
         {
@@ -148,18 +150,20 @@ return {
         mode = "cursor",
       })
       
-      -- Wrap the update function to catch errors
-      local ts_context = require("treesitter-context")
-      local original_update = ts_context.update
-      ts_context.update = function(...)
-        local ok, err = pcall(original_update, ...)
-        if not ok then
-          -- Silently ignore errors from invalid buffers
-          if not string.match(tostring(err), "must be given") then
-            vim.notify("treesitter-context error: " .. tostring(err), vim.log.levels.ERROR)
+      -- Patch the context module to handle invalid buffers
+      vim.schedule(function()
+        local context = require("treesitter-context.context")
+        local original_get = context.get
+        
+        context.get = function(bufnr, winid)
+          local ok, result = pcall(original_get, bufnr, winid)
+          if not ok then
+            -- Return empty context on error
+            return nil
           end
+          return result
         end
-      end
+      end)
     end,
     keys = {
       {
