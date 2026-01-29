@@ -26,6 +26,7 @@ return {
           { "filename", file_status = true, newfile_status = true, path = 0, shorting_target = 40 },
           { "diff", symbols = { added = " ", modified = "󰣕 ", removed = " " } },
           "diagnostics",
+          "searchcount",
         },
         lualine_x = {
           {
