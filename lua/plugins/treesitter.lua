@@ -122,32 +122,16 @@ return {
   },
   {
     "nvim-treesitter/nvim-treesitter-context",
+    commit = "64dd4cf3f6fd0ab17622c5ce15c91fc539c3f24a", -- Pin to working version
     dependencies = { "nvim-treesitter/nvim-treesitter" },
     lazy = false,
-    config = function()
-      require("treesitter-context").setup({
-        enable = true,
-        multiwindow = true,
-        max_lines = 0,
-        separator = "▔",
-        mode = "cursor",
-      })
-      
-      -- Patch the context module to handle invalid buffers
-      vim.schedule(function()
-        local context = require("treesitter-context.context")
-        local original_get = context.get
-        
-        context.get = function(bufnr, winid)
-          local ok, result = pcall(original_get, bufnr, winid)
-          if not ok then
-            -- Return empty context on error
-            return nil
-          end
-          return result
-        end
-      end)
-    end,
+    opts = {
+      enable = true,
+      multiwindow = true,
+      max_lines = 0,
+      separator = "▔",
+      mode = "cursor",
+    },
     keys = {
       {
         "[c",
