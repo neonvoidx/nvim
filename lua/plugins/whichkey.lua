@@ -43,10 +43,17 @@ return {
           icon = { icon = " " },
         },
         {
-          "<leader>o",
+          "<leader>O",
           group = "+Overseer",
           icon = {
             icon = "",
+          },
+        },
+        {
+          "<leader>o",
+          group = "+Obsidian",
+          icon = {
+            icon = "",
           },
         },
       },

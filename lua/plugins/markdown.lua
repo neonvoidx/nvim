@@ -45,10 +45,13 @@ return {
     event = "VimEnter",
     cond = function()
       -- Check if the current working directory is within the vault
-      local cwd = vim.fn.getcwd()
-      local vault_path = vim.fn.expand("~/vault")
-      local blog_path = vim.fn.expand("~/homepage")
-      return vim.startswith(cwd, vault_path) or vim.startswith(cwd, blog_path)
+      local cwd = vim.fn.resolve(vim.fn.getcwd())
+      local vault_path = vim.fn.resolve(vim.fn.expand("~/vault"))
+      local blog_path = vim.fn.resolve(vim.fn.expand("~/homepage"))
+      return cwd == vault_path
+        or vim.startswith(cwd, vault_path .. "/")
+        or cwd == blog_path
+        or vim.startswith(cwd, blog_path .. "/")
     end,
     config = function(_, opts)
       local wk = require("which-key")
@@ -91,7 +94,7 @@ return {
           local encoded_name = require("obsidian.util").urlencode(name)
           return string.format("![%s](%s)", name, encoded_name)
         end,
-        img_folder = "./",
+        folder = "./",
       },
       legacy_commands = false,
       checkbox = {
@@ -116,18 +119,14 @@ return {
         blink = true,
       },
       preferred_link_style = "markdown",
-      disable_frontmatter = false,
+      frontmatter = {
+        enabled = true,
+      },
       templates = {
         folder = "templates",
         date_format = "%d %b %Y",
       },
-      follow_url_func = function(url)
-        -- Open the URL in the default web browser.
-        -- vim.fn.jobstart({ "open", url }) -- Mac OS
-        -- vim.fn.jobstart({"xdg-open", url})  -- linux
-        -- vim.cmd(':silent exec "!start ' .. url .. '"') -- Windows
-        vim.ui.open(url) -- need Neovim 0.10.0+
-      end,
+      follow_url_func = nil,
       picker = {
         name = "snacks.pick",
         new = "<C-x>",
