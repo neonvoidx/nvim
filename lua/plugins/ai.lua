@@ -36,7 +36,7 @@ return {
       ---@type table<string, sidekick.cli.Config|{}>
       cli = {
         tools = {
-          aider = { cmd = { "ocaider", "--watch-files", "--model oca/gpt5" } },
+          -- aider = { cmd = { "ocaider", "--watch-files", "--model oca/gpt5" } },
         },
       },
     },
