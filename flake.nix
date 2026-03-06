@@ -6,7 +6,6 @@
     wrappers.url = "github:BirdeeHub/nix-wrapper-modules";
     wrappers.inputs.nixpkgs.follows = "nixpkgs";
 
-    # Freshest lze + lzextras (same pattern as the template)
     plugins-lze = {
       url = "github:BirdeeHub/lze";
       flake = false;

@@ -1,8 +1,13 @@
 local on_attach = function(client, bufnr)
   local opts = { buffer = bufnr }
-  vim.keymap.set("n", "<leader>cr", vim.lsp.buf.rename,          vim.tbl_extend("force", opts, { desc = "Rename" }))
-  vim.keymap.set({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, vim.tbl_extend("force", opts, { desc = "Code Action" }))
-  vim.keymap.set("n", "K",          vim.lsp.buf.hover,           vim.tbl_extend("force", opts, { desc = "Hover" }))
+  vim.keymap.set("n", "<leader>cr", vim.lsp.buf.rename, vim.tbl_extend("force", opts, { desc = "Rename" }))
+  vim.keymap.set(
+    { "n", "v" },
+    "<leader>ca",
+    vim.lsp.buf.code_action,
+    vim.tbl_extend("force", opts, { desc = "Code Action" })
+  )
+  vim.keymap.set("n", "K", vim.lsp.buf.hover, vim.tbl_extend("force", opts, { desc = "Hover" }))
   if client.supports_method("textDocument/inlayHint") then
     vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
   end
@@ -10,16 +15,21 @@ end
 
 local function get_capabilities()
   local ok, blink = pcall(require, "blink.cmp")
-  if ok then return blink.get_lsp_capabilities() end
+  if ok then
+    return blink.get_lsp_capabilities()
+  end
   return vim.lsp.protocol.make_client_capabilities()
 end
 
 -- vim.lsp.config (nvim 0.11+) — no lspconfig deprecation warning
 local function cfg(server, settings)
-  vim.lsp.config(server, vim.tbl_deep_extend("force", {
-    on_attach = on_attach,
-    capabilities = get_capabilities(),
-  }, settings or {}))
+  vim.lsp.config(
+    server,
+    vim.tbl_deep_extend("force", {
+      on_attach = on_attach,
+      capabilities = get_capabilities(),
+    }, settings or {})
+  )
   vim.lsp.enable(server)
 end
 
@@ -51,7 +61,14 @@ return {
             doc = { privateName = { "^_" } },
             type = { castNumberToInteger = true },
             diagnostics = { disable = { "incomplete-signature-doc", "trailing-space" } },
-            hint = { enable = true, setType = false, paramType = true, paramName = "Disable", semicolon = "Disable", arrayIndex = "Disable" },
+            hint = {
+              enable = true,
+              setType = false,
+              paramType = true,
+              paramName = "Disable",
+              semicolon = "Disable",
+              arrayIndex = "Disable",
+            },
           },
         },
       })
@@ -67,10 +84,21 @@ return {
       cfg("dockerls")
       cfg("neocmake")
       cfg("vtsls", {
-        filetypes = { "javascript", "javascriptreact", "javascript.jsx", "typescript", "typescriptreact", "typescript.tsx" },
+        filetypes = {
+          "javascript",
+          "javascriptreact",
+          "javascript.jsx",
+          "typescript",
+          "typescriptreact",
+          "typescript.tsx",
+        },
         settings = {
           complete_function_calls = true,
-          vtsls = { enableMoveToFileCodeAction = true, autoUseWorkspaceTsdk = true, experimental = { completion = { enableServerSideFuzzyMatch = true } } },
+          vtsls = {
+            enableMoveToFileCodeAction = true,
+            autoUseWorkspaceTsdk = true,
+            experimental = { completion = { enableServerSideFuzzyMatch = true } },
+          },
           typescript = {
             updateImportsOnFileMove = { enabled = "always" },
             suggest = { completeFunctionCalls = true },
@@ -101,9 +129,9 @@ return {
       })
     end,
     keys = {
-      { "<leader>Li", "<cmd>LspInfo<cr>",    desc = "LSP Info" },
-      { "<leader>Ll", "<cmd>LspLog<cr>",     desc = "LSP Log" },
-      { "<leader>Lr", "<cmd>LspRestart<cr>", desc = "LSP Restart" },
+      { "<leader>li", "<cmd>LspInfo<cr>", desc = "LSP Info" },
+      { "<leader>ll", "<cmd>LspLog<cr>", desc = "LSP Log" },
+      { "<leader>lr", "<cmd>LspRestart<cr>", desc = "LSP Restart" },
     },
   },
   {
@@ -121,12 +149,20 @@ return {
     "trouble.nvim",
     cmd = "Trouble",
     keys = {
-      { "<leader>xx", "<cmd>Trouble diagnostics toggle<cr>",                        desc = "Diagnostics (Trouble)" },
-      { "<leader>xX", "<cmd>Trouble diagnostics toggle filter.buf=0<cr>",           desc = "Buffer Diagnostics (Trouble)" },
-      { "<leader>cs", "<cmd>Trouble symbols toggle focus=false<cr>",                desc = "Symbols (Trouble)" },
-      { "<leader>cl", "<cmd>Trouble lsp toggle focus=false win.position=right<cr>", desc = "LSP Definitions / references (Trouble)" },
-      { "<leader>xL", "<cmd>Trouble loclist toggle<cr>",                            desc = "Location List (Trouble)" },
-      { "<leader>xQ", "<cmd>Trouble qflist toggle<cr>",                             desc = "Quickfix List (Trouble)" },
+      { "<leader>xx", "<cmd>Trouble diagnostics toggle<cr>", desc = "Diagnostics (Trouble)" },
+      {
+        "<leader>xX",
+        "<cmd>Trouble diagnostics toggle filter.buf=0<cr>",
+        desc = "Buffer Diagnostics (Trouble)",
+      },
+      { "<leader>cs", "<cmd>Trouble symbols toggle focus=false<cr>", desc = "Symbols (Trouble)" },
+      {
+        "<leader>cl",
+        "<cmd>Trouble lsp toggle focus=false win.position=right<cr>",
+        desc = "LSP Definitions / references (Trouble)",
+      },
+      { "<leader>xL", "<cmd>Trouble loclist toggle<cr>", desc = "Location List (Trouble)" },
+      { "<leader>xQ", "<cmd>Trouble qflist toggle<cr>", desc = "Quickfix List (Trouble)" },
     },
     after = function()
       require("trouble").setup({
@@ -158,7 +194,14 @@ return {
               cargo = { allFeatures = true, loadOutDirsFromCheck = true, buildScripts = { enable = true } },
               checkOnSave = true,
               check = { command = "clippy", extraArgs = { "--all", "--", "-W", "clippy::pedantic" } },
-              procMacro = { enable = true, ignored = { ["async-trait"] = { "async_trait" }, ["napi-derive"] = { "napi" }, ["async-recursion"] = { "async_recursion" } } },
+              procMacro = {
+                enable = true,
+                ignored = {
+                  ["async-trait"] = { "async_trait" },
+                  ["napi-derive"] = { "napi" },
+                  ["async-recursion"] = { "async_recursion" },
+                },
+              },
             },
           },
         },
@@ -174,8 +217,13 @@ return {
           on_attach = on_attach,
           capabilities = vim.tbl_deep_extend("force", get_capabilities(), { offsetEncoding = { "utf-16" } }),
           cmd = {
-            "clangd", "--background-index", "--clang-tidy", "--header-insertion=iwyu",
-            "--completion-style=detailed", "--function-arg-placeholders", "--fallback-style=llvm",
+            "clangd",
+            "--background-index",
+            "--clang-tidy",
+            "--header-insertion=iwyu",
+            "--completion-style=detailed",
+            "--function-arg-placeholders",
+            "--fallback-style=llvm",
           },
           init_options = { usePlaceholders = true, completeUnimported = true, clangdFileStatus = true },
         },
