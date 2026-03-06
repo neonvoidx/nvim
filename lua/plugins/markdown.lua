@@ -82,9 +82,4 @@ return {
       { "<leader>mp", "<cmd>Presenting<cr>", desc = "Presenting Mode" },
     },
   },
-  {
-    "hmts.nvim",
-    ft = { "haskell", "help" },
-    lazy = false,
-  },
 }

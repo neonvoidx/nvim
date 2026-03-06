@@ -1,6 +1,6 @@
 return {
   {
-    "eldritch.nvim",
+    "eldritch-nvim",
     lazy = false,
     priority = 1000,
     after = function()

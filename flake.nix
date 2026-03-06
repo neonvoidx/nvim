@@ -18,7 +18,7 @@
 
     # Plugins NOT in nixpkgs
     plugins-eldritch-nvim = {
-      url = "https://github.com/eldritch-theme/eldritch.nvim/archive/refs/heads/master.tar.gz";
+      url = "github:eldritch-theme/eldritch.nvim/0415fa72c348e814a7a6cc9405593a4f812fe12f";
       flake = false;
     };
     plugins-vim-kitty = {

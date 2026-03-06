@@ -3,6 +3,8 @@ return {
     "nvim-ufo",
     lazy = false,
     after = function()
+      -- promise-async is a required dependency of nvim-ufo
+      vim.cmd.packadd("promise-async")
       vim.o.foldcolumn = "1"
       vim.o.foldlevel = 99
       vim.o.foldlevelstart = 99

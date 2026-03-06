@@ -131,6 +131,7 @@ inputs:
       inc-rename-nvim
       copilot-lsp
       copilot-lua
+      SchemaStore-nvim
     ];
     extraPackages = with pkgs; [
       # LSP servers
