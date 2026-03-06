@@ -10,6 +10,7 @@ return {
     lazy = false,
     after = function()
       vim.cmd.packadd("blink-copilot")
+      vim.cmd.packadd("lazydev.nvim")
       require("blink.cmp").setup({
         enabled = function()
           return not vim.tbl_contains({ "oil" }, vim.bo.filetype) and vim.bo.buftype ~= "prompt"
