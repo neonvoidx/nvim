@@ -137,6 +137,7 @@ return {
               { icon = " ", key = "r", desc = "Recent Files",    action = ":lua Snacks.picker.recent()" },
               { icon = " ", key = "s", desc = "Restore Session", action = function()
                   vim.cmd.packadd("persistence.nvim")
+                  require("persistence").setup({ need = 1, branch = true })
                   require("persistence").load()
                 end },
               { icon = "󰒲 ", key = "l", desc = "Lazy",           action = ":Lazy",   enabled = package.loaded.lazy ~= nil },
