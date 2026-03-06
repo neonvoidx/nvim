@@ -4,6 +4,7 @@ return {
     lazy = false,
     priority = 800,
     after = function()
+      vim.cmd.packadd("nui.nvim")
       require("noice").setup({
         lsp = {
           progress = { enabled = true },
