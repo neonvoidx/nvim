@@ -130,6 +130,18 @@ return {
 █  ██    ██  ████████  ████  ████    ███████  █████  █  █  █
 █  ███   ██        ███      ██████  █████        ██  ████  █
 ]],
+            keys = {
+              { icon = " ", key = "f", desc = "Find File",       action = ":lua Snacks.picker.files()" },
+              { icon = " ", key = "n", desc = "New File",        action = ":ene | startinsert" },
+              { icon = " ", key = "g", desc = "Find Text",       action = ":lua Snacks.picker.grep()" },
+              { icon = " ", key = "r", desc = "Recent Files",    action = ":lua Snacks.picker.recent()" },
+              { icon = " ", key = "s", desc = "Restore Session", action = function()
+                  vim.cmd.packadd("persistence.nvim")
+                  require("persistence").load()
+                end },
+              { icon = "󰒲 ", key = "l", desc = "Lazy",           action = ":Lazy",   enabled = package.loaded.lazy ~= nil },
+              { icon = " ", key = "q", desc = "Quit",            action = ":qa" },
+            },
           },
           sections = {
             { section = "header" },
