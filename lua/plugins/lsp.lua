@@ -38,7 +38,6 @@ return {
     "nvim-lspconfig",
     lazy = false,
     after = function()
-      vim.cmd.packadd("SchemaStore.nvim")
       cfg("bashls")
       cfg("jsonls", {
         settings = {
@@ -173,6 +172,7 @@ return {
   {
     "lazydev.nvim",
     ft = "lua",
+    dep_of = "blink.cmp",
     after = function()
       require("lazydev").setup({
         library = {

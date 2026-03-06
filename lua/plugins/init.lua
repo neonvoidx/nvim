@@ -1,4 +1,5 @@
 return {
+  { import = "plugins.deps" },
   { import = "plugins.eldritch" },
   { import = "plugins.alt-themes" },
   { import = "plugins.snacks" },

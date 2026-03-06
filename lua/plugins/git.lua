@@ -39,7 +39,6 @@ return {
     "resolved-nvim",
     event = "User VeryLazy",
     after = function()
-      vim.cmd.packadd("resolved-nvim")
       require("resolved").setup()
     end,
   },
