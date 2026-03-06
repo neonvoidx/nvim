@@ -2,9 +2,14 @@ local snippet_path = vim.fn.stdpath("config") .. "/snippets"
 
 return {
   {
+    "nvim-web-devicons",
+    lazy = false,
+  },
+  {
     "blink.cmp",
     lazy = false,
     after = function()
+      vim.cmd.packadd("blink-copilot")
       require("blink.cmp").setup({
         enabled = function()
           return not vim.tbl_contains({ "oil" }, vim.bo.filetype) and vim.bo.buftype ~= "prompt"

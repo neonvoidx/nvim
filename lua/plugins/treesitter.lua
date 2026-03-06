@@ -29,6 +29,7 @@ return {
       end
 
       -- Enable endwise (nvim-treesitter-endwise integration)
+      vim.cmd.packadd("nvim-treesitter-endwise")
       local ok_endwise = pcall(require, "nvim-treesitter-endwise")
       if ok_endwise then
         vim.api.nvim_create_autocmd("FileType", {
