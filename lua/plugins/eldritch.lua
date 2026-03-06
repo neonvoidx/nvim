@@ -1,14 +1,11 @@
 return {
-  "eldritch-theme/eldritch.nvim",
-  -- dir = "~/dev/eldritch.nvim",
-  -- cache = false,
-  lazy = false,
-  priority = 1000,
-  opts = {
-    transparent = true,
+  {
+    "eldritch.nvim",
+    lazy = false,
+    priority = 1000,
+    after = function()
+      require("eldritch").setup({ transparent = true })
+      vim.cmd.colorscheme("eldritch")
+    end,
   },
-  config = function(_, opts)
-    require("eldritch").setup(opts)
-    vim.cmd.colorscheme("eldritch")
-  end,
 }

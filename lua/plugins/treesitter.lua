@@ -1,82 +1,62 @@
 return {
   {
-    "nvim-treesitter/nvim-treesitter",
-    build = ":TSUpdate",
-    dependencies = {
-      "RRethy/nvim-treesitter-endwise", -- Auto adds `end` to things like lua functions
-      "JoosepAlviste/nvim-ts-context-commentstring", -- Allows commenting in things like HTML inside Vue etc
-      {
-        "nvim-treesitter/nvim-treesitter-context",
-        opts = {
-          enable = true,
-          multiwindow = true,
-          max_lines = 0,
-          separator = "▔",
-        },
-        keys = {
-          {
-            "[c",
-            function()
-              require("treesitter-context").go_to_context(vim.v.count1)
-            end,
-            { desc = "Go to Treesitter context" },
-          },
-        },
-      },
-    },
-    opts = {
-      endwise = {
-        enable = true,
-      },
-      sync_install = false,
-      auto_install = true,
-      ignore_install = {},
-      modules = {},
-      highlight = {
-        enable = true,
-        additional_vim_regex_highlighting = false,
-        disable = function(_, buf)
-          local max_filesize = 100 * 1024 -- 100 KB
-          local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
-          if ok and stats and stats.size > max_filesize then
-            return true
+    "nvim-treesitter",
+    lazy = false,
+    after = function()
+      -- nvim-treesitter v1 API: setup just configures install_dir
+      -- Highlight is handled by neovim's built-in treesitter
+      local ts = require("nvim-treesitter")
+      ts.setup({})
+
+      -- On non-nix: install parsers via TSInstall
+      -- On nix: withAllGrammars provides all parsers; auto_install not available
+      if not nixInfo.isNix then
+        -- Set up the old-style highlights/ensure_installed via :TSInstall
+        -- (v1 API doesn't have configs.setup; just install parsers)
+        local parsers = {
+          "css", "latex", "scss", "svelte", "typst", "vue",
+          "bash", "c", "cpp", "cmake", "diff", "html",
+          "javascript", "jsdoc", "json", "jsonc", "lua", "luadoc",
+          "luap", "markdown", "markdown_inline", "printf", "python",
+          "query", "regex", "toml", "tsx", "typescript", "vim",
+          "vimdoc", "xml", "yaml",
+        }
+        vim.defer_fn(function()
+          for _, lang in ipairs(parsers) do
+            pcall(vim.cmd, "TSInstall " .. lang)
           end
+        end, 1000)
+      end
+
+      -- Enable endwise (nvim-treesitter-endwise integration)
+      local ok_endwise = pcall(require, "nvim-treesitter-endwise")
+      if ok_endwise then
+        vim.api.nvim_create_autocmd("FileType", {
+          callback = function(ev)
+            pcall(require("nvim-treesitter-endwise").attach, ev.buf)
+          end,
+        })
+      end
+    end,
+  },
+  {
+    "nvim-treesitter-context",
+    lazy = false,
+    after = function()
+      require("treesitter-context").setup({
+        enable = true,
+        multiwindow = true,
+        max_lines = 0,
+        separator = "▔",
+      })
+    end,
+    keys = {
+      {
+        "[c",
+        function()
+          require("treesitter-context").go_to_context(vim.v.count1)
         end,
-      },
-      ensure_installed = {
-        "css",
-        "latex",
-        "norg",
-        "scss",
-        "svelte",
-        "typst",
-        "vue",
-        "bash",
-        "c",
-        "cpp",
-        "cmake",
-        "diff",
-        "html",
-        "javascript",
-        "jsdoc",
-        "json",
-        "jsonc",
-        "lua",
-        "luadoc",
-        "luap",
-        "markdown",
-        "markdown_inline",
-        "printf",
-        "python",
-        "query",
-        "regex",
-        "toml",
-        "tsx",
-        "typescript",
-        "vim",
-        "vimdoc",
-        "xml",
-        "yaml",
+        desc = "Go to Treesitter context",
       },
     },
   },

@@ -1,6 +1,9 @@
 return {
-  "brenoprata10/nvim-highlight-colors",
-  opts = {
-    render = "virtual",
+  {
+    "nvim-highlight-colors",
+    lazy = false,
+    after = function()
+      require("nvim-highlight-colors").setup({ render = "virtual" })
+    end,
   },
 }

@@ -1,29 +1,28 @@
 return {
-	{
-		"echasnovski/mini.pairs",
-		vscode = false,
-		opts = {
-			modes = { insert = true, command = false, terminal = false },
-			markdown = false,
-			mappings = {
-				-- ['"'] = false,
-				-- ["'"] = false,
-				-- ["`"] = false,
-			},
-		},
-	},
-	{
-		"echasnovski/mini.surround",
-		opts = {
-			mappings = {
-				add = "gsa",
-				delete = "gsd",
-				find = "gsf",
-				find_left = "gsF",
-				highlight = "gsh",
-				replace = "gsr",
-				update_n_lines = "gsn",
-			},
-		},
-	},
+  {
+    "mini.pairs",
+    lazy = false,
+    after = function()
+      require("mini.pairs").setup({
+        modes = { insert = true, command = false, terminal = false },
+      })
+    end,
+  },
+  {
+    "mini.surround",
+    lazy = false,
+    after = function()
+      require("mini.surround").setup({
+        mappings = {
+          add = "gsa",
+          delete = "gsd",
+          find = "gsf",
+          find_left = "gsF",
+          highlight = "gsh",
+          replace = "gsr",
+          update_n_lines = "gsn",
+        },
+      })
+    end,
+  },
 }

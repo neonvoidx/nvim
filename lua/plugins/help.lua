@@ -1,8 +1,11 @@
 return {
-  "OXY2DEV/helpview.nvim",
-  opts = {
-    preview = {
-      icon_provider = "devicons",
-    },
+  {
+    "helpview.nvim",
+    ft = "help",
+    after = function()
+      require("helpview").setup({
+        preview = { icon_provider = "devicons" },
+      })
+    end,
   },
 }

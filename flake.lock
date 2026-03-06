@@ -1,0 +1,181 @@
+{
+  "nodes": {
+    "nixpkgs": {
+      "locked": {
+        "lastModified": 1772674223,
+        "narHash": "sha256-/suKbHSaSmuC9UY7G0VRQ3aO+QKqxAQPQ19wG7QNkF8=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "66d9241e3dc2296726dc522e62dbfe89c7b449f3",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixpkgs-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "plugins-eldritch-nvim": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1766498878,
+        "narHash": "sha256-nEt25TqsYePRCYkCI9zEk/awFBQ9ENyYWR0hSyy24GY=",
+        "type": "tarball",
+        "url": "https://github.com/eldritch-theme/eldritch.nvim/archive/refs/heads/master.tar.gz"
+      },
+      "original": {
+        "type": "tarball",
+        "url": "https://github.com/eldritch-theme/eldritch.nvim/archive/refs/heads/master.tar.gz"
+      }
+    },
+    "plugins-git-scripts-nvim": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1711326359,
+        "narHash": "sha256-Z/Z4WVLd0uFGgAvtSwpiY54gyfBCbW3kvGs3o7QksWo=",
+        "owner": "declancm",
+        "repo": "git-scripts.nvim",
+        "rev": "e02c502118d9d24c733c22ec361a44cd873dfa29",
+        "type": "github"
+      },
+      "original": {
+        "owner": "declancm",
+        "repo": "git-scripts.nvim",
+        "type": "github"
+      }
+    },
+    "plugins-lze": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1772337062,
+        "narHash": "sha256-joi1087b2iDmwOHv7/0YCrDPucbu0osbS8WQmDYoyE4=",
+        "owner": "BirdeeHub",
+        "repo": "lze",
+        "rev": "f50a84a5d84f6b16e254091e755f5a9e839a9924",
+        "type": "github"
+      },
+      "original": {
+        "owner": "BirdeeHub",
+        "repo": "lze",
+        "type": "github"
+      }
+    },
+    "plugins-lzextras": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1772336997,
+        "narHash": "sha256-BsoZTfXpISPeTnTQWtnZkDXzvo9ocILB5IO2vU8IvAM=",
+        "owner": "BirdeeHub",
+        "repo": "lzextras",
+        "rev": "abdda956a2947d0617133a018992d035fc5781da",
+        "type": "github"
+      },
+      "original": {
+        "owner": "BirdeeHub",
+        "repo": "lzextras",
+        "type": "github"
+      }
+    },
+    "plugins-markdown-toc-nvim": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1758680979,
+        "narHash": "sha256-HfjE9xfahy1U+G4aSopRBt6Qz3FXxss41oJJcuvFh70=",
+        "owner": "hedyhli",
+        "repo": "markdown-toc.nvim",
+        "rev": "869af35bce0c27e2006f410fa3f706808db4843d",
+        "type": "github"
+      },
+      "original": {
+        "owner": "hedyhli",
+        "repo": "markdown-toc.nvim",
+        "type": "github"
+      }
+    },
+    "plugins-presenting-nvim": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1758962116,
+        "narHash": "sha256-Q/SNFkMSREVEeDiikdMXQCVxrt3iThQUh08YMcN9qSk=",
+        "owner": "sotte",
+        "repo": "presenting.nvim",
+        "rev": "e78245995a09233e243bf48169b2f00dc76341f7",
+        "type": "github"
+      },
+      "original": {
+        "owner": "sotte",
+        "repo": "presenting.nvim",
+        "type": "github"
+      }
+    },
+    "plugins-resolved-nvim": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1765918012,
+        "narHash": "sha256-9wBsqHvZZMsWGiM90R9WoZ0WF4pBdC1w3FIr++zdd2A=",
+        "owner": "noamsto",
+        "repo": "resolved.nvim",
+        "rev": "15fd72dc643b60b01c8763e56edc316ff3d5e26e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "noamsto",
+        "repo": "resolved.nvim",
+        "type": "github"
+      }
+    },
+    "plugins-vim-kitty": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1767623423,
+        "narHash": "sha256-R/qZ4g8CBqdkTQqaIGTiHFPVRFDtVGsF3EmzeVGTorE=",
+        "owner": "fladson",
+        "repo": "vim-kitty",
+        "rev": "cd72f2d9cfee8d6aba5a180a5ac3ca265b5d3a46",
+        "type": "github"
+      },
+      "original": {
+        "owner": "fladson",
+        "repo": "vim-kitty",
+        "type": "github"
+      }
+    },
+    "root": {
+      "inputs": {
+        "nixpkgs": "nixpkgs",
+        "plugins-eldritch-nvim": "plugins-eldritch-nvim",
+        "plugins-git-scripts-nvim": "plugins-git-scripts-nvim",
+        "plugins-lze": "plugins-lze",
+        "plugins-lzextras": "plugins-lzextras",
+        "plugins-markdown-toc-nvim": "plugins-markdown-toc-nvim",
+        "plugins-presenting-nvim": "plugins-presenting-nvim",
+        "plugins-resolved-nvim": "plugins-resolved-nvim",
+        "plugins-vim-kitty": "plugins-vim-kitty",
+        "wrappers": "wrappers"
+      }
+    },
+    "wrappers": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1772662098,
+        "narHash": "sha256-BKxBM4RNWP+5q0ZQ6v3JlJ0e6fFj/YoYNZ7/OpgabdU=",
+        "owner": "BirdeeHub",
+        "repo": "nix-wrapper-modules",
+        "rev": "2c0a3b795766b25d15ad1ec9eef3a06160154c9a",
+        "type": "github"
+      },
+      "original": {
+        "owner": "BirdeeHub",
+        "repo": "nix-wrapper-modules",
+        "type": "github"
+      }
+    }
+  },
+  "root": "root",
+  "version": 7
+}

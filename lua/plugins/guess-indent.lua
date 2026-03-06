@@ -1,3 +1,9 @@
 return {
-	"NMAC427/guess-indent.nvim",
+  {
+    "guess-indent.nvim",
+    lazy = false,
+    after = function()
+      require("guess-indent").setup()
+    end,
+  },
 }
