@@ -8,24 +8,16 @@ return {
       local ts = require("nvim-treesitter")
       ts.setup({})
 
-      -- On non-nix: install parsers via TSInstall
-      -- On nix: withAllGrammars provides all parsers; auto_install not available
+      -- Non-nix: prefer automatic parser installation instead of manually
+      -- enumerating parsers. Nix: parsers are typically pre-provided.
       if not nixInfo.isNix then
-        -- Set up the old-style highlights/ensure_installed via :TSInstall
-        -- (v1 API doesn't have configs.setup; just install parsers)
-        local parsers = {
-          "css", "latex", "scss", "svelte", "typst", "vue",
-          "bash", "c", "cpp", "cmake", "diff", "html",
-          "javascript", "jsdoc", "json", "jsonc", "lua", "luadoc",
-          "luap", "markdown", "markdown_inline", "printf", "python",
-          "query", "regex", "toml", "tsx", "typescript", "vim",
-          "vimdoc", "xml", "yaml",
-        }
-        vim.defer_fn(function()
-          for _, lang in ipairs(parsers) do
-            pcall(vim.cmd, "TSInstall " .. lang)
-          end
-        end, 1000)
+        -- nvim-treesitter v1 exposes its config via `nvim-treesitter.configs`.
+        -- `auto_install` installs missing parsers when entering a buffer.
+        pcall(function()
+          require("nvim-treesitter.configs").setup({
+            auto_install = true,
+          })
+        end)
       end
 
       -- Enable endwise (nvim-treesitter-endwise integration)

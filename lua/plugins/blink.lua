@@ -14,6 +14,9 @@ return {
           return not vim.tbl_contains({ "oil" }, vim.bo.filetype) and vim.bo.buftype ~= "prompt"
         end,
         fuzzy = {
+          -- Silence warning when the Rust prebuilt can't be downloaded.
+          -- On macOS (and some corp networks), downloads can fail; Lua fallback is fine.
+          implementation = "lua",
           sorts = { "exact", "score", "sort_text" },
         },
         sources = {

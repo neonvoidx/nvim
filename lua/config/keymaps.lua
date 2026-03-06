@@ -125,3 +125,12 @@ local function compareToClip()
 end
 
 map({ "n" }, "<leader>D", compareToClip, { desc = "Diff vs clipboard" })
+
+-- Diagnostics: jump between diagnostics in the current buffer
+map("n", "]e", function()
+  vim.diagnostic.goto_next({ float = false })
+end, { desc = "Next diagnostic" })
+
+map("n", "[e", function()
+  vim.diagnostic.goto_prev({ float = false })
+end, { desc = "Prev diagnostic" })

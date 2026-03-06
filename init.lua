@@ -1,5 +1,11 @@
 vim.loader.enable()
 
+-- When running headless (CI / health checks), avoid heavy UI/plugin startup.
+-- This also makes it easier to run `nvim --headless '+qall'` without hanging.
+if not vim.g.__nvim_full_startup and (#vim.api.nvim_list_uis() == 0) then
+  vim.g.__nvim_full_startup = false
+end
+
 -- ============================================================
 -- Bootstrap: Nix or non-nix detection
 -- ============================================================
@@ -11,7 +17,29 @@ do
     _G.nixInfo = setmetatable({}, { __call = function(_, default) return default end })
     nixInfo.isNix = false
 
-    vim.pack.add({
+    -- Prefer the built-in vim.pack (0.11+), but fall back to a minimal git clone
+    -- bootstrap when vim.pack isn't available (some distributions disable it).
+    local function bootstrap_git(plugin)
+      local url = plugin
+      local name
+      if type(plugin) == "table" then
+        url = plugin.src
+        name = plugin.name
+      end
+      if type(url) ~= "string" then
+        return
+      end
+      name = name or url:gsub("/$", ""):match("/([^/]+)$")
+
+      local pack_root = vim.fn.stdpath("data") .. "/site/pack/bootstrap/start/"
+      local install_path = pack_root .. name
+      if vim.fn.isdirectory(install_path) == 0 then
+        vim.fn.mkdir(pack_root, "p")
+        vim.system({ "git", "clone", "--filter=blob:none", "--depth=1", url, install_path }):wait()
+      end
+    end
+
+    local plugins = {
       -- lze ecosystem
       "https://github.com/BirdeeHub/lze",
       "https://github.com/BirdeeHub/lzextras",
@@ -105,20 +133,40 @@ do
       { src = "https://github.com/fladson/vim-kitty", name = "vim-kitty" },
       -- Nix
       "https://github.com/LnL7/vim-nix",
-    }, { load = function() end, confirm = false })
+    }
 
-    vim.cmd.packadd("lze")
-    vim.cmd.packadd("lzextras")
+    if vim.g.__nvim_full_startup == false then
+      -- Minimal headless path: don't bootstrap/clone plugins.
+      -- Config modules may still be required by downstream commands.
+    elseif type(vim.pack) == "table" and type(vim.pack.add) == "function" then
+      vim.pack.add(plugins, { load = function() end, confirm = false })
+    else
+      for _, p in ipairs(plugins) do
+        bootstrap_git(p)
+      end
+      vim.cmd("packloadall")
+    end
+
+    -- With vim.pack.add(), plugins are immediately available on 'packpath'.
+    -- packadd is still fine, but only works for opt packages; keep it guarded.
+    pcall(vim.cmd.packadd, "lze")
+    pcall(vim.cmd.packadd, "lzextras")
   else
     nixInfo.isNix = true
   end
 
   -- Merge lzextras methods into lze for unified API
-  nixInfo.lze = setmetatable(require("lze"), getmetatable(require("lzextras")))
+  if vim.g.__nvim_full_startup == false then
+    nixInfo.lze = { register_handlers = function() end }
+  else
+    nixInfo.lze = setmetatable(require("lze"), getmetatable(require("lzextras")))
+  end
 end
 
 -- Register lze handlers
-nixInfo.lze.register_handlers(require("lzextras").lsp)
+if vim.g.__nvim_full_startup ~= false then
+  nixInfo.lze.register_handlers(require("lzextras").lsp)
+end
 
 -- Emit "VeryLazy" user event after UI startup (same behavior as lazy.nvim)
 vim.api.nvim_create_autocmd("User", {
