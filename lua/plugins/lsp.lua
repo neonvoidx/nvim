@@ -87,6 +87,7 @@ return {
       })
       cfg("terraformls")
       cfg("emmet_language_server")
+      cfg("nil_ls")
       pcall(cfg, "fish_lsp")
       pcall(cfg, "typos_lsp")
 

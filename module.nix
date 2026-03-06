@@ -151,6 +151,7 @@ inputs:
       fish-lsp
       typos-lsp
       vtsls
+      nil
     ];
   };
 
