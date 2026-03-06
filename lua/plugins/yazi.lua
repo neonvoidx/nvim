@@ -6,6 +6,7 @@ return {
       vim.g.loaded_netrwPlugin = 1
     end,
     after = function()
+      vim.cmd.packadd("plenary.nvim")
       require("yazi").setup({
         open_for_directories = true,
         pick_window_implementation = "snacks.picker",
