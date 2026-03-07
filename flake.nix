@@ -59,6 +59,30 @@
         neovim = final: prev: { neovim = wrapper.config.wrap { pkgs = final; }; };
         default = self.overlays.neovim;
       };
+      nixos.nix.settings = {
+
+        substituters = [
+          "https://cache.nixos.org"
+          "https://nix-community.cachix.org"
+          "https://cache.garnix.io"
+        ];
+        trusted-substituters = [
+          # Official nix cache
+          "https://cache.nixos.org"
+          # Garnix
+          "https://cache.garnix.io"
+          # Nix Community Cache
+          "https://nix-community.cachix.org"
+        ];
+        trusted-public-keys = [
+          # Official nix cache
+          "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
+          # Garnix
+          "cache.garnix.io:CTFPyKSLcx5RMJKfLo5EEPUObbA78b0YQ2DTCJXqr9g="
+          # Nix community cache
+          "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+        ];
+      };
       wrapperModules = {
         neovim = module;
         default = self.wrapperModules.neovim;
