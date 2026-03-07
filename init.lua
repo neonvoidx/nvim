@@ -168,21 +168,6 @@ if vim.g.__nvim_full_startup ~= false then
   nixInfo.lze.register_handlers(require("lzextras").lsp)
 end
 
--- Emit "VeryLazy" user event after UI startup (same behavior as lazy.nvim)
-vim.api.nvim_create_autocmd("User", {
-  pattern = "VeryLazy",
-  once = true,
-  callback = function() end, -- marker autocmd so the event is known
-})
-vim.api.nvim_create_autocmd({ "UIEnter", "VimEnter" }, {
-  once = true,
-  callback = function()
-    vim.schedule(function()
-      vim.api.nvim_exec_autocmds("User", { pattern = "VeryLazy" })
-    end)
-  end,
-})
-
 -- ============================================================
 -- Core settings
 -- ============================================================

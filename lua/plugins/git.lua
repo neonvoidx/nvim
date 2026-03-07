@@ -8,7 +8,7 @@ return {
   },
   {
     "git-blame.nvim",
-    event = "User VeryLazy",
+    event = "DeferredUIEnter",
     after = function()
       require("gitblame").setup({
         enabled = true,
@@ -37,7 +37,7 @@ return {
   },
   {
     "resolved-nvim",
-    event = "User VeryLazy",
+    event = "DeferredUIEnter",
     after = function()
       require("resolved").setup()
     end,

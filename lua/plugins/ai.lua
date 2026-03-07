@@ -21,7 +21,7 @@ return {
   },
   {
     "sidekick.nvim",
-    event = "User VeryLazy",
+    event = "DeferredUIEnter",
     after = function()
       require("sidekick").setup({
         nes = { enabled = false },

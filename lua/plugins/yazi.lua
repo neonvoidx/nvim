@@ -1,7 +1,7 @@
 return {
   {
     "yazi.nvim",
-    event = "User VeryLazy",
+    event = "DeferredUIEnter",
     beforeAll = function()
       vim.g.loaded_netrwPlugin = 1
     end,

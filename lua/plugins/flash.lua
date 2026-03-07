@@ -1,7 +1,7 @@
 return {
   {
     "flash.nvim",
-    event = "User VeryLazy",
+    event = "DeferredUIEnter",
     after = function()
       require("flash").setup({ auto_jump = true, multi_window = false })
     end,
