@@ -1,5 +1,22 @@
 {
   "nodes": {
+    "eldritch-nvim": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1766498878,
+        "narHash": "sha256-nEt25TqsYePRCYkCI9zEk/awFBQ9ENyYWR0hSyy24GY=",
+        "owner": "eldritch-theme",
+        "repo": "eldritch.nvim",
+        "rev": "0415fa72c348e814a7a6cc9405593a4f812fe12f",
+        "type": "github"
+      },
+      "original": {
+        "owner": "eldritch-theme",
+        "repo": "eldritch.nvim",
+        "rev": "0415fa72c348e814a7a6cc9405593a4f812fe12f",
+        "type": "github"
+      }
+    },
     "flake-parts": {
       "inputs": {
         "nixpkgs-lib": "nixpkgs-lib"
@@ -41,16 +58,16 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1772956932,
-        "narHash": "sha256-M0yS4AafhKxPPmOHGqIV0iKxgNO8bHDWdl1kOwGBwRY=",
+        "lastModified": 1772773019,
+        "narHash": "sha256-E1bxHxNKfDoQUuvriG71+f+s/NT0qWkImXsYZNFFfCs=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "608d0cadfed240589a7eea422407a547ad626a14",
+        "rev": "aca4d95fce4914b3892661bcb80b8087293536c6",
         "type": "github"
       },
       "original": {
         "owner": "nixos",
-        "ref": "nixpkgs-unstable",
+        "ref": "nixos-unstable",
         "repo": "nixpkgs",
         "type": "github"
       }
@@ -106,11 +123,29 @@
         "type": "github"
       }
     },
+    "resolved-nvim": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1765918012,
+        "narHash": "sha256-9wBsqHvZZMsWGiM90R9WoZ0WF4pBdC1w3FIr++zdd2A=",
+        "owner": "noamsto",
+        "repo": "resolved.nvim",
+        "rev": "15fd72dc643b60b01c8763e56edc316ff3d5e26e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "noamsto",
+        "repo": "resolved.nvim",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
+        "eldritch-nvim": "eldritch-nvim",
         "flake-parts": "flake-parts",
         "nixpkgs": "nixpkgs",
-        "nixvim": "nixvim"
+        "nixvim": "nixvim",
+        "resolved-nvim": "resolved-nvim"
       }
     },
     "systems": {
