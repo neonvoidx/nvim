@@ -115,6 +115,55 @@
           lsp_doc_border = true;
           long_message_to_split = true;
         };
+
+        # Don't show "X more lines" / file open style messages as popups.
+        # These are often triggered on buffer enter/read and can be noisy.
+        routes = [
+          {
+            filter = {
+              event = "msg_show";
+              kind = "";
+              find = "more lines";
+            };
+            opts = {
+              skip = true;
+            };
+          }
+          {
+            filter = {
+              event = "msg_show";
+              kind = "";
+              find = "fewer lines";
+            };
+            opts = {
+              skip = true;
+            };
+          }
+          {
+            # Hide the default file info message (e.g. "path/file" 317 lines --22%--)
+            # shown on every buffer switch.
+            filter = {
+              event = "msg_show";
+              kind = "";
+              find = "lines --";
+            };
+            opts = {
+              skip = true;
+            };
+          }
+          {
+            # Also hide the alternate file info message format:
+            # "path/file" 327 lines, 9115 bytes
+            filter = {
+              event = "msg_show";
+              kind = "";
+              find = "bytes";
+            };
+            opts = {
+              skip = true;
+            };
+          }
+        ];
       };
     };
 
