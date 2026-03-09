@@ -53,7 +53,8 @@
           enable = true;
           # settings are wrapped as { json = settings } by nixvim
           settings = {
-            schemas.__raw = "require('schemastore').json.schemas()";
+            # schemastore plugin module already configures jsonls schemas; defining
+            # this here causes an option conflict.
             validate.enable = true;
           };
         };

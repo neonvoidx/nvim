@@ -38,11 +38,7 @@
           pkgs = import nixpkgs {
             inherit system;
             config = {
-              # Allow only the specific unfree package we need.
-              allowUnfreePredicate = pkg:
-                builtins.elem (nixpkgs.lib.getName pkg) [
-                  "copilot-language-server"
-                ];
+              allowUnfree = true;
             };
           };
           nixvimLib = nixvim.lib.${system};

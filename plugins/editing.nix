@@ -45,6 +45,7 @@
       settings.keys = [
         {
           __unkeyed-1 = ">";
+          __unkeyed-2 = ">";
           fn.__raw = ''
             function()
               require("quicker").expand({ before = 2, after = 2, add_to_existing = true })
@@ -54,6 +55,7 @@
         }
         {
           __unkeyed-1 = "<";
+          __unkeyed-2 = "<";
           fn.__raw = ''
             function()
               require("quicker").collapse()
