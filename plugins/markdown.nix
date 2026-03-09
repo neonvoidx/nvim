@@ -67,26 +67,6 @@
     };
   };
 
-  # markdown-toc and presenting – not in nixvim or nixpkgs, use flake inputs
-  extraPlugins = [
-    (pkgs.vimUtils.buildVimPlugin {
-      name = "markdown-toc-nvim";
-      src = inputs.markdown-toc-nvim;
-    })
-    (pkgs.vimUtils.buildVimPlugin {
-      name = "presenting-nvim";
-      src = inputs.presenting-nvim;
-    })
-  ];
-
-  extraConfigLua = ''
-    require("mtoc").setup({
-      headings = { before_toc = false },
-      toc_list = { markers = "-" },
-    })
-    require("presenting").setup()
-  '';
-
   keymaps = [
     {
       mode = "n";
