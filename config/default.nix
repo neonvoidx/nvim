@@ -1,3 +1,3 @@
 {
-  imports = [ ./bufferline.nix ];
+  imports = [ ./options.nix ];
 }
