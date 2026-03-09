@@ -1,10 +1,36 @@
 {
-  description = "A Nixvim configuration";
+  description = "neonvoid's Neovim configuration (nixvim)";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     nixvim.url = "github:nix-community/nixvim";
     flake-parts.url = "github:hercules-ci/flake-parts";
+
+    # Plugins not in nixpkgs
+    eldritch-nvim = {
+      url = "github:eldritch-theme/eldritch.nvim/0415fa72c348e814a7a6cc9405593a4f812fe12f";
+      flake = false;
+    };
+    vim-kitty = {
+      url = "github:fladson/vim-kitty";
+      flake = false;
+    };
+    git-scripts-nvim = {
+      url = "github:declancm/git-scripts.nvim";
+      flake = false;
+    };
+    resolved-nvim = {
+      url = "github:noamsto/resolved.nvim";
+      flake = false;
+    };
+    markdown-toc-nvim = {
+      url = "github:hedyhli/markdown-toc.nvim";
+      flake = false;
+    };
+    presenting-nvim = {
+      url = "github:sotte/presenting.nvim";
+      flake = false;
+    };
   };
 
   outputs =
@@ -23,11 +49,10 @@
           nixvimLib = nixvim.lib.${system};
           nixvim' = nixvim.legacyPackages.${system};
           nixvimModule = {
-            inherit system; # or alternatively, set `pkgs`
-            module = import ./config; # import the module directly
-            # You can use `extraSpecialArgs` to pass additional arguments to your module files
+            inherit system;
+            module = import ./config;
             extraSpecialArgs = {
-              # inherit (inputs) foo;
+              inherit inputs;
             };
           };
           nvim = nixvim'.makeNixvimWithModule nixvimModule;
