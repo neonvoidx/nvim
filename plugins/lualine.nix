@@ -1,12 +1,10 @@
-{ ... }:
+{ pkgs, ... }:
 {
-  plugins.lualine.enable = true;
-
-  # Use extraConfigLua for the full config because sections reference other
-  # plugins (noice, gitblame, sidekick) via pcall and conditional expressions.
+  # Do NOT enable plugins.lualine — nixvim would call require("lualine").setup() automatically.
+  # We configure lualine manually via extraConfigLua so we can use pcall for optional plugins
+  # (noice, gitblame, sidekick) in the sections.
+  extraPlugins = [ pkgs.vimPlugins.lualine-nvim ];
   extraConfigLua = ''
-    vim.g.gitblame_display_virtual_text = 0
-
     local ok_gitblame, git_blame = pcall(require, "gitblame")
     local ok_noice, noice = pcall(require, "noice")
     local ok_sidekick_status, sidekick_status = pcall(require, "sidekick.status")

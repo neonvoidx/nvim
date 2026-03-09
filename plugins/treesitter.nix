@@ -4,10 +4,9 @@
     treesitter = {
       enable = true;
       grammarPackages = pkgs.vimPlugins.nvim-treesitter.allGrammars;
-      settings = {
-        highlight.enable = true;
-        indent.enable = true;
-      };
+      # highlight and indent are nixvim extraOptions (top-level), not treesitter settings
+      highlight.enable = true;
+      indent.enable = true;
     };
 
     treesitter-context = {

@@ -60,7 +60,8 @@
 
         gopls = {
           enable = true;
-          settings.gopls = {
+          # nixvim wraps gopls settings as { gopls = cfg }, so set at top level
+          settings = {
             analyses.unusedparams = true;
             staticcheck = true;
           };
@@ -265,7 +266,8 @@
   '';
 
   extraPackages = with pkgs; [
-    # LSP servers
+    # LSP servers – most are auto-added by nixvim when servers.*.enable = true,
+    # but listed here explicitly for clarity and as fallback.
     lua-language-server
     gopls
     basedpyright
@@ -274,13 +276,12 @@
     vscode-langservers-extracted
     yaml-language-server
     docker-compose-language-service
-    dockerfile-language-server-nodejs
+    dockerfile-language-server # maps to pkgs.dockerfile-language-server in nixpkgs
     neocmakelsp
     terraform-ls
     emmet-language-server
     nil
     vtsls
-    # Optional (may not exist on all platforms)
   ];
 
   keymaps = [

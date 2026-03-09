@@ -11,8 +11,10 @@
       enable = true;
       settings = {
         enabled = true;
-        message_template = "<author> • <date> <<sha>>";
+        message_template = "<author> • <date> • <summary>";
         date_format = "%r";
+        # Disable virtual text – lualine shows blame in the statusline instead
+        display_virtual_text = false;
       };
     };
 

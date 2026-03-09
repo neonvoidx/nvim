@@ -99,7 +99,6 @@
     markdownlint-cli2
     kdlfmt
     pylint
-    nodePackages.eslint
     cmake-format
     nixfmt-rfc-style
   ];
