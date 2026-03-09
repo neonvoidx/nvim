@@ -13,22 +13,22 @@
             __unkeyed-1 = {
               __unkeyed-1 = "<leader>w";
               group = "+window";
-              icon.icon = " ";
+              icon.icon = "󰖲";
             };
             __unkeyed-2 = {
               __unkeyed-1 = "<leader>p";
               group = "+Yanky";
-              icon.icon = " ";
+              icon.icon = "󰅍";
             };
             __unkeyed-3 = {
               __unkeyed-1 = "<leader>a";
               group = "+ai";
-              icon.icon = " ";
+              icon.icon = "󰚩";
             };
             __unkeyed-4 = {
               __unkeyed-1 = "<leader>.";
               group = "+scratch";
-              icon.icon = "";
+              icon.icon = "󰃉";
             };
             __unkeyed-5 = {
               __unkeyed-1 = "<leader>S";
@@ -38,32 +38,69 @@
             __unkeyed-6 = {
               __unkeyed-1 = "<leader>n";
               group = "+notifications";
-              icon.icon = " ";
+              icon.icon = "󰍩";
             };
             __unkeyed-7 = {
               __unkeyed-1 = "<leader>l";
               group = "+LSP";
-              icon.icon = " ";
+              icon.icon = "";
             };
             __unkeyed-8 = {
-              __unkeyed-1 = "<leader>o";
-              group = "+Overseer";
-              icon.icon = "";
+              __unkeyed-1 = "<leader>c";
+              group = "+code";
+              icon.icon = "";
             };
             __unkeyed-9 = {
+              __unkeyed-1 = "<leader>o";
+              group = "+Overseer";
+              icon.icon = "󰒋";
+            };
+            __unkeyed-10 = {
               __unkeyed-1 = "<leader>b";
               group = "Buffer";
-              icon = "";
+              icon = "";
+            };
+            __unkeyed-11 = {
+              __unkeyed-1 = "<leader>g";
+              group = "Git";
+              icon = "";
+            };
+            __unkeyed-12 = {
+              __unkeyed-1 = "<leader>x";
+              group = "Trouble";
+              icon = "󰎟";
             };
           }
         ];
       };
     };
 
+    # Snacks can register which-key groups in `plugins/snacks.nix` (it runs on
+    # `User VeryLazy`). That integration expects which-key to be loaded.
+    # Explicitly declare the dependency so Nixvim orders setup correctly.
+    snacks = {
+      settings.toggle.which_key = true;
+    };
+
     # ── Noice ─────────────────────────────────────────────────────────────
     noice = {
       enable = true;
       settings = {
+        # Fix: notifications appearing truncated/"folded".
+        # Noice can render messages/notify in compact views depending on config.
+        # Force long messages to go to a split and use the default cmdline popup.
+        messages = {
+          enabled = true;
+          view = "notify";
+          view_error = "notify";
+          view_warn = "notify";
+          view_history = "messages";
+          view_search = "virtualtext";
+        };
+        notify = {
+          enabled = true;
+          view = "notify";
+        };
         lsp = {
           progress.enabled = true;
           override = {
@@ -76,7 +113,7 @@
           command_palette = true;
           inc_rename = true;
           lsp_doc_border = true;
-          long_message_to_split = false;
+          long_message_to_split = true;
         };
       };
     };

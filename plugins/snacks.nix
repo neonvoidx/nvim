@@ -229,8 +229,10 @@
     vim.api.nvim_set_hl(0, "SnacksDim", { link = "Comment" })
 
     -- which-key group labels for snacks
-    vim.api.nvim_create_autocmd("User", {
-      pattern = "VeryLazy",
+    -- In the pre-nixvim config this ran on `DeferredUIEnter`. Nixvim doesn't
+    -- emit that by default, so use `VimEnter` to ensure these groups register
+    -- consistently.
+    vim.api.nvim_create_autocmd("VimEnter", {
       callback = function()
         _G.dd = function(...) Snacks.debug.inspect(...) end
         _G.bt = function() Snacks.debug.backtrace() end

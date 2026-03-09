@@ -46,10 +46,14 @@
     obsidian = {
       enable = true;
       settings = {
+        # Upstream is deprecating `ObsidianBacklinks`-style commands in favor of
+        # subcommands like `:Obsidian backlinks`. Disable legacy commands to
+        # silence the warning.
+        legacy_commands = false;
         workspaces = [
           {
             name = "personal";
-            path = "~/vaults/personal";
+            path = "~/vault";
           }
         ];
         ui.enable = false;
@@ -91,18 +95,6 @@
       key = "<leader>oq";
       action = "<cmd>ObsidianQuickSwitch<cr>";
       options.desc = "Quick Switch";
-    }
-    {
-      mode = "n";
-      key = "<leader>mt";
-      action = "<cmd>Mtoc<cr>";
-      options.desc = "Markdown TOC";
-    }
-    {
-      mode = "n";
-      key = "<leader>mp";
-      action = "<cmd>Presenting<cr>";
-      options.desc = "Presenting Mode";
     }
   ];
 }

@@ -100,7 +100,7 @@
     kdlfmt
     pylint
     cmake-format
-    nixfmt-rfc-style
+    nixfmt
   ];
 
   keymaps = [

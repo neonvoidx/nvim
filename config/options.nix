@@ -6,6 +6,10 @@
     skip_ts_context_commentstring_module = true;
     markdown_recommended_style = 0;
     qf_is_open = false;
+
+    # Set leader keys early so all keymaps using <leader> resolve correctly.
+    mapleader = " ";
+    maplocalleader = ",";
   };
 
   opts = {

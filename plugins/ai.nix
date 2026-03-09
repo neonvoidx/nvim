@@ -1,11 +1,18 @@
-{ ... }:
+{ lib, pkgs, ... }:
 {
   plugins.sidekick = {
     enable = true;
     settings = {
       nes.enabled = false;
       mux.enabled = false;
-      cli.tools = [ ];
+
+      # Sidekick (by default) enables a set of CLI assistants. One of those is
+      # `claude-code`, which is unfree and also frequently blocked (HTTP 403)
+      # when fetched from the npm registry in a pure Nix build.
+      #
+      # By explicitly setting the tool list, we avoid pulling `pkgs.claude-code`
+      # into the Neovim build closure unless you opt in.
+      cli.tools = lib.mkDefault [ pkgs.aider-chat pkgs.copilot-cli ];
     };
   };
 
