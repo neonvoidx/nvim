@@ -5,7 +5,7 @@
       copilot-lua
     ];
 
-    luaConfigRC."ai" = lib.nvim.dag.entryAnywhere ''
+    luaConfigRC."ai" = lib.nvim.dag.entryAnywhere /* lua */ ''
       -- ── GitHub Copilot ────────────────────────────────────────────────
       require("copilot").setup({
         filetypes = {

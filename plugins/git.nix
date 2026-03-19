@@ -1,34 +1,30 @@
 { pkgs, lib, ... }:
 {
   config.vim = {
-    # ── Gitsigns (native NVF module) ──────────────────────────────────────
     git.gitsigns = {
       enable = true;
-      # Override default hunk-navigation mappings to use ]h / [h instead of ]c / [c
       mappings = {
-        nextHunk     = "]h";
+        nextHunk = "]h";
         previousHunk = "[h";
       };
     };
 
-    # ── Diffview (native NVF module) ──────────────────────────────────────
     utility.diffview-nvim = {
       enable = true;
       setupOpts = {
         enhanced_diff_hl = true;
-        use_icons        = true;
+        use_icons = true;
         view.merge_tool = {
-          layout              = "diff3_horizontal";
-          winbar_info         = true;
+          layout = "diff3_horizontal";
+          winbar_info = true;
           disable_diagnostics = true;
         };
       };
     };
 
-    # ── Git-blame (not a native NVF module) ──────────────────────────────
     startPlugins = [ pkgs.vimPlugins.git-blame-nvim ];
 
-    luaConfigRC."git-blame" = lib.nvim.dag.entryAnywhere ''
+    luaConfigRC."git-blame" = lib.nvim.dag.entryAnywhere /* lua */ ''
       require("gitblame").setup({
         enabled             = true,
         message_template    = "<author> • <date> <<sha>>",

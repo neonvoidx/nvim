@@ -3,7 +3,7 @@
   config.vim = {
     startPlugins = with pkgs.vimPlugins; [ persistence-nvim ];
 
-    luaConfigRC."session" = lib.nvim.dag.entryAnywhere ''
+    luaConfigRC."session" = lib.nvim.dag.entryAnywhere /* lua */ ''
       require("persistence").setup({
         need = 1,
         branch = true,

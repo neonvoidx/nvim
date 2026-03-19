@@ -1,37 +1,38 @@
 { pkgs, lib, ... }:
 {
   config.vim = {
-    # ── blink.cmp (native NVF module) ────────────────────────────────────
     autocomplete.blink-cmp = {
       enable = true;
 
-      # Source plugins – blink-copilot registered as a source plugin
       sourcePlugins.copilot = {
-        enable  = true;
+        enable = true;
         package = pkgs.vimPlugins.blink-copilot;
-        module  = "blink-copilot";
+        module = "blink-copilot";
       };
 
       setupOpts = {
-        enabled = lib.generators.mkLuaInline ''
-          function()
-            return not vim.tbl_contains({ "oil" }, vim.bo.filetype)
-              and vim.bo.buftype ~= "prompt"
-          end
-        '';
-
         fuzzy = {
-          sorts = [ "exact" "score" "sort_text" ];
+          sorts = [
+            "exact"
+            "score"
+            "sort_text"
+          ];
           prebuilt_binaries.download = false;
         };
 
         sources = {
-          default  = [ "copilot" "lsp" "path" "snippets" "buffer" ];
+          default = [
+            "copilot"
+            "lsp"
+            "path"
+            "snippets"
+            "buffer"
+          ];
           providers = {
             copilot = {
-              module      = "blink-copilot";
+              module = "blink-copilot";
               score_offset = 4;
-              async        = true;
+              async = true;
             };
             path = {
               score_offset = 5;
@@ -42,39 +43,66 @@
 
         completion = {
           documentation = {
-            auto_show          = true;
+            auto_show = true;
             auto_show_delay_ms = 500;
-            window.border      = "rounded";
+            window.border = "rounded";
           };
           menu = {
-            auto_show  = true;
-            min_width  = 60;
-            border     = "rounded";
+            auto_show = true;
+            min_width = 60;
+            border = "rounded";
           };
           list.selection = {
-            preselect  = true;
+            preselect = true;
             auto_insert = true;
           };
         };
 
         keymap = {
-          "<C-k>"     = [ "select_prev" "fallback" ];
-          "<C-j>"     = [ "select_next" "fallback" ];
-          "<Tab>"     = [ "accept"      "fallback" ];
-          "<Up>"      = [ "select_prev" "fallback" ];
-          "<Down>"    = [ "select_next" "fallback" ];
-          "<S-Tab>"   = [ "snippet_forward"  "fallback" ];
-          "<C-Tab>"   = [ "snippet_backward" "fallback" ];
-          "<C-e>"     = [ "hide" "fallback" ];
-          "<C-space>" = [ "show" "show_documentation" "hide_documentation" ];
+          "<C-k>" = [
+            "select_prev"
+            "fallback"
+          ];
+          "<C-j>" = [
+            "select_next"
+            "fallback"
+          ];
+          "<Tab>" = [
+            "accept"
+            "fallback"
+          ];
+          "<Up>" = [
+            "select_prev"
+            "fallback"
+          ];
+          "<Down>" = [
+            "select_next"
+            "fallback"
+          ];
+          "<S-Tab>" = [
+            "snippet_forward"
+            "fallback"
+          ];
+          "<C-Tab>" = [
+            "snippet_backward"
+            "fallback"
+          ];
+          "<C-e>" = [
+            "hide"
+            "fallback"
+          ];
+          "<C-space>" = [
+            "show"
+            "show_documentation"
+            "hide_documentation"
+          ];
         };
       };
     };
 
-    # ── nvim-scissors (snippet management – not in NVF natively) ─────────
     startPlugins = [ pkgs.vimPlugins.nvim-scissors ];
 
-    luaConfigRC."scissors" = lib.nvim.dag.entryAnywhere ''
+    luaConfigRC."scissors" = lib.nvim.dag.entryAnywhere /* lua */ ''
       require("scissors").setup({
         snippetDir = vim.fn.stdpath("config") .. "/snippets",
       })

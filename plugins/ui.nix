@@ -1,7 +1,6 @@
 { pkgs, lib, ... }:
 {
   config.vim = {
-    # ── Noice (native NVF module) ─────────────────────────────────────────
     ui.noice = {
       enable = true;
       setupOpts = {
@@ -9,14 +8,14 @@
           progress.enabled = true;
           override = {
             "vim.lsp.util.convert_input_to_markdown_lines" = true;
-            "vim.lsp.util.stylize_markdown"                = true;
+            "vim.lsp.util.stylize_markdown" = true;
           };
         };
         presets = {
-          bottom_search    = true;
-          command_palette  = true;
-          inc_rename       = true;
-          lsp_doc_border   = true;
+          bottom_search = true;
+          command_palette = true;
+          inc_rename = true;
+          lsp_doc_border = true;
           long_message_to_split = false;
         };
       };
@@ -29,9 +28,12 @@
     };
 
     # ── which-key (not a native NVF module – kept as raw Lua) ────────────
-    startPlugins = [ pkgs.vimPlugins.which-key-nvim pkgs.vimPlugins.helpview-nvim ];
+    startPlugins = [
+      pkgs.vimPlugins.which-key-nvim
+      pkgs.vimPlugins.helpview-nvim
+    ];
 
-    luaConfigRC."which-key" = lib.nvim.dag.entryAnywhere ''
+    luaConfigRC."which-key" = lib.nvim.dag.entryAnywhere /* lua */ ''
       require("which-key").setup({
         preset    = "helix",
         timeoutlen = 300,
@@ -50,7 +52,7 @@
       })
     '';
 
-    luaConfigRC."helpview" = lib.nvim.dag.entryAnywhere ''
+    luaConfigRC."helpview" = lib.nvim.dag.entryAnywhere /* lua */ ''
       require("helpview").setup({
         preview = { icon_provider = "devicons" },
       })

@@ -1,4 +1,9 @@
-{ inputs, pkgs, lib, ... }:
+{
+  inputs,
+  pkgs,
+  lib,
+  ...
+}:
 let
   eldritch-nvim = pkgs.vimUtils.buildVimPlugin {
     name = "eldritch.nvim";
@@ -9,7 +14,7 @@ in
   config.vim = {
     startPlugins = [ eldritch-nvim ];
 
-    luaConfigRC."colorscheme" = lib.nvim.dag.entryAnywhere ''
+    luaConfigRC."colorscheme" = lib.nvim.dag.entryAnywhere /* lua */ ''
       require("eldritch").setup({ transparent = true })
       vim.cmd.colorscheme("eldritch")
     '';

@@ -1,70 +1,104 @@
 { pkgs, lib, ... }:
 {
   config.vim = {
-    # lazygit binary used by snacks.lazygit
     extraPackages = [ pkgs.lazygit ];
 
-    # ── snacks.nvim (native NVF module) ──────────────────────────────────
     utility.snacks-nvim = {
       enable = true;
 
       setupOpts = {
-        animate      = { enabled = true; };
-        bigfile      = { enabled = true; };
-        dim          = { enabled = true; };
-        scope        = { enabled = true; };
-        rename       = { enabled = true; };
-        git          = { enabled = false; };
-        notifier     = { enabled = true; timeout = 3000; };
-        quickfile    = { enabled = true; };
-        scroll       = { enabled = true; };
-        input        = { enabled = true; };
-        lazygit      = { enabled = true; };
+        animate = {
+          enabled = true;
+        };
+        bigfile = {
+          enabled = true;
+        };
+        dim = {
+          enabled = true;
+        };
+        scope = {
+          enabled = true;
+        };
+        rename = {
+          enabled = true;
+        };
+        git = {
+          enabled = false;
+        };
+        notifier = {
+          enabled = true;
+          timeout = 3000;
+        };
+        quickfile = {
+          enabled = true;
+        };
+        scroll = {
+          enabled = true;
+        };
+        input = {
+          enabled = true;
+        };
+        lazygit = {
+          enabled = true;
+        };
 
         statuscolumn = {
           enable = true;
-          left   = [ "sign" ];
-          right  = [ "fold" "git" "mark" ];
-          folds  = { open = false; git_hl = true; };
+          left = [ "sign" ];
+          right = [
+            "fold"
+            "git"
+            "mark"
+          ];
+          folds = {
+            open = false;
+            git_hl = true;
+          };
         };
 
         indent = {
           enabled = true;
           hl = [
-            "SnacksIndent1" "SnacksIndent2" "SnacksIndent3" "SnacksIndent4"
-            "SnacksIndent5" "SnacksIndent6" "SnacksIndent7" "SnacksIndent8"
+            "SnacksIndent1"
+            "SnacksIndent2"
+            "SnacksIndent3"
+            "SnacksIndent4"
+            "SnacksIndent5"
+            "SnacksIndent6"
+            "SnacksIndent7"
+            "SnacksIndent8"
           ];
         };
 
         picker = {
           enabled = true;
           layout.layout = {
-            backdrop   = false;
-            width      = 0.80;
-            min_width  = 80;
-            height     = 0.80;
+            backdrop = false;
+            width = 0.80;
+            min_width = 80;
+            height = 0.80;
             min_height = 30;
-            box        = "vertical";
-            border     = true;
-            title      = "{title} {live} {flags}";
-            title_pos  = "center";
+            box = "vertical";
+            border = true;
+            title = "{title} {live} {flags}";
+            title_pos = "center";
           };
         };
 
         dashboard = {
           enabled = true;
           preset.header = ''
-░   ░░░  ░░        ░░░      ░░░  ░░░░  ░░        ░░  ░░░░  ░
-▒    ▒▒  ▒▒  ▒▒▒▒▒▒▒▒  ▒▒▒▒  ▒▒  ▒▒▒▒  ▒▒▒▒▒  ▒▒▒▒▒   ▒▒   ▒
-▓  ▓  ▓  ▓▓      ▓▓▓▓  ▓▓▓▓  ▓▓▓  ▓▓  ▓▓▓▓▓▓  ▓▓▓▓▓        ▓
-█  ██    ██  ████████  ████  ████    ███████  █████  █  █  █
-█  ███   ██        ███      ██████  █████        ██  ████  █'';
+            ░   ░░░  ░░        ░░░      ░░░  ░░░░  ░░        ░░  ░░░░  ░
+            ▒    ▒▒  ▒▒  ▒▒▒▒▒▒▒▒  ▒▒▒▒  ▒▒  ▒▒▒▒  ▒▒▒▒▒  ▒▒▒▒▒   ▒▒   ▒
+            ▓  ▓  ▓  ▓▓      ▓▓▓▓  ▓▓▓▓  ▓▓▓  ▓▓  ▓▓▓▓▓▓  ▓▓▓▓▓        ▓
+            █  ██    ██  ████████  ████  ████    ███████  █████  █  █  █
+            █  ███   ██        ███      ██████  █████        ██  ████  █'';
         };
       };
     };
 
     # ── Keymaps and globals that depend on Snacks being loaded ───────────
-    luaConfigRC."snacks-config" = lib.nvim.dag.entryAnywhere ''
+    luaConfigRC."snacks-config" = lib.nvim.dag.entryAnywhere /* lua */ ''
       vim.api.nvim_set_hl(0, "SnacksDim", { link = "Comment" })
 
       vim.api.nvim_create_autocmd("User", {

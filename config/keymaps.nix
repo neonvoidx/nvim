@@ -1,6 +1,6 @@
 { lib, ... }:
 {
-  config.vim.luaConfigRC."keymaps" = lib.nvim.dag.entryAnywhere ''
+  config.vim.luaConfigRC."keymaps" = lib.nvim.dag.entryAnywhere /* lua */ ''
     local map = vim.keymap.set
 
     -- Helper: get visual selection as a list of lines

@@ -1,6 +1,6 @@
 { lib, ... }:
 {
-  config.vim.luaConfigRC."autocmds" = lib.nvim.dag.entryAnywhere ''
+  config.vim.luaConfigRC."autocmds" = lib.nvim.dag.entryAnywhere /* lua */ ''
     local function augroup(name)
       return vim.api.nvim_create_augroup("autocmd_" .. name, { clear = true })
     end

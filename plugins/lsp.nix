@@ -1,25 +1,22 @@
 { pkgs, lib, ... }:
 {
   config.vim = {
-    # ── Core LSP toggle ───────────────────────────────────────────────────
     lsp = {
       enable = true;
-      formatOnSave = false;   # handled by conform.nvim
+      formatOnSave = false; # handled by conform.nvim
       inlayHints.enable = true;
 
-      # lspkind (vscode-like icons in completion)
       lspkind = {
         enable = true;
         setupOpts.mode = "symbol_text";
       };
 
-      # Trouble (diagnostics viewer)
       trouble = {
         enable = true;
         setupOpts = {
           modes = {
             diagnostics_buffer = {
-              mode   = "diagnostics";
+              mode = "diagnostics";
               filter.buf = 0;
             };
           };
@@ -27,12 +24,10 @@
       };
     };
 
-    # ── Language modules (each one auto-enables its LSP, treesitter, fmt) ─
     languages = {
-      # Master toggles (used as defaults by each language module)
-      enableTreesitter       = true;
-      enableFormat           = true;
-      enableExtraDiagnostics = false;  # null-ls not used
+      enableTreesitter = true;
+      enableFormat = true;
+      enableExtraDiagnostics = false; # null-ls not used
 
       ts = {
         enable = true;
@@ -44,8 +39,8 @@
       lua = {
         enable = true;
         lsp = {
-          enable  = true;
-          lazydev.enable = true;   # lazydev.nvim for neovim API completions
+          enable = true;
+          lazydev.enable = true; # lazydev.nvim for neovim API completions
         };
         treesitter.enable = true;
         format.enable = true;
@@ -54,19 +49,19 @@
       nix = {
         enable = true;
         lsp = {
-          enable  = true;
+          enable = true;
           servers = [ "nixd" ];
         };
         treesitter.enable = true;
         format = {
           enable = true;
-          type   = [ "nixfmt" ];
+          type = [ "nixfmt" ];
         };
       };
 
       rust = {
         enable = true;
-        lsp.enable  = true;
+        lsp.enable = true;
         treesitter.enable = true;
         format.enable = true;
       };
@@ -74,7 +69,7 @@
       python = {
         enable = true;
         lsp = {
-          enable  = true;
+          enable = true;
           servers = [ "basedpyright" ];
         };
         treesitter.enable = true;
@@ -103,26 +98,24 @@
 
       markdown = {
         enable = true;
-        lsp.enable = false;   # markdown LSP is heavy; rely on lint
+        lsp.enable = false; # markdown LSP is heavy; rely on lint
         treesitter.enable = true;
         format.enable = true;
       };
     };
 
-    # ── Extra tools placed on PATH ────────────────────────────────────────
     extraPackages = with pkgs; [
       ripgrep
       fd
     ];
 
-    # ── Additional plugins not covered by NVF language modules ───────────
     startPlugins = with pkgs.vimPlugins; [
       tiny-inline-diagnostic-nvim
       inc-rename-nvim
-      vim-illuminate       # also enabled via vim.ui.illuminate but kept here for awareness
+      vim-illuminate # also enabled via vim.ui.illuminate but kept here for awareness
     ];
 
-    luaConfigRC."lsp-extra" = lib.nvim.dag.entryAnywhere ''
+    luaConfigRC."lsp-extra" = lib.nvim.dag.entryAnywhere /* lua */ ''
       -- ── Tiny Inline Diagnostic ─────────────────────────────────────
       require("tiny-inline-diagnostic").setup({
         options = {

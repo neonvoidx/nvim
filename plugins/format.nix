@@ -1,34 +1,62 @@
 { pkgs, lib, ... }:
 {
   config.vim = {
-    # ── conform.nvim (native NVF module) ─────────────────────────────────
     formatter.conform-nvim = {
       enable = true;
 
       setupOpts = {
         formatters_by_ft = {
-          javascript       = [ "eslint_d" "prettierd" ];
-          typescript       = [ "eslint_d" "prettierd" ];
-          javascriptreact  = [ "eslint_d" "prettierd" ];
-          typescriptreact  = [ "eslint_d" "prettierd" ];
-          "javascript.jsx" = [ "eslint_d" "prettierd" ];
-          "typescript.tsx" = [ "eslint_d" "prettierd" ];
-          css              = [ "prettierd" ];
-          html             = [ "prettierd" ];
-          json             = [ "prettierd" ];
-          yaml             = [ "prettierd" ];
-          lua              = [ "stylua" ];
-          python           = [ "isort" "black" ];
-          markdown         = [ "prettierd" "markdownlint-cli2" "markdown-toc" ];
-          "markdown.mdx"   = [ "prettierd" "markdownlint-cli2" "markdown-toc" ];
-          nix              = [ "nixfmt" ];
+          javascript = [
+            "eslint_d"
+            "prettierd"
+          ];
+          typescript = [
+            "eslint_d"
+            "prettierd"
+          ];
+          javascriptreact = [
+            "eslint_d"
+            "prettierd"
+          ];
+          typescriptreact = [
+            "eslint_d"
+            "prettierd"
+          ];
+          "javascript.jsx" = [
+            "eslint_d"
+            "prettierd"
+          ];
+          "typescript.tsx" = [
+            "eslint_d"
+            "prettierd"
+          ];
+          css = [ "prettierd" ];
+          html = [ "prettierd" ];
+          json = [ "prettierd" ];
+          yaml = [ "prettierd" ];
+          lua = [ "stylua" ];
+          python = [
+            "isort"
+            "black"
+          ];
+          markdown = [
+            "prettierd"
+            "markdownlint-cli2"
+            "markdown-toc"
+          ];
+          "markdown.mdx" = [
+            "prettierd"
+            "markdownlint-cli2"
+            "markdown-toc"
+          ];
+          nix = [ "nixfmt" ];
         };
 
         notify_on_error = false;
 
         formatters.prettierd.require_cwd = true;
 
-        format_on_save = lib.generators.mkLuaInline ''
+        format_on_save = lib.generators.mkLuaInline /* lua */ ''
           function(bufnr)
             if vim.g.disable_autoformat or vim.b[bufnr].disable_autoformat then
               return
@@ -39,7 +67,6 @@
       };
     };
 
-    # ── nvim-lint (not a native NVF module) ──────────────────────────────
     startPlugins = [ pkgs.vimPlugins.nvim-lint ];
 
     extraPackages = with pkgs; [
@@ -52,7 +79,7 @@
       markdownlint-cli2
     ];
 
-    luaConfigRC."lint" = lib.nvim.dag.entryAnywhere ''
+    luaConfigRC."lint" = lib.nvim.dag.entryAnywhere /* lua */ ''
       vim.g.disable_autoformat = false
 
       -- Toggle autoformat keymaps

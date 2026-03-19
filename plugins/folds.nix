@@ -4,7 +4,7 @@
     enable = true;
 
     setupOpts = {
-      fold_virt_text_handler = lib.generators.mkLuaInline ''
+      fold_virt_text_handler = lib.generators.mkLuaInline /* lua */ ''
         function(virtText, lnum, endLnum, width, truncate)
           local newVirtText = {}
           local suffix = ("   %d lines"):format(endLnum - lnum)
@@ -36,7 +36,7 @@
   };
 
   # Keymaps for ufo go here since NVF's nvim-ufo module doesn't expose them
-  config.vim.luaConfigRC."ufo-keymaps" = lib.nvim.dag.entryAnywhere ''
+  config.vim.luaConfigRC."ufo-keymaps" = lib.nvim.dag.entryAnywhere /* lua */ ''
     vim.keymap.set("n", "zR", require("ufo").openAllFolds,  { desc = "Open all folds" })
     vim.keymap.set("n", "zM", require("ufo").closeAllFolds, { desc = "Close all folds" })
   '';

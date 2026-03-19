@@ -1,60 +1,50 @@
 { pkgs, lib, ... }:
 {
   config.vim = {
-    # ── Flash (native NVF module) ─────────────────────────────────────────
     utility.motion.flash-nvim = {
       enable = true;
       setupOpts = {
-        auto_jump    = true;
+        auto_jump = true;
         multi_window = false;
-      };
-      # Override mappings to match original config
-      mappings = {
-        jump              = "s";
-        treesitter        = "S";
-        remote            = "r";
-        treesitter_search = "R";
-        toggle            = "<c-s>";
       };
     };
 
-    # ── Mini.pairs (native NVF module) ────────────────────────────────────
     mini.pairs = {
       enable = true;
       setupOpts.modes = {
-        insert  = true;
+        insert = true;
         command = false;
         terminal = false;
       };
     };
 
-    # ── Mini.surround (native NVF module) ────────────────────────────────
     mini.surround = {
       enable = true;
       setupOpts.mappings = {
-        add           = "gsa";
-        delete        = "gsd";
-        find          = "gsf";
-        find_left     = "gsF";
-        highlight     = "gsh";
-        replace       = "gsr";
+        add = "gsa";
+        delete = "gsd";
+        find = "gsf";
+        find_left = "gsF";
+        highlight = "gsh";
+        replace = "gsr";
         update_n_lines = "gsn";
       };
     };
 
-    # ── nvim-highlight-colors (native NVF module) ─────────────────────────
     ui.nvim-highlight-colors = {
       enable = true;
       setupOpts.render = "virtual";
     };
 
-    # ── Illuminate (native NVF module) ────────────────────────────────────
     ui.illuminate = {
       enable = true;
-      setupOpts.providers = [ "lsp" "treesitter" "regex" ];
+      setupOpts.providers = [
+        "lsp"
+        "treesitter"
+        "regex"
+      ];
     };
 
-    # ── Plugins not yet in NVF – kept as raw Lua ─────────────────────────
     startPlugins = with pkgs.vimPlugins; [
       todo-comments-nvim
       numb-nvim
@@ -63,7 +53,7 @@
       guess-indent-nvim
     ];
 
-    luaConfigRC."editing-extra" = lib.nvim.dag.entryAnywhere ''
+    luaConfigRC."editing-extra" = lib.nvim.dag.entryAnywhere /* lua */ ''
       -- ── Todo-comments ───────────────────────────────────────────────
       require("todo-comments").setup({
         signs  = true,

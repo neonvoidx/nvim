@@ -8,7 +8,7 @@
       nvim-web-devicons
     ];
 
-    luaConfigRC."markdown" = lib.nvim.dag.entryAnywhere ''
+    luaConfigRC."markdown" = lib.nvim.dag.entryAnywhere /* lua */ ''
       -- ── Render-markdown ───────────────────────────────────────────────
       require("render-markdown").setup({
         file_types = { "markdown", "codecompanion" },

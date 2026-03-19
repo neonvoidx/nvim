@@ -66,7 +66,7 @@
     };
 
     # Options that require raw Lua (complex types or not exposed by nvf)
-    luaConfigRC."options-extra" = lib.nvim.dag.entryAnywhere ''
+    luaConfigRC."options-extra" = lib.nvim.dag.entryAnywhere /* lua */ ''
       -- winborder (vim.o global option, not in vim.opt)
       vim.o.winborder = "rounded"
 

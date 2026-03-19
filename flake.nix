@@ -8,7 +8,7 @@
 
     # Plugins not packaged in nixpkgs
     eldritch-nvim = {
-      url = "github:eldritch-theme/eldritch.nvim/0415fa72c348e814a7a6cc9405593a4f812fe12f";
+      url = "github:eldritch-theme/eldritch.nvim";
       flake = false;
     };
     resolved-nvim = {
