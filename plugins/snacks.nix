@@ -93,18 +93,33 @@
             ▓  ▓  ▓  ▓▓      ▓▓▓▓  ▓▓▓▓  ▓▓▓  ▓▓  ▓▓▓▓▓▓  ▓▓▓▓▓        ▓
             █  ██    ██  ████████  ████  ████    ███████  █████  █  █  █
             █  ███   ██        ███      ██████  █████        ██  ████  █'';
+          preset.keys = [
+            { icon = " "; key = "f"; desc = "Find File";       action.__raw = "function() Snacks.picker.files() end"; }
+            { icon = " "; key = "n"; desc = "New File";        action.__raw = "function() vim.cmd('enew') end"; }
+            { icon = " "; key = "g"; desc = "Find Text";       action.__raw = "function() Snacks.picker.grep() end"; }
+            { icon = " "; key = "r"; desc = "Recent Files";    action.__raw = "function() Snacks.picker.recent() end"; }
+            { icon = " "; key = "s"; desc = "Restore Session"; action.__raw = "function() require('persistence').load() end"; section = "session"; }
+            { icon = "󰒲 "; key = "q"; desc = "Quit";           action.__raw = "function() vim.cmd('qa') end"; }
+          ];
           sections = [
             { section = "header"; }
             { section = "keys"; gap = 1; padding = 1; }
             { section = "recent_files"; gap = 1; padding = 1; }
             { section = "projects"; gap = 1; padding = 1; }
-            { section = "startup"; }
           ];
         };
       };
     };
 
     # ── Keymaps and globals that depend on Snacks being loaded ───────────
+    luaConfigRC."lazy-stats-shim" = lib.nvim.dag.entryAnywhere /* lua */ ''
+      -- Shim lazy.stats so lzn-auto-require doesn't hard-error if snacks
+      -- ever tries to require it (we use lze, not lazy.nvim)
+      package.preload["lazy.stats"] = function()
+        return { stats = function() return { startuptime = 0, count = 0, loaded = 0 } end }
+      end
+    '';
+
     luaConfigRC."snacks-config" = lib.nvim.dag.entryAnywhere /* lua */ ''
       vim.api.nvim_set_hl(0, "SnacksDim", { link = "Comment" })
 
@@ -136,6 +151,7 @@
       wk.add({
         { "<leader>f",  group = "+find",    icon = { icon = "󰍉 " } },
         { "<leader>g",  group = "+git",     icon = { icon = " " } },
+        { "<leader>q",  group = "+session", icon = { icon = " " } },
         { "<leader>s",  group = "+search",  icon = { icon = "󰆘 " } },
         { "<leader>u",  group = "+ui",      icon = { icon = "󰍹 " } },
         { "<leader>c",  group = "+code",    icon = { icon = " " } },
