@@ -15,6 +15,14 @@
       url = "github:noamsto/resolved.nvim";
       flake = false;
     };
+    vim-kitty = {
+      url = "github:fladson/vim-kitty";
+      flake = false;
+    };
+    markdown-toc-nvim = {
+      url = "github:hedyhli/markdown-toc.nvim";
+      flake = false;
+    };
   };
 
   outputs =

@@ -1,10 +1,16 @@
-{ pkgs, lib, ... }:
+{ inputs, pkgs, lib, ... }:
+let
+  markdown-toc-nvim = pkgs.vimUtils.buildVimPlugin {
+    name = "markdown-toc.nvim";
+    src = inputs.markdown-toc-nvim;
+  };
+in
 {
   config.vim = {
     startPlugins = with pkgs.vimPlugins; [
       render-markdown-nvim
       obsidian-nvim
-      markdown-toc
+      markdown-toc-nvim
       nvim-web-devicons
     ];
 
