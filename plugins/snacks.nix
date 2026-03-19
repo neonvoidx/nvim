@@ -94,12 +94,12 @@
             █  ██    ██  ████████  ████  ████    ███████  █████  █  █  █
             █  ███   ██        ███      ██████  █████        ██  ████  █'';
           preset.keys = [
-            { icon = " "; key = "f"; desc = "Find File";       action.__raw = "function() Snacks.picker.files() end"; }
-            { icon = " "; key = "n"; desc = "New File";        action.__raw = "function() vim.cmd('enew') end"; }
-            { icon = " "; key = "g"; desc = "Find Text";       action.__raw = "function() Snacks.picker.grep() end"; }
-            { icon = " "; key = "r"; desc = "Recent Files";    action.__raw = "function() Snacks.picker.recent() end"; }
-            { icon = " "; key = "s"; desc = "Restore Session"; action.__raw = "function() require('persistence').load() end"; section = "session"; }
-            { icon = "󰒲 "; key = "q"; desc = "Quit";           action.__raw = "function() vim.cmd('qa') end"; }
+            { icon = " "; key = "f"; desc = "Find File";       action = lib.generators.mkLuaInline "function() Snacks.picker.files() end"; }
+            { icon = " "; key = "n"; desc = "New File";        action = lib.generators.mkLuaInline "function() vim.cmd('enew') end"; }
+            { icon = " "; key = "g"; desc = "Find Text";       action = lib.generators.mkLuaInline "function() Snacks.picker.grep() end"; }
+            { icon = " "; key = "r"; desc = "Recent Files";    action = lib.generators.mkLuaInline "function() Snacks.picker.recent() end"; }
+            { icon = " "; key = "s"; desc = "Restore Session"; action = lib.generators.mkLuaInline "function() require('persistence').load() end"; }
+            { icon = "󰒲 "; key = "q"; desc = "Quit";           action = lib.generators.mkLuaInline "function() vim.cmd('qa') end"; }
           ];
           sections = [
             { section = "header"; }
