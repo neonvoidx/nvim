@@ -1,6 +1,8 @@
 { pkgs, lib, ... }:
 {
   config.vim = {
+    extraPackages = [ pkgs.nodejs ];
+
     startPlugins = with pkgs.vimPlugins; [
       copilot-lua
     ];

@@ -93,6 +93,13 @@
             ▓  ▓  ▓  ▓▓      ▓▓▓▓  ▓▓▓▓  ▓▓▓  ▓▓  ▓▓▓▓▓▓  ▓▓▓▓▓        ▓
             █  ██    ██  ████████  ████  ████    ███████  █████  █  █  █
             █  ███   ██        ███      ██████  █████        ██  ████  █'';
+          sections = [
+            { section = "header"; }
+            { section = "keys"; gap = 1; padding = 1; }
+            { section = "recent_files"; gap = 1; padding = 1; }
+            { section = "projects"; gap = 1; padding = 1; }
+            { section = "startup"; }
+          ];
         };
       };
     };

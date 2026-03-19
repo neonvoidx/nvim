@@ -77,8 +77,8 @@
       vim.opt.spelllang = { "en" }
 
       vim.opt.fillchars = {
-        foldopen = "",
-        foldclose = "",
+        foldopen = "▾",
+        foldclose = "▸",
         fold = " ",
         foldsep = " ",
         diff = "╱",
