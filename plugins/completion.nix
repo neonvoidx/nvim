@@ -1,116 +1,80 @@
 { pkgs, lib, ... }:
 {
   config.vim = {
-    startPlugins = with pkgs.vimPlugins; [
-      blink-cmp
-      blink-copilot        # copilot source for blink.cmp
-      friendly-snippets
-      nvim-web-devicons
-      lspkind-nvim
-    ];
+    # ── blink.cmp (native NVF module) ────────────────────────────────────
+    autocomplete.blink-cmp = {
+      enable = true;
 
-    luaConfigRC."completion" = lib.nvim.dag.entryAnywhere ''
-      local snippet_path = vim.fn.stdpath("config") .. "/snippets"
+      # Source plugins – blink-copilot registered as a source plugin
+      sourcePlugins.copilot = {
+        enable  = true;
+        package = pkgs.vimPlugins.blink-copilot;
+        module  = "blink-copilot";
+      };
 
-      require("blink.cmp").setup({
-        enabled = function()
-          return not vim.tbl_contains({ "oil" }, vim.bo.filetype)
-            and vim.bo.buftype ~= "prompt"
-        end,
+      setupOpts = {
+        enabled = lib.generators.mkLuaInline ''
+          function()
+            return not vim.tbl_contains({ "oil" }, vim.bo.filetype)
+              and vim.bo.buftype ~= "prompt"
+          end
+        '';
+
         fuzzy = {
-          sorts = { "exact", "score", "sort_text" },
-        },
-        sources = {
-          default = { "copilot", "lsp", "path", "lazydev", "snippets", "buffer" },
-          providers = {
-            path = {
-              name = "path",
-              opts = {
-                get_cwd = function(_) return vim.fn.getcwd() end,
-              },
-              score_offset = 5,
-            },
-            lazydev = {
-              name = "LazyDev",
-              module = "lazydev.integrations.blink",
-              score_offset = 6,
-            },
-            lsp = {
-              name = "LSP",
-              module = "blink.cmp.sources.lsp",
-              score_offset = 7,
-            },
-            copilot = {
-              name = "copilot",
-              module = "blink-copilot",
-              score_offset = 4,
-              async = true,
-            },
-            snippets = {
-              name = "snippets",
-              opts = { search_paths = { snippet_path } },
-              score_offset = 3,
-            },
-          },
-        },
-        completion = {
-          menu = {
-            min_width = 60,
-            border = "rounded",
-            draw = {
-              padding = { 0, 1 },
-              columns = { { "kind_icon", gap = 1 }, { "label", "label_description" }, { "source_name" } },
-              components = {
-                kind_icon = {
-                  text = function(ctx)
-                    local icon = ctx.kind_icon
-                    if vim.tbl_contains({ "path" }, ctx.source_name) then
-                      local dev_icon, _ = require("nvim-web-devicons").get_icon(ctx.label)
-                      if dev_icon then icon = dev_icon end
-                    else
-                      icon = require("lspkind").symbolic(ctx.kind, { mode = "symbol" })
-                    end
-                    return icon .. ctx.icon_gap
-                  end,
-                  highlight = function(ctx)
-                    local hl = ctx.kind_hl
-                    if vim.tbl_contains({ "Path" }, ctx.source_name) then
-                      local _, dev_hl = require("nvim-web-devicons").get_icon(ctx.label)
-                      if dev_hl then hl = dev_hl end
-                    end
-                    return hl
-                  end,
-                },
-                label_description = { width = { fill = true } },
-              },
-            },
-          },
-          documentation = {
-            auto_show = true,
-            auto_show_delay_ms = 500,
-            window = { border = "rounded" },
-          },
-          trigger = { prefetch_on_insert = false },
-          list = {
-            selection = { preselect = true, auto_insert = true },
-          },
-        },
-        keymap = {
-          ["<C-k>"]     = { "select_prev", "fallback" },
-          ["<C-j>"]     = { "select_next", "fallback" },
-          ["<Tab>"]     = { "accept", "fallback" },
-          ["<C-l>"]     = { "scroll_documentation_up", "fallback" },
-          ["<C-h>"]     = { "scroll_documentation_down", "fallback" },
-          ["<Up>"]      = { "select_prev", "fallback" },
-          ["<Down>"]    = { "select_next", "fallback" },
-          ["<S-Tab>"]   = { "snippet_forward", "fallback" },
-          ["<C-Tab>"]   = { "snippet_backward", "fallback" },
-          ["<C-e>"]     = { "hide", "fallback" },
-          ["<C-space>"] = { "show", "show_documentation", "hide_documentation" },
-        },
-      })
+          sorts = [ "exact" "score" "sort_text" ];
+          prebuilt_binaries.download = false;
+        };
 
-      -- Scissors (snippet management)
+        sources = {
+          default  = [ "copilot" "lsp" "path" "snippets" "buffer" ];
+          providers = {
+            copilot = {
+              module      = "blink-copilot";
+              score_offset = 4;
+              async        = true;
+            };
+            path = {
+              score_offset = 5;
+              opts.get_cwd = lib.generators.mkLuaInline "function(_) return vim.fn.getcwd() end";
+            };
+          };
+        };
+
+        completion = {
+          documentation = {
+            auto_show          = true;
+            auto_show_delay_ms = 500;
+            window.border      = "rounded";
+          };
+          menu = {
+            auto_show  = true;
+            min_width  = 60;
+            border     = "rounded";
+          };
+          list.selection = {
+            preselect  = true;
+            auto_insert = true;
+          };
+        };
+
+        keymap = {
+          "<C-k>"     = [ "select_prev" "fallback" ];
+          "<C-j>"     = [ "select_next" "fallback" ];
+          "<Tab>"     = [ "accept"      "fallback" ];
+          "<Up>"      = [ "select_prev" "fallback" ];
+          "<Down>"    = [ "select_next" "fallback" ];
+          "<S-Tab>"   = [ "snippet_forward"  "fallback" ];
+          "<C-Tab>"   = [ "snippet_backward" "fallback" ];
+          "<C-e>"     = [ "hide" "fallback" ];
+          "<C-space>" = [ "show" "show_documentation" "hide_documentation" ];
+        };
+      };
+    };
+
+    # ── nvim-scissors (snippet management – not in NVF natively) ─────────
+    startPlugins = [ pkgs.vimPlugins.nvim-scissors ];
+
+    luaConfigRC."scissors" = lib.nvim.dag.entryAnywhere ''
       require("scissors").setup({
         snippetDir = vim.fn.stdpath("config") .. "/snippets",
       })

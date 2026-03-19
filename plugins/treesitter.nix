@@ -1,41 +1,29 @@
 { pkgs, lib, ... }:
 {
   config.vim = {
-    startPlugins = with pkgs.vimPlugins; [
-      nvim-treesitter.withAllGrammars
-      nvim-treesitter-context
-      nvim-ts-context-commentstring
-      nvim-treesitter-endwise
-    ];
+    # ── Core treesitter ───────────────────────────────────────────────────
+    treesitter = {
+      enable = true;
+      indent.enable = true;
+      highlight.enable = true;
 
-    luaConfigRC."treesitter" = lib.nvim.dag.entryAnywhere ''
-      require("nvim-treesitter.configs").setup({
-        -- Grammars are provided by Nix; no auto-install needed
-        auto_install = false,
-        sync_install = false,
-        ignore_install = {},
-        modules = {},
+      # Add every grammar available; nvf language modules add their own parsers
+      # automatically – this just catches any extra ones we want.
+      grammars = pkgs.vimPlugins.nvim-treesitter.allGrammars;
+    };
 
-        endwise = { enable = true },
+    # ── Language-specific treesitter (handled by language modules) ────────
+    # Enabled in lsp.nix via vim.languages.<lang>.treesitter.enable
 
-        highlight = {
-          enable = true,
-          additional_vim_regex_highlighting = false,
-          disable = function(_, buf)
-            local max_filesize = 100 * 1024 -- 100 KB
-            local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
-            if ok and stats and stats.size > max_filesize then
-              return true
-            end
-          end,
-        },
-      })
+    # ── Treesitter-context (not a native NVF module – kept as raw Lua) ────
+    startPlugins = with pkgs.vimPlugins; [ nvim-treesitter-context ];
 
+    luaConfigRC."treesitter-context" = lib.nvim.dag.entryAnywhere ''
       require("treesitter-context").setup({
-        enable = true,
+        enable     = true,
         multiwindow = true,
-        max_lines = 0,
-        separator = "▔",
+        max_lines  = 0,
+        separator  = "▔",
       })
 
       vim.keymap.set("n", "[c", function()

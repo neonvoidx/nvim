@@ -1,37 +1,40 @@
 { pkgs, lib, ... }:
 {
   config.vim = {
-    startPlugins = with pkgs.vimPlugins; [
-      noice-nvim
-      nui-nvim
-      which-key-nvim
-      helpview-nvim
-      nvim-web-devicons
-    ];
-
-    luaConfigRC."ui" = lib.nvim.dag.entryAnywhere ''
-      -- ── Noice (UI overhaul) ───────────────────────────────────────────
-      require("noice").setup({
+    # ── Noice (native NVF module) ─────────────────────────────────────────
+    ui.noice = {
+      enable = true;
+      setupOpts = {
         lsp = {
-          progress = { enabled = true },
+          progress.enabled = true;
           override = {
-            ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
-            ["vim.lsp.util.stylize_markdown"] = true,
-          },
-        },
+            "vim.lsp.util.convert_input_to_markdown_lines" = true;
+            "vim.lsp.util.stylize_markdown"                = true;
+          };
+        };
         presets = {
-          bottom_search = true,
-          command_palette = true,
-          inc_rename = true,
-          lsp_doc_border = true,
-          long_message_to_split = false,
-        },
-      })
+          bottom_search    = true;
+          command_palette  = true;
+          inc_rename       = true;
+          lsp_doc_border   = true;
+          long_message_to_split = false;
+        };
+      };
+    };
 
-      -- ── Which-key ─────────────────────────────────────────────────────
+    # ── nvim-web-devicons (native NVF module) ─────────────────────────────
+    visuals.nvim-web-devicons = {
+      enable = true;
+      setupOpts.color_icons = true;
+    };
+
+    # ── which-key (not a native NVF module – kept as raw Lua) ────────────
+    startPlugins = [ pkgs.vimPlugins.which-key-nvim pkgs.vimPlugins.helpview-nvim ];
+
+    luaConfigRC."which-key" = lib.nvim.dag.entryAnywhere ''
       require("which-key").setup({
-        preset = "helix",
-        timeoutlen = 0,
+        preset    = "helix",
+        timeoutlen = 300,
         spec = {
           { mode = { "n" },
             { "<leader>w",  group = "+window",        icon = { icon = " " } },
@@ -45,8 +48,9 @@
           },
         },
       })
+    '';
 
-      -- ── HelpView (enhanced help pages) ───────────────────────────────
+    luaConfigRC."helpview" = lib.nvim.dag.entryAnywhere ''
       require("helpview").setup({
         preview = { icon_provider = "devicons" },
       })

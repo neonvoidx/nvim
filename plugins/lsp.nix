@@ -1,189 +1,161 @@
 { pkgs, lib, ... }:
 {
   config.vim = {
-    # LSP servers and tools provided by Nix (replaces Mason)
+    # ── Core LSP toggle ───────────────────────────────────────────────────
+    lsp = {
+      enable = true;
+      formatOnSave = false;   # handled by conform.nvim
+      inlayHints.enable = true;
+
+      # lspkind (vscode-like icons in completion)
+      lspkind = {
+        enable = true;
+        setupOpts.mode = "symbol_text";
+      };
+
+      # Trouble (diagnostics viewer)
+      trouble = {
+        enable = true;
+        setupOpts = {
+          modes = {
+            diagnostics_buffer = {
+              mode   = "diagnostics";
+              filter.buf = 0;
+            };
+          };
+        };
+      };
+    };
+
+    # ── Language modules (each one auto-enables its LSP, treesitter, fmt) ─
+    languages = {
+      # Master toggles (used as defaults by each language module)
+      enableTreesitter       = true;
+      enableFormat           = true;
+      enableExtraDiagnostics = false;  # null-ls not used
+
+      ts = {
+        enable = true;
+        lsp.enable = true;
+        treesitter.enable = true;
+        format.enable = true;
+      };
+
+      lua = {
+        enable = true;
+        lsp = {
+          enable  = true;
+          lazydev.enable = true;   # lazydev.nvim for neovim API completions
+        };
+        treesitter.enable = true;
+        format.enable = true;
+      };
+
+      nix = {
+        enable = true;
+        lsp = {
+          enable  = true;
+          servers = [ "nixd" ];
+        };
+        treesitter.enable = true;
+        format = {
+          enable = true;
+          type   = [ "nixfmt" ];
+        };
+      };
+
+      rust = {
+        enable = true;
+        lsp.enable  = true;
+        treesitter.enable = true;
+        format.enable = true;
+      };
+
+      python = {
+        enable = true;
+        lsp = {
+          enable  = true;
+          servers = [ "basedpyright" ];
+        };
+        treesitter.enable = true;
+        format.enable = true;
+      };
+
+      clang = {
+        enable = true;
+        lsp.enable = true;
+        treesitter.enable = true;
+        format.enable = true;
+      };
+
+      go = {
+        enable = true;
+        lsp.enable = true;
+        treesitter.enable = true;
+        format.enable = true;
+      };
+
+      yaml = {
+        enable = true;
+        lsp.enable = true;
+        treesitter.enable = true;
+      };
+
+      markdown = {
+        enable = true;
+        lsp.enable = false;   # markdown LSP is heavy; rely on lint
+        treesitter.enable = true;
+        format.enable = true;
+      };
+    };
+
+    # ── Extra tools placed on PATH ────────────────────────────────────────
     extraPackages = with pkgs; [
-      lua-language-server
-      gopls
-      basedpyright
-      zls
-      clang-tools          # provides clangd
-      yaml-language-server
-      dockerfile-language-server-nodejs
-      cmake-language-server
-      nodePackages.typescript-language-server  # vtsls alternative available in nixpkgs
-      nixd                 # nix LSP
-      # Linters / formatters (also used by conform/lint)
-      stylua
-      nodePackages.prettier
-      black
-      isort
-      nixfmt-rfc-style
-      markdownlint-cli2
       ripgrep
       fd
     ];
 
+    # ── Additional plugins not covered by NVF language modules ───────────
     startPlugins = with pkgs.vimPlugins; [
-      nvim-lspconfig
-      vim-illuminate
-      trouble-nvim
-      lazydev-nvim
-      rustaceanvim
-      clangd-extensions-nvim
       tiny-inline-diagnostic-nvim
-      lspkind-nvim
       inc-rename-nvim
+      vim-illuminate       # also enabled via vim.ui.illuminate but kept here for awareness
     ];
 
-    luaConfigRC."lsp" = lib.nvim.dag.entryAnywhere ''
-      -- ── LSP servers (Neovim 0.11 API: vim.lsp.config + vim.lsp.enable) ──
-
-      vim.lsp.config("vtsls", {
-        settings = {
-          complete_function_calls = true,
-          vtsls = {
-            enableMoveToFileCodeAction = true,
-            autoUseWorkspaceTsdk = true,
-            experimental = {
-              maxInlayHintLength = 30,
-              completion = { enableServerSideFuzzyMatch = true },
-            },
-          },
-          typescript = {
-            updateImportsOnFileMove = { enabled = "always" },
-            suggest = { completeFunctionCalls = true },
-            inlayHints = {
-              enumMemberValues = { enabled = true },
-              functionLikeReturnTypes = { enabled = true },
-              parameterNames = { enabled = "literals" },
-              parameterTypes = { enabled = true },
-              propertyDeclarationTypes = { enabled = true },
-              variableTypes = { enabled = false },
-            },
-            preferences = { importModuleSpecifier = "relative" },
-          },
-        },
-      })
-
-      vim.lsp.config("clangd", {
-        root_markers = {
-          "compile_commands.json", "compile_flags.txt", "configure.ac",
-          "Makefile", "config.h.in", "meson.build", "meson_options.txt",
-          "build.ninja", ".git",
-        },
-        capabilities = { offsetEncoding = { "utf-16" } },
-        cmd = {
-          "clangd",
-          "--background-index",
-          "--clang-tidy",
-          "--header-insertion=iwyu",
-          "--completion-style=detailed",
-          "--function-arg-placeholders",
-          "--fallback-style=llvm",
-        },
-        init_options = {
-          usePlaceholders = true,
-          completeUnimported = true,
-          clangdFileStatus = true,
-        },
-      })
-
-      -- Enable configured servers
-      vim.lsp.enable({
-        "vtsls", "clangd", "lua_ls", "gopls", "basedpyright",
-        "yamlls", "dockerls", "cmake", "nixd", "zls",
-      })
-
-      -- ── Illuminate (auto-highlight same word) ────────────────────────
-      require("illuminate").configure({
-        providers = { "lsp", "treesitter", "regex" },
-      })
-
-      -- ── LazyDev (Lua neovim API completions) ─────────────────────────
-      require("lazydev").setup({
-        library = {
-          { path = "${3rd}/luv/library", words = { "vim%.uv" } },
-        },
-      })
-
-      -- ── Tiny Inline Diagnostic ───────────────────────────────────────
+    luaConfigRC."lsp-extra" = lib.nvim.dag.entryAnywhere ''
+      -- ── Tiny Inline Diagnostic ─────────────────────────────────────
       require("tiny-inline-diagnostic").setup({
         options = {
           show_source = { enabled = true },
-          multilines = { enabled = true },
-          add_messages = { display_count = true },
+          multilines  = { enabled = true },
         },
       })
+      -- Disable built-in virtual_text since tiny-inline-diagnostic replaces it
       vim.diagnostic.config({ virtual_text = false })
 
-      -- ── Inc-Rename ───────────────────────────────────────────────────
+      -- ── Inc-Rename ─────────────────────────────────────────────────
       require("inc_rename").setup({})
       vim.keymap.set("n", "<leader>cr", ":IncRename ", { desc = "Rename symbol" })
 
-      -- ── Trouble ──────────────────────────────────────────────────────
-      require("trouble").setup({
-        modes = {
-          diagnostics_buffer = {
-            mode = "diagnostics",
-            preview = {
-              type = "float",
-              relative = "editor",
-              border = "rounded",
-              title = "Preview",
-              title_pos = "center",
-              position = { 0, -2 },
-              size = { width = 0.4, height = 0.4 },
-              zindex = 200,
-            },
-            filter = { buf = 0 },
-          },
-        },
-      })
-
-      -- ── LSP keymaps (set on LspAttach) ───────────────────────────────
+      -- ── Extra LSP keymaps (LspAttach) ──────────────────────────────
       vim.api.nvim_create_autocmd("LspAttach", {
         group = vim.api.nvim_create_augroup("UserLspConfig", {}),
         callback = function(ev)
+          local map  = vim.keymap.set
           local opts = { buffer = ev.buf }
-          local map = vim.keymap.set
-          map("n", "gD", vim.lsp.buf.declaration,    vim.tbl_extend("force", opts, { desc = "Goto declaration" }))
-          map("n", "gd", vim.lsp.buf.definition,     vim.tbl_extend("force", opts, { desc = "Goto definition" }))
-          map("n", "K",  vim.lsp.buf.hover,          vim.tbl_extend("force", opts, { desc = "Hover" }))
-          map("n", "gi", vim.lsp.buf.implementation, vim.tbl_extend("force", opts, { desc = "Implementation" }))
-          map({ "n", "v" }, "<space>ca", vim.lsp.buf.code_action,
-            vim.tbl_extend("force", opts, { desc = "Code action" }))
-          map({ "n", "v" }, "<space>cA", function()
+          local e    = function(desc) return vim.tbl_extend("force", opts, { desc = desc }) end
+
+          map("n", "<space>cA", function()
             vim.lsp.buf.code_action({
               apply = true,
               context = { only = { "source" }, diagnostics = {} },
             })
-          end, vim.tbl_extend("force", opts, { desc = "Code action (buffer)" }))
-          map("n", "<space>cd", vim.diagnostic.open_float,
-            vim.tbl_extend("force", opts, { desc = "Open diagnostic float" }))
-          map("n", "<leader>Li", "<cmd>LspInfo<cr>",    vim.tbl_extend("force", opts, { desc = "LSP Info" }))
-          map("n", "<leader>Ll", "<cmd>LspLog<cr>",     vim.tbl_extend("force", opts, { desc = "LSP Logs" }))
-          map("n", "<leader>r",  "<cmd>LspRestart<cr>", vim.tbl_extend("force", opts, { desc = "LSP Restart" }))
-          map("n", "[e", function()
-            vim.diagnostic.jump({ count = -1, float = true, severity = vim.diagnostic.severity.ERROR })
-          end, vim.tbl_extend("force", opts, { desc = "Prev diagnostic error" }))
-          map("n", "]e", function()
-            vim.diagnostic.jump({ count = 1, float = true, severity = vim.diagnostic.severity.ERROR })
-          end, vim.tbl_extend("force", opts, { desc = "Next diagnostic error" }))
+          end, e("Code action (buffer)"))
+          map("n", "<leader>Li", "<cmd>LspInfo<cr>",    e("LSP Info"))
+          map("n", "<leader>Ll", "<cmd>LspLog<cr>",     e("LSP Logs"))
+          map("n", "<leader>r",  "<cmd>LspRestart<cr>", e("LSP Restart"))
         end,
       })
-
-      -- ── Trouble keymaps ──────────────────────────────────────────────
-      local map = vim.keymap.set
-      map("n", "<leader>xX", "<cmd>Trouble diagnostics toggle<cr>",           { desc = "Diagnostics (Trouble)" })
-      map("n", "<leader>xx", "<cmd>Trouble diagnostics toggle filter.buf=0<cr>", { desc = "Buffer Diagnostics" })
-      map("n", "<leader>cs", "<cmd>Trouble symbols toggle focus=false<cr>",   { desc = "Symbols (Trouble)" })
-      map("n", "<leader>cl", "<cmd>Trouble lsp toggle focus=false win.position=right<cr>", { desc = "LSP (Trouble)" })
-      map("n", "<leader>xl", "<cmd>Trouble loclist toggle<cr>",               { desc = "Location List (Trouble)" })
-      map("n", "<leader>xq", "<cmd>Trouble qflist toggle<cr>",               { desc = "Quickfix List (Trouble)" })
-
-      -- ── Rustaceanvim ─────────────────────────────────────────────────
-      vim.g.rustaceanvim = {}
     '';
   };
 }

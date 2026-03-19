@@ -1,42 +1,44 @@
 { pkgs, lib, ... }:
 {
-  config.vim.extraPackages = with pkgs; [ yazi lazygit ];
-
   config.vim = {
-    startPlugins = with pkgs.vimPlugins; [
-      yazi-nvim
-      yanky-nvim
-      plenary-nvim
-      nvim-web-devicons
-    ];
+    # ── Yazi (native NVF module) ──────────────────────────────────────────
+    utility.yazi-nvim = {
+      enable = true;
+      setupOpts = {
+        open_for_directories = true;
+        keymaps.show_help = "<f1>";
+      };
+      # Override default mappings
+      mappings = {
+        openYazi    = "<leader>e";
+        openYaziDir = "<leader>E";
+      };
+    };
 
-    luaConfigRC."navigation" = lib.nvim.dag.entryAnywhere ''
-      -- ── Yazi (file manager) ───────────────────────────────────────────
-      require("yazi").setup({
-        open_for_directories = true,
-        pick_window_implementation = "snacks.picker",
-        integrations = {
-          grep_in_directory = "snacks.picker",
-        },
-        keymaps = { show_help = "<f1>" },
-      })
+    # ── Yanky (native NVF module) ─────────────────────────────────────────
+    utility.yanky-nvim = {
+      enable = true;
+      setupOpts = {
+        highlight.timer = 200;
+        ring.storage = "shada";
+      };
+    };
+
+    # ── yazi binary on PATH ───────────────────────────────────────────────
+    extraPackages = [ pkgs.yazi ];
+
+    # ── Yanky keymaps (NVF module doesn't expose these yet) ──────────────
+    luaConfigRC."yanky-keymaps" = lib.nvim.dag.entryAnywhere ''
+      local map = vim.keymap.set
+      map({ "n", "x" }, "y",     "<Plug>(YankyYank)")
+      map({ "n", "x" }, "p",     "<Plug>(YankyPutAfter)")
+      map({ "n", "x" }, "P",     "<Plug>(YankyPutBefore)")
+      map("n",          "<c-p>", "<Plug>(YankyCycleForward)")
+      map("n",          "<c-n>", "<Plug>(YankyCycleBackward)")
+      map("n", "<leader>pp", "<cmd>YankyRingHistory<cr>", { desc = "Yank history" })
+
       -- Disable netrw (yazi takes over directory opening)
       vim.g.loaded_netrwPlugin = 1
-
-      local map = vim.keymap.set
-      map({ "n", "v" }, "<leader>e", "<cmd>Yazi<cr>",     { desc = "Yazi (current location)" })
-      map("n",          "<leader>E", "<cmd>Yazi cwd<cr>", { desc = "Yazi (cwd)" })
-
-      -- ── Yanky (yank history) ──────────────────────────────────────────
-      require("yanky").setup({
-        highlight = { timer = 200 },
-      })
-      map({ "n", "x" }, "y",      "<Plug>(YankyYank)")
-      map({ "n", "x" }, "p",      "<Plug>(YankyPutAfter)")
-      map({ "n", "x" }, "P",      "<Plug>(YankyPutBefore)")
-      map("n",          "<c-p>",  "<Plug>(YankyCycleForward)")
-      map("n",          "<c-n>",  "<Plug>(YankyCycleBackward)")
-      map("n",          "<leader>pp", "<cmd>YankyRingHistory<cr>", { desc = "Yank history" })
     '';
   };
 }
