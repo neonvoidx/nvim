@@ -1,7 +1,8 @@
-{ ... }:
+{ lib, ... }:
 {
-  # Helper functions used by keymaps – defined before the mappings are registered.
-  extraConfigLuaPre = ''
+  config.vim.luaConfigRC."keymaps" = lib.nvim.dag.entryAnywhere ''
+    local map = vim.keymap.set
+
     -- Helper: get visual selection as a list of lines
     local function get_visual()
       local _, ls, cs = table.unpack(vim.fn.getpos("v"))
@@ -21,413 +22,90 @@
       vim.cmd([[execute "normal! \<C-w>h"]])
       vim.cmd("diffthis")
     end
+
+    -- Better up/down (respect visual lines)
+    map({ "n", "x" }, "j",      "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
+    map({ "n", "x" }, "<Down>", "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
+    map({ "n", "x" }, "k",      "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
+    map({ "n", "x" }, "<Up>",   "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
+
+    -- Window resize
+    map("n", "<C-Up>",    "<cmd>resize +2<cr>",          { desc = "Increase window height" })
+    map("n", "<C-Down>",  "<cmd>resize -2<cr>",          { desc = "Decrease window height" })
+    map("n", "<C-Left>",  "<cmd>vertical resize -2<cr>", { desc = "Decrease window width"  })
+    map("n", "<C-Right>", "<cmd>vertical resize +2<cr>", { desc = "Increase window width"  })
+
+    -- Move lines
+    map("n", "<A-j>", "<cmd>m .+1<cr>==",        { desc = "Move line down" })
+    map("n", "<A-k>", "<cmd>m .-2<cr>==",        { desc = "Move line up"   })
+    map("i", "<A-j>", "<esc><cmd>m .+1<cr>==gi", { desc = "Move line down" })
+    map("i", "<A-k>", "<esc><cmd>m .-2<cr>==gi", { desc = "Move line up"   })
+    map("v", "<A-j>", ":m '>+1<cr>gv=gv",        { desc = "Move selection down" })
+    map("v", "<A-k>", ":m '<-2<cr>gv=gv",        { desc = "Move selection up"   })
+
+    -- Search
+    map({ "i", "n" }, "<esc>", "<cmd>noh<cr><esc>", { desc = "Escape and clear hlsearch" })
+    map("n", "<leader>ur", "<Cmd>nohlsearch<Bar>diffupdate<Bar>normal! <C-L><CR>",
+      { desc = "Redraw / clear hlsearch / diff update" })
+    map("n", "n", "'Nn'[v:searchforward].'zv'", { expr = true, desc = "Next search result" })
+    map("x", "n", "'Nn'[v:searchforward]",      { expr = true, desc = "Next search result" })
+    map("o", "n", "'Nn'[v:searchforward]",      { expr = true, desc = "Next search result" })
+    map("n", "N", "'nN'[v:searchforward].'zv'", { expr = true, desc = "Prev search result" })
+    map("x", "N", "'nN'[v:searchforward]",      { expr = true, desc = "Prev search result" })
+    map("o", "N", "'nN'[v:searchforward]",      { expr = true, desc = "Prev search result" })
+
+    -- Undo break-points
+    map("i", ",", ",<c-g>u")
+    map("i", ".", ".<c-g>u")
+    map("i", ";", ";<c-g>u")
+
+    -- Save / quit
+    map({ "i", "x", "n", "s" }, "<C-s>", "<cmd>w!<cr><esc>", { desc = "Save file"       })
+    map({ "i", "n" },           "<C-q>", "<cmd>silent! xa<cr>", { desc = "Save all and quit" })
+
+    -- Indenting
+    map("v", "<", "<gv")
+    map("v", ">", ">gv")
+
+    -- Windows
+    map("n", "<leader>wd", "<cmd>q<cr>",      { desc = "Delete window", remap = true })
+    map("n", "<leader>w|", "<cmd>vsplit<cr>", { desc = "Split right",   remap = true })
+    map("n", "<leader>w-", "<cmd>split<cr>",  { desc = "Split below",   remap = true })
+
+    -- Escape shortcuts
+    map("i", "jj", "<Esc>")
+    map("i", "kk", "<Esc>")
+
+    -- CAPS LOCK is bound to Insert on the desktop – remap to Esc
+    local esc_modes = { "i", "n", "v", "x", "o", "t", "s", "c", "l" }
+    map(esc_modes, "<Insert>", "<Esc>")
+
+    -- Unbind nuisance keys
+    map(esc_modes, "<F1>",          "<Nop>")
+    map(esc_modes, "<C-LeftMouse>", "<Nop>")
+    map("n", "<C-t>", "<Nop>")
+
+    -- Black-hole delete / change
+    map({ "n", "v" }, "D", '"_d')
+    map({ "n", "v" }, "C", '"_c')
+
+    -- Visual search-and-replace for the current selection
+    map("v", "<C-r>", function()
+      local pattern = table.concat(get_visual())
+      pattern = vim.fn.substitute(vim.fn.escape(pattern, "^$.*\\/~[]"), "\n", "\\n", "g")
+      vim.api.nvim_input("<Esc>:%s/" .. pattern .. "//g<Left><Left>")
+    end)
+
+    -- Navigation
+    map("n", "<Backspace>", "^", { desc = "Move to first non-blank character" })
+
+    -- Paste without overwriting the yank register
+    map("v", "p", '"_dP')
+
+    -- Diff vs clipboard
+    map("n", "<leader>D", compareToClip, { desc = "Diff vs clipboard" })
+
+    -- Lazy UI
+    map("n", "<leader>l", "<cmd>Lazy<cr>", { desc = "Lazy", silent = true })
   '';
-
-  keymaps = [
-    # ── Better up/down (respect visual lines) ────────────────────────────
-    {
-      mode = [
-        "n"
-        "x"
-      ];
-      key = "j";
-      action = "v:count == 0 ? 'gj' : 'j'";
-      options = {
-        expr = true;
-        silent = true;
-      };
-    }
-    {
-      mode = [
-        "n"
-        "x"
-      ];
-      key = "<Down>";
-      action = "v:count == 0 ? 'gj' : 'j'";
-      options = {
-        expr = true;
-        silent = true;
-      };
-    }
-    {
-      mode = [
-        "n"
-        "x"
-      ];
-      key = "k";
-      action = "v:count == 0 ? 'gk' : 'k'";
-      options = {
-        expr = true;
-        silent = true;
-      };
-    }
-    {
-      mode = [
-        "n"
-        "x"
-      ];
-      key = "<Up>";
-      action = "v:count == 0 ? 'gk' : 'k'";
-      options = {
-        expr = true;
-        silent = true;
-      };
-    }
-
-    # ── Resize window ─────────────────────────────────────────────────────
-    {
-      mode = "n";
-      key = "<C-Up>";
-      action = "<cmd>resize +2<cr>";
-      options.desc = "Increase window height";
-    }
-    {
-      mode = "n";
-      key = "<C-Down>";
-      action = "<cmd>resize -2<cr>";
-      options.desc = "Decrease window height";
-    }
-    {
-      mode = "n";
-      key = "<C-Left>";
-      action = "<cmd>vertical resize -2<cr>";
-      options.desc = "Decrease window width";
-    }
-    {
-      mode = "n";
-      key = "<C-Right>";
-      action = "<cmd>vertical resize +2<cr>";
-      options.desc = "Increase window width";
-    }
-
-    # ── Move Lines ────────────────────────────────────────────────────────
-    {
-      mode = "n";
-      key = "<A-j>";
-      action = "<cmd>m .+1<cr>==";
-      options.desc = "Move down";
-    }
-    {
-      mode = "n";
-      key = "<A-k>";
-      action = "<cmd>m .-2<cr>==";
-      options.desc = "Move up";
-    }
-    {
-      mode = "i";
-      key = "<A-j>";
-      action = "<esc><cmd>m .+1<cr>==gi";
-      options.desc = "Move down";
-    }
-    {
-      mode = "i";
-      key = "<A-k>";
-      action = "<esc><cmd>m .-2<cr>==gi";
-      options.desc = "Move up";
-    }
-    {
-      mode = "v";
-      key = "<A-j>";
-      action = ":m '>+1<cr>gv=gv";
-      options.desc = "Move down";
-    }
-    {
-      mode = "v";
-      key = "<A-k>";
-      action = ":m '<-2<cr>gv=gv";
-      options.desc = "Move up";
-    }
-
-    # ── Search ────────────────────────────────────────────────────────────
-    {
-      mode = [
-        "i"
-        "n"
-      ];
-      key = "<esc>";
-      action = "<cmd>noh<cr><esc>";
-      options.desc = "Escape and clear hlsearch";
-    }
-    {
-      mode = "n";
-      key = "<leader>ur";
-      action = "<Cmd>nohlsearch<Bar>diffupdate<Bar>normal! <C-L><CR>";
-      options.desc = "Redraw / clear hlsearch / diff update";
-    }
-    {
-      mode = "n";
-      key = "n";
-      action = "'Nn'[v:searchforward].'zv'";
-      options = {
-        expr = true;
-        desc = "Next search result";
-      };
-    }
-    {
-      mode = "x";
-      key = "n";
-      action = "'Nn'[v:searchforward]";
-      options = {
-        expr = true;
-        desc = "Next search result";
-      };
-    }
-    {
-      mode = "o";
-      key = "n";
-      action = "'Nn'[v:searchforward]";
-      options = {
-        expr = true;
-        desc = "Next search result";
-      };
-    }
-    {
-      mode = "n";
-      key = "N";
-      action = "'nN'[v:searchforward].'zv'";
-      options = {
-        expr = true;
-        desc = "Prev search result";
-      };
-    }
-    {
-      mode = "x";
-      key = "N";
-      action = "'nN'[v:searchforward]";
-      options = {
-        expr = true;
-        desc = "Prev search result";
-      };
-    }
-    {
-      mode = "o";
-      key = "N";
-      action = "'nN'[v:searchforward]";
-      options = {
-        expr = true;
-        desc = "Prev search result";
-      };
-    }
-
-    # ── Undo break-points ─────────────────────────────────────────────────
-    {
-      mode = "i";
-      key = ",";
-      action = ",<c-g>u";
-    }
-    {
-      mode = "i";
-      key = ".";
-      action = ".<c-g>u";
-    }
-    {
-      mode = "i";
-      key = ";";
-      action = ";<c-g>u";
-    }
-
-    # ── Save / quit ───────────────────────────────────────────────────────
-    {
-      mode = [
-        "i"
-        "x"
-        "n"
-        "s"
-      ];
-      key = "<C-s>";
-      action = "<cmd>w!<cr><esc>";
-      options.desc = "Save file";
-    }
-    {
-      mode = [
-        "i"
-        "n"
-      ];
-      key = "<C-q>";
-      action = "<cmd>silent! xa<cr>";
-      options.desc = "Save all and quit";
-    }
-
-    # ── Indenting ─────────────────────────────────────────────────────────
-    {
-      mode = "v";
-      key = "<";
-      action = "<gv";
-    }
-    {
-      mode = "v";
-      key = ">";
-      action = ">gv";
-    }
-
-    # ── Windows ───────────────────────────────────────────────────────────
-    {
-      mode = "n";
-      key = "<leader>wd";
-      action = "<cmd>q<cr>";
-      options = {
-        desc = "Delete window";
-        remap = true;
-      };
-    }
-    {
-      mode = "n";
-      key = "<leader>w|";
-      action = "<cmd>vsplit<cr>";
-      options = {
-        desc = "Split window right";
-        remap = true;
-      };
-    }
-    {
-      mode = "n";
-      key = "<leader>w-";
-      action = "<cmd>split<cr>";
-      options = {
-        desc = "Split window below";
-        remap = true;
-      };
-    }
-
-    # ── Escape shortcuts ──────────────────────────────────────────────────
-    {
-      mode = "i";
-      key = "jj";
-      action = "<Esc>";
-    }
-    {
-      mode = "i";
-      key = "kk";
-      action = "<Esc>";
-    }
-    # Remap Insert → Esc (CAPS LOCK bound to Insert on desktop)
-    {
-      mode = [
-        "i"
-        "n"
-        "v"
-        "x"
-        "o"
-        "t"
-        "s"
-        "c"
-        "l"
-      ];
-      key = "<Insert>";
-      action = "<Esc>";
-    }
-
-    # ── Unbind nuisance keys ──────────────────────────────────────────────
-    {
-      mode = [
-        "i"
-        "n"
-        "v"
-        "x"
-        "o"
-        "t"
-        "s"
-        "c"
-        "l"
-      ];
-      key = "<F1>";
-      action = "<Nop>";
-    }
-    {
-      mode = [
-        "i"
-        "n"
-        "v"
-        "x"
-        "o"
-        "t"
-        "s"
-        "c"
-        "l"
-      ];
-      key = "<C-LeftMouse>";
-      action = "<Nop>";
-    }
-    {
-      mode = "n";
-      key = "<C-t>";
-      action = "<Nop>";
-    }
-
-    # ── Black-hole delete/change ──────────────────────────────────────────
-    {
-      mode = [
-        "n"
-        "v"
-      ];
-      key = "D";
-      action = ''"_d'';
-    }
-    {
-      mode = [
-        "n"
-        "v"
-      ];
-      key = "C";
-      action = ''"_c'';
-    }
-
-    # ── Visual search/replace ─────────────────────────────────────────────
-    {
-      mode = "v";
-      key = "<C-r>";
-      action.__raw = ''
-        function()
-          local pattern = table.concat(get_visual())
-          pattern = vim.fn.substitute(vim.fn.escape(pattern, "^$.*\\/~[]"), "\n", "\\n", "g")
-          vim.api.nvim_input("<Esc>:%s/" .. pattern .. "//g<Left><Left>")
-        end
-      '';
-    }
-
-    # ── Navigation ────────────────────────────────────────────────────────
-    {
-      mode = "n";
-      key = "<Backspace>";
-      action = "^";
-      options.desc = "Move to first non-blank character";
-    }
-
-    # ── Paste without losing yanked text ──────────────────────────────────
-    {
-      mode = "v";
-      key = "p";
-      action = ''"_dP'';
-    }
-
-    # ── Diff vs clipboard ─────────────────────────────────────────────────
-    {
-      mode = "n";
-      key = "<leader>D";
-      action.__raw = "compareToClip";
-      options.desc = "Diff vs clipboard";
-    }
-
-    # ── Diagnostics ───────────────────────────────────────────────────────
-    {
-      mode = "n";
-      key = "]e";
-      action.__raw = ''
-        function()
-          vim.diagnostic.goto_next({ float = false })
-        end
-      '';
-      options.desc = "Next diagnostic";
-    }
-    {
-      mode = "n";
-      key = "[e";
-      action.__raw = ''
-        function()
-          vim.diagnostic.goto_prev({ float = false })
-        end
-      '';
-      options.desc = "Prev diagnostic";
-    }
-  ];
 }

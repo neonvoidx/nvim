@@ -1,52 +1,45 @@
-{ pkgs, inputs, ... }:
+{ pkgs, lib, ... }:
 {
-  plugins = {
-    gitsigns = {
-      enable = true;
-      settings = { };
-    };
+  config.vim = {
+    startPlugins = with pkgs.vimPlugins; [
+      gitsigns-nvim
+      git-blame-nvim
+      diffview-nvim
+    ];
 
-    # git-blame.nvim (nixvim module: gitblame)
-    gitblame = {
-      enable = true;
-      settings = {
-        enabled = true;
-        message_template = "<author> • <date> • <summary>";
-        date_format = "%r";
-        # Disable virtual text – lualine shows blame in the statusline instead
-        display_virtual_text = false;
-      };
-    };
+    luaConfigRC."git" = lib.nvim.dag.entryAnywhere ''
+      -- ── Gitsigns ─────────────────────────────────────────────────────
+      require("gitsigns").setup()
 
-    diffview = {
-      enable = true;
-      settings = {
-        enhanced_diff_hl = true;
-        use_icons = true;
-        view.merge_tool = {
-          layout = "diff3_horizontal";
-          winbar_info = true;
-          disable_diagnostics = true;
-        };
-      };
-    };
+      -- ── Git Blame ────────────────────────────────────────────────────
+      require("gitblame").setup({
+        enabled = true,
+        message_template = "<author> • <date> <<sha>>",
+        date_format = "%r",
+      })
+      vim.g.gitblame_display_virtual_text = 0
+
+      -- ── Diffview ─────────────────────────────────────────────────────
+      require("diffview").setup({
+        enhanced_diff_hl = true,
+        use_icons = true,
+        view = {
+          merge_tool = {
+            layout = "diff3_horizontal",
+            winbar_info = true,
+            disable_diagnostics = true,
+          },
+        },
+      })
+
+      vim.keymap.set("n", "<leader>gd", function()
+        local lib = require("diffview.lib")
+        if lib.get_current_view() then
+          vim.cmd.DiffviewClose()
+        else
+          vim.cmd.DiffviewOpen()
+        end
+      end, { desc = "Diffview toggle" })
+    '';
   };
-
-  # git-scripts.nvim and resolved.nvim – not in nixvim or nixpkgs, use flake inputs
-  extraPlugins = [
-    (pkgs.vimUtils.buildVimPlugin {
-      name = "resolved-nvim";
-      src = inputs.resolved-nvim;
-    })
-  ];
-
-  extraConfigLua = ''
-    -- resolved.nvim
-    pcall(function() require("resolved").setup() end)
-  '';
-
-  extraPackages = with pkgs; [
-    lazygit
-    git
-  ];
 }

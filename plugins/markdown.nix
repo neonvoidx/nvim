@@ -1,100 +1,96 @@
-{ pkgs, inputs, ... }:
+{ pkgs, lib, ... }:
 {
-  plugins = {
-    render-markdown = {
-      enable = true;
-      settings = {
-        file_types = [
-          "markdown"
-          "norg"
-          "rmd"
-          "org"
-          "codecompanion"
-        ];
-        heading = {
-          sign = false;
-          icons = [ ];
-        };
-        code = {
-          sign = false;
-          width = "block";
-          right_pad = 1;
-        };
-        dash.width = 50;
+  config.vim = {
+    startPlugins = with pkgs.vimPlugins; [
+      render-markdown-nvim
+      obsidian-nvim
+      markdown-toc
+      nvim-web-devicons
+    ];
+
+    luaConfigRC."markdown" = lib.nvim.dag.entryAnywhere ''
+      -- ── Render-markdown ───────────────────────────────────────────────
+      require("render-markdown").setup({
+        file_types = { "markdown", "codecompanion" },
+        anti_conceal = {
+          enabled = true,
+          ignore = { code_background = true, sign = true },
+        },
+        completions = { blink = { enabled = true } },
+        preset = "obsidian",
+        bullet = { right_pad = 1 },
         checkbox = {
-          unchecked.icon = "✘ ";
-          checked.icon = "✔ ";
-          custom.in_progress = {
-            raw = "[-]";
-            rendered = "◐ ";
-            highlight = "RenderMarkdownUnchecked";
-          };
-          custom.important = {
-            raw = "[!]";
-            rendered = "◆ ";
-            highlight = "DiagnosticError";
-          };
-        };
-      };
-    };
+          enabled = true,
+          unchecked = { icon = "▢ " },
+          checked   = { icon = "✓ " },
+          custom    = { todo = { rendered = "◯ " } },
+          right_pad = 1,
+        },
+      })
 
-    markdown-preview = {
-      enable = true;
-      settings.auto_close = 0;
-    };
+      -- ── Obsidian ──────────────────────────────────────────────────────
+      local cwd = vim.fn.getcwd()
+      local vault_path = vim.fn.expand("~/vault")
+      local blog_path  = vim.fn.expand("~/homepage")
 
-    obsidian = {
-      enable = true;
-      settings = {
-        # Upstream is deprecating `ObsidianBacklinks`-style commands in favor of
-        # subcommands like `:Obsidian backlinks`. Disable legacy commands to
-        # silence the warning.
-        legacy_commands = false;
-        workspaces = [
-          {
-            name = "personal";
-            path = "~/vault";
-          }
-        ];
-        ui.enable = false;
-        picker.name = "snacks.pick";
-        completion = {
-          nvim_cmp = false;
-          blink = true;
-        };
-      };
-    };
+      if vim.startswith(cwd, vault_path) or vim.startswith(cwd, blog_path) then
+        require("obsidian").setup({
+          attachments = {
+            image_text_func = function(path)
+              local name = vim.fs.basename(tostring(path))
+              local encoded_name = require("obsidian.util").urlencode(name)
+              return string.format("![%s](%s)", name, encoded_name)
+            end,
+            img_folder = "./",
+          },
+          legacy_commands = false,
+          checkbox = { order = { " ", "x", "!", ">", "~" } },
+          ui = { enable = false },
+          workspaces = {
+            { name = "vault", path = vim.fn.expand("~/vault") },
+          },
+          daily_notes = {
+            folder = "Daily Notes",
+            date_format = "%d %b %Y",
+            template = vim.fn.expand("~/vault/templates/daily-note.md"),
+          },
+          completion = { nvim_cmp = false, blink = true },
+          preferred_link_style = "markdown",
+          disable_frontmatter = false,
+          templates = { folder = "templates", date_format = "%d %b %Y" },
+          follow_url_func = function(url) vim.ui.open(url) end,
+          picker = {
+            name = "snacks.pick",
+            new = "<C-x>",
+            insert_link = "<C-l>",
+          },
+        })
 
-    helpview = {
-      enable = true;
-      settings.preview.icon_provider = "devicons";
-    };
+        local wk = require("which-key")
+        wk.add({ { "<leader>o", group = "Obsidian", icon = "" } })
+
+        local p = "<leader>o"
+        local map = vim.keymap.set
+        map("n", p .. "o", "<cmd>Obsidian open<CR>",        { desc = "Open on App" })
+        map("n", p .. "n", "<cmd>Obsidian new<CR>",         { desc = "New Note" })
+        map("n", p .. "b", "<cmd>Obsidian backlinks<CR>",   { desc = "Backlinks" })
+        map("n", p .. "t", "<cmd>Obsidian tags<CR>",        { desc = "Tags" })
+        map("n", p .. "T", "<cmd>Obsidian template<CR>",    { desc = "Template" })
+        map("n", p .. "d", "<cmd>Obsidian dailies<CR>",     { desc = "Daily Notes" })
+        map("n", p .. "w", "<cmd>Obsidian workspace<CR>",   { desc = "Workspace" })
+        map("n", p .. "r", "<cmd>Obsidian rename<CR>",      { desc = "Rename" })
+        map("n", p .. "i", "<cmd>Obsidian paste_img<CR>",   { desc = "Paste Image" })
+        map("n", "<leader>sO", "<cmd>Obsidian search<CR>",  { desc = "Obsidian Grep" })
+        map("v", p .. "l", "<cmd>Obsidian link<CR>",        { desc = "Link" })
+        map("v", p .. "N", "<cmd>Obsidian linknew<CR>",     { desc = "New Link" })
+        map("v", p .. "e", "<cmd>Obsidian extractnote<CR>", { desc = "Extract Note" })
+      end
+
+      -- ── Markdown-toc ─────────────────────────────────────────────────
+      require("mtoc").setup({
+        heading = { before_toc = false },
+        auto_update = true,
+      })
+    '';
   };
-
-  keymaps = [
-    {
-      mode = "n";
-      key = "<leader>oo";
-      action = "<cmd>ObsidianOpen<cr>";
-      options.desc = "Open Obsidian";
-    }
-    {
-      mode = "n";
-      key = "<leader>on";
-      action = "<cmd>ObsidianNew<cr>";
-      options.desc = "New Note";
-    }
-    {
-      mode = "n";
-      key = "<leader>os";
-      action = "<cmd>ObsidianSearch<cr>";
-      options.desc = "Search Notes";
-    }
-    {
-      mode = "n";
-      key = "<leader>oq";
-      action = "<cmd>ObsidianQuickSwitch<cr>";
-      options.desc = "Quick Switch";
-    }
-  ];
 }

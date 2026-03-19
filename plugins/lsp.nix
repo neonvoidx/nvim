@@ -1,333 +1,189 @@
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 {
-  plugins = {
-    # ── Core LSP ─────────────────────────────────────────────────────────
-    lsp = {
-      enable = true;
-      inlayHints = true;
+  config.vim = {
+    # LSP servers and tools provided by Nix (replaces Mason)
+    extraPackages = with pkgs; [
+      lua-language-server
+      gopls
+      basedpyright
+      zls
+      clang-tools          # provides clangd
+      yaml-language-server
+      dockerfile-language-server-nodejs
+      cmake-language-server
+      nodePackages.typescript-language-server  # vtsls alternative available in nixpkgs
+      nixd                 # nix LSP
+      # Linters / formatters (also used by conform/lint)
+      stylua
+      nodePackages.prettier
+      black
+      isort
+      nixfmt-rfc-style
+      markdownlint-cli2
+      ripgrep
+      fd
+    ];
 
-      # Keymaps added on every LSP attach
-      keymaps = {
-        silent = true;
-        lspBuf = {
-          K = "hover";
-        };
-        extra = [
-          {
-            key = "<leader>cr";
-            action.__raw = "vim.lsp.buf.rename";
-            options.desc = "Rename";
-          }
-          {
-            mode = [
-              "n"
-              "v"
-            ];
-            key = "<leader>ca";
-            action.__raw = "vim.lsp.buf.code_action";
-            options.desc = "Code Action";
-          }
-          {
-            key = "<leader>li";
-            action = "<cmd>LspInfo<cr>";
-            options.desc = "LSP Info";
-          }
-          {
-            key = "<leader>ll";
-            action = "<cmd>LspLog<cr>";
-            options.desc = "LSP Log";
-          }
-          {
-            key = "<leader>lr";
-            action = "<cmd>LspRestart<cr>";
-            options.desc = "LSP Restart";
-          }
-        ];
-      };
+    startPlugins = with pkgs.vimPlugins; [
+      nvim-lspconfig
+      vim-illuminate
+      trouble-nvim
+      lazydev-nvim
+      rustaceanvim
+      clangd-extensions-nvim
+      tiny-inline-diagnostic-nvim
+      lspkind-nvim
+      inc-rename-nvim
+    ];
 
-      # ── Language servers ───────────────────────────────────────────────
-      servers = {
-        bashls.enable = true;
+    luaConfigRC."lsp" = lib.nvim.dag.entryAnywhere ''
+      -- ── LSP servers (Neovim 0.11 API: vim.lsp.config + vim.lsp.enable) ──
 
-        jsonls = {
-          enable = true;
-          # settings are wrapped as { json = settings } by nixvim
-          settings = {
-            # schemastore plugin module already configures jsonls schemas; defining
-            # this here causes an option conflict.
-            validate.enable = true;
-          };
-        };
+      vim.lsp.config("vtsls", {
+        settings = {
+          complete_function_calls = true,
+          vtsls = {
+            enableMoveToFileCodeAction = true,
+            autoUseWorkspaceTsdk = true,
+            experimental = {
+              maxInlayHintLength = 30,
+              completion = { enableServerSideFuzzyMatch = true },
+            },
+          },
+          typescript = {
+            updateImportsOnFileMove = { enabled = "always" },
+            suggest = { completeFunctionCalls = true },
+            inlayHints = {
+              enumMemberValues = { enabled = true },
+              functionLikeReturnTypes = { enabled = true },
+              parameterNames = { enabled = "literals" },
+              parameterTypes = { enabled = true },
+              propertyDeclarationTypes = { enabled = true },
+              variableTypes = { enabled = false },
+            },
+            preferences = { importModuleSpecifier = "relative" },
+          },
+        },
+      })
 
-        gopls = {
-          enable = true;
-          # nixvim wraps gopls settings as { gopls = cfg }, so set at top level
-          settings = {
-            analyses.unusedparams = true;
-            staticcheck = true;
-          };
-        };
+      vim.lsp.config("clangd", {
+        root_markers = {
+          "compile_commands.json", "compile_flags.txt", "configure.ac",
+          "Makefile", "config.h.in", "meson.build", "meson_options.txt",
+          "build.ninja", ".git",
+        },
+        capabilities = { offsetEncoding = { "utf-16" } },
+        cmd = {
+          "clangd",
+          "--background-index",
+          "--clang-tidy",
+          "--header-insertion=iwyu",
+          "--completion-style=detailed",
+          "--function-arg-placeholders",
+          "--fallback-style=llvm",
+        },
+        init_options = {
+          usePlaceholders = true,
+          completeUnimported = true,
+          clangdFileStatus = true,
+        },
+      })
 
-        lua_ls = {
-          enable = true;
-          # settings are wrapped as { Lua = settings } by nixvim
-          settings = {
-            workspace.checkThirdParty = false;
-            completion.callSnippet = "Replace";
-            doc.privateName = [ "^_" ];
-            type.castNumberToInteger = true;
-            diagnostics.disable = [
-              "incomplete-signature-doc"
-              "trailing-space"
-            ];
-            hint = {
-              enable = true;
-              setType = false;
-              paramType = true;
-              paramName = "Disable";
-              semicolon = "Disable";
-              arrayIndex = "Disable";
-            };
-          };
-        };
+      -- Enable configured servers
+      vim.lsp.enable({
+        "vtsls", "clangd", "lua_ls", "gopls", "basedpyright",
+        "yamlls", "dockerls", "cmake", "nixd", "zls",
+      })
 
-        basedpyright = {
-          enable = true;
-          settings.basedpyright.analysis = {
-            autoSearchPaths = true;
-            autoImportCompletions = true;
-          };
-        };
+      -- ── Illuminate (auto-highlight same word) ────────────────────────
+      require("illuminate").configure({
+        providers = { "lsp", "treesitter", "regex" },
+      })
 
-        yamlls = {
-          enable = true;
-          # settings are wrapped as { yaml = settings } by nixvim
-          settings.schemaStore = {
-            enable = false;
-            url = "";
-          };
-        };
+      -- ── LazyDev (Lua neovim API completions) ─────────────────────────
+      require("lazydev").setup({
+        library = {
+          { path = "${3rd}/luv/library", words = { "vim%.uv" } },
+        },
+      })
 
-        docker_compose_language_service.enable = true;
-        dockerls.enable = true;
-
-        neocmake.enable = true;
-
-        vtsls = {
-          enable = true;
-          filetypes = [
-            "javascript"
-            "javascriptreact"
-            "javascript.jsx"
-            "typescript"
-            "typescriptreact"
-            "typescript.tsx"
-          ];
-          settings = {
-            complete_function_calls = true;
-            vtsls = {
-              enableMoveToFileCodeAction = true;
-              autoUseWorkspaceTsdk = true;
-              experimental.completion.enableServerSideFuzzyMatch = true;
-            };
-            typescript = {
-              updateImportsOnFileMove.enabled = "always";
-              suggest.completeFunctionCalls = true;
-              inlayHints = {
-                enumMemberValues.enabled = true;
-                functionLikeReturnTypes.enabled = true;
-                parameterNames.enabled = "literals";
-                parameterTypes.enabled = true;
-                propertyDeclarationTypes.enabled = true;
-                variableTypes.enabled = false;
-              };
-            };
-          };
-        };
-
-        terraformls.enable = true;
-
-        emmet_language_server.enable = true;
-
-        nil_ls.enable = true;
-      };
-    };
-
-    # ── Schemastore (JSON/YAML schemas) ──────────────────────────────────
-    schemastore.enable = true;
-
-    # ── Lazydev (Lua LSP enhancement) ─────────────────────────────────────
-    lazydev = {
-      enable = true;
-      settings.library = [
-        {
-          path = "\${3rd}/luv/library";
-          words = [ "vim%.uv" ];
-        }
-      ];
-    };
-
-    # ── Vim-illuminate ───────────────────────────────────────────────────
-    illuminate = {
-      enable = true;
-      settings = {
-        providers = [
-          "lsp"
-          "treesitter"
-          "regex"
-        ];
-        delay = 200;
-        filetypes_denylist = [
-          "dirbuf"
-          "dirvish"
-          "fugitive"
-        ];
-      };
-    };
-
-    # ── Trouble ──────────────────────────────────────────────────────────
-    trouble = {
-      enable = true;
-      settings.modes.lsp_references.params.include_declaration = true;
-    };
-
-    # ── Inc-rename ────────────────────────────────────────────────────────
-    inc-rename = {
-      enable = true;
-      settings = { };
-    };
-
-    # ── Rustaceanvim ─────────────────────────────────────────────────────
-    rustaceanvim = {
-      enable = true;
-      settings.server = {
-        default_settings."rust-analyzer" = {
-          cargo = {
-            allFeatures = true;
-            loadOutDirsFromCheck = true;
-            buildScripts.enable = true;
-          };
-          checkOnSave = true;
-          check = {
-            command = "clippy";
-            extraArgs = [
-              "--all"
-              "--"
-              "-W"
-              "clippy::pedantic"
-            ];
-          };
-          procMacro = {
-            enable = true;
-            ignored = {
-              async-trait = [ "async_trait" ];
-              napi-derive = [ "napi" ];
-              async-recursion = [ "async_recursion" ];
-            };
-          };
-        };
-      };
-    };
-
-    # ── Clangd extensions ─────────────────────────────────────────────────
-    clangd-extensions = {
-      enable = true;
-      enableOffsetEncodingWorkaround = true;
-    };
-
-    # ── Tiny inline diagnostic ────────────────────────────────────────────
-    tiny-inline-diagnostic = {
-      enable = true;
-      settings = {
-        preset = "powerline";
-        transparent_bg = false;
+      -- ── Tiny Inline Diagnostic ───────────────────────────────────────
+      require("tiny-inline-diagnostic").setup({
         options = {
-          show_source = true;
-          use_icons_from_diagnostic = true;
-          multilines = {
-            enabled = true;
-            always_show = false;
-          };
-          overflow.mode = "wrap";
-        };
-      };
-    };
+          show_source = { enabled = true },
+          multilines = { enabled = true },
+          add_messages = { display_count = true },
+        },
+      })
+      vim.diagnostic.config({ virtual_text = false })
+
+      -- ── Inc-Rename ───────────────────────────────────────────────────
+      require("inc_rename").setup({})
+      vim.keymap.set("n", "<leader>cr", ":IncRename ", { desc = "Rename symbol" })
+
+      -- ── Trouble ──────────────────────────────────────────────────────
+      require("trouble").setup({
+        modes = {
+          diagnostics_buffer = {
+            mode = "diagnostics",
+            preview = {
+              type = "float",
+              relative = "editor",
+              border = "rounded",
+              title = "Preview",
+              title_pos = "center",
+              position = { 0, -2 },
+              size = { width = 0.4, height = 0.4 },
+              zindex = 200,
+            },
+            filter = { buf = 0 },
+          },
+        },
+      })
+
+      -- ── LSP keymaps (set on LspAttach) ───────────────────────────────
+      vim.api.nvim_create_autocmd("LspAttach", {
+        group = vim.api.nvim_create_augroup("UserLspConfig", {}),
+        callback = function(ev)
+          local opts = { buffer = ev.buf }
+          local map = vim.keymap.set
+          map("n", "gD", vim.lsp.buf.declaration,    vim.tbl_extend("force", opts, { desc = "Goto declaration" }))
+          map("n", "gd", vim.lsp.buf.definition,     vim.tbl_extend("force", opts, { desc = "Goto definition" }))
+          map("n", "K",  vim.lsp.buf.hover,          vim.tbl_extend("force", opts, { desc = "Hover" }))
+          map("n", "gi", vim.lsp.buf.implementation, vim.tbl_extend("force", opts, { desc = "Implementation" }))
+          map({ "n", "v" }, "<space>ca", vim.lsp.buf.code_action,
+            vim.tbl_extend("force", opts, { desc = "Code action" }))
+          map({ "n", "v" }, "<space>cA", function()
+            vim.lsp.buf.code_action({
+              apply = true,
+              context = { only = { "source" }, diagnostics = {} },
+            })
+          end, vim.tbl_extend("force", opts, { desc = "Code action (buffer)" }))
+          map("n", "<space>cd", vim.diagnostic.open_float,
+            vim.tbl_extend("force", opts, { desc = "Open diagnostic float" }))
+          map("n", "<leader>Li", "<cmd>LspInfo<cr>",    vim.tbl_extend("force", opts, { desc = "LSP Info" }))
+          map("n", "<leader>Ll", "<cmd>LspLog<cr>",     vim.tbl_extend("force", opts, { desc = "LSP Logs" }))
+          map("n", "<leader>r",  "<cmd>LspRestart<cr>", vim.tbl_extend("force", opts, { desc = "LSP Restart" }))
+          map("n", "[e", function()
+            vim.diagnostic.jump({ count = -1, float = true, severity = vim.diagnostic.severity.ERROR })
+          end, vim.tbl_extend("force", opts, { desc = "Prev diagnostic error" }))
+          map("n", "]e", function()
+            vim.diagnostic.jump({ count = 1, float = true, severity = vim.diagnostic.severity.ERROR })
+          end, vim.tbl_extend("force", opts, { desc = "Next diagnostic error" }))
+        end,
+      })
+
+      -- ── Trouble keymaps ──────────────────────────────────────────────
+      local map = vim.keymap.set
+      map("n", "<leader>xX", "<cmd>Trouble diagnostics toggle<cr>",           { desc = "Diagnostics (Trouble)" })
+      map("n", "<leader>xx", "<cmd>Trouble diagnostics toggle filter.buf=0<cr>", { desc = "Buffer Diagnostics" })
+      map("n", "<leader>cs", "<cmd>Trouble symbols toggle focus=false<cr>",   { desc = "Symbols (Trouble)" })
+      map("n", "<leader>cl", "<cmd>Trouble lsp toggle focus=false win.position=right<cr>", { desc = "LSP (Trouble)" })
+      map("n", "<leader>xl", "<cmd>Trouble loclist toggle<cr>",               { desc = "Location List (Trouble)" })
+      map("n", "<leader>xq", "<cmd>Trouble qflist toggle<cr>",               { desc = "Quickfix List (Trouble)" })
+
+      -- ── Rustaceanvim ─────────────────────────────────────────────────
+      vim.g.rustaceanvim = {}
+    '';
   };
-
-  # fish_lsp and typos_lsp – configure via extraConfigLua since they may not
-  # be available on all systems (pcall fallback mirrors the original Lua config)
-  extraConfigLua = ''
-    -- Optional LSP servers (system-installed, not managed by Nix)
-    pcall(function()
-      vim.lsp.enable("fish_lsp")
-    end)
-    pcall(function()
-      vim.lsp.enable("typos_lsp")
-    end)
-  '';
-
-  extraPackages = with pkgs; [
-    # LSP servers – most are auto-added by nixvim when servers.*.enable = true,
-    # but listed here explicitly for clarity and as fallback.
-    lua-language-server
-    gopls
-    basedpyright
-    clang-tools
-    bash-language-server
-    vscode-langservers-extracted
-    yaml-language-server
-    docker-compose-language-service
-    dockerfile-language-server # maps to pkgs.dockerfile-language-server in nixpkgs
-    neocmakelsp
-    terraform-ls
-    emmet-language-server
-    nil
-    vtsls
-  ];
-
-  keymaps = [
-    {
-      mode = "n";
-      key = "<leader>xx";
-      action = "<cmd>Trouble diagnostics toggle<cr>";
-      options.desc = "Diagnostics (Trouble)";
-    }
-    {
-      mode = "n";
-      key = "<leader>xX";
-      action = "<cmd>Trouble diagnostics toggle filter.buf=0<cr>";
-      options.desc = "Buffer Diagnostics (Trouble)";
-    }
-    {
-      mode = "n";
-      key = "<leader>cs";
-      action = "<cmd>Trouble symbols toggle focus=false<cr>";
-      options.desc = "Symbols (Trouble)";
-    }
-    {
-      mode = "n";
-      key = "<leader>cl";
-      action = "<cmd>Trouble lsp toggle focus=false win.position=right<cr>";
-      options.desc = "LSP Definitions / references (Trouble)";
-    }
-    {
-      mode = "n";
-      key = "<leader>xL";
-      action = "<cmd>Trouble loclist toggle<cr>";
-      options.desc = "Location List (Trouble)";
-    }
-    {
-      mode = "n";
-      key = "<leader>xQ";
-      action = "<cmd>Trouble qflist toggle<cr>";
-      options.desc = "Quickfix List (Trouble)";
-    }
-    # Inc-rename overrides the LSP rename keymap
-    {
-      mode = "n";
-      key = "<leader>cr";
-      action = ":IncRename ";
-      options.desc = "Rename symbol";
-    }
-  ];
 }

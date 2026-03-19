@@ -1,12 +1,12 @@
 {
-  description = "neonvoid's Neovim configuration (nixvim)";
+  description = "neonvoid's Neovim configuration (nvf)";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
-    nixvim.url = "github:nix-community/nixvim";
+    nvf.url = "github:notashelf/nvf";
     flake-parts.url = "github:hercules-ci/flake-parts";
 
-    # Plugins not in nixpkgs
+    # Plugins not packaged in nixpkgs
     eldritch-nvim = {
       url = "github:eldritch-theme/eldritch.nvim/0415fa72c348e814a7a6cc9405593a4f812fe12f";
       flake = false;
@@ -19,7 +19,7 @@
 
   outputs =
     {
-      nixvim,
+      nvf,
       flake-parts,
       nixpkgs,
       ...
@@ -37,31 +37,17 @@
         let
           pkgs = import nixpkgs {
             inherit system;
-            config = {
-              allowUnfree = true;
-            };
+            config.allowUnfree = true;
           };
-          nixvimLib = nixvim.lib.${system};
-          nixvim' = nixvim.legacyPackages.${system};
-          nixvimModule = {
-            inherit system;
-            module = import ./config;
-            extraSpecialArgs = {
-              inherit inputs;
-            };
+          neovimConfig = nvf.lib.neovimConfiguration {
+            inherit pkgs;
+            modules = [ ./config ];
+            extraSpecialArgs = { inherit inputs pkgs; };
           };
-          nvim = nixvim'.makeNixvimWithModule (nixvimModule // { inherit pkgs; });
         in
         {
-          checks = {
-            # Run `nix flake check .` to verify that your config is not broken
-            default = nixvimLib.check.mkTestDerivationFromNixvimModule nixvimModule;
-          };
-
-          packages = {
-            # Lets you run `nix run .` to start nixvim
-            default = nvim;
-          };
+          # Run `nix run .` to start neovim
+          packages.default = neovimConfig.neovim;
         };
     };
 }

@@ -1,83 +1,63 @@
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 {
-  # Do NOT enable plugins.lualine — nixvim would call require("lualine").setup() automatically.
-  # We configure lualine manually via extraConfigLua so we can use pcall for optional plugins
-  # (noice, gitblame, sidekick) in the sections.
-  extraPlugins = [ pkgs.vimPlugins.lualine-nvim ];
-  extraConfigLua = ''
-    local ok_gitblame, git_blame = pcall(require, "gitblame")
-    local ok_noice, noice = pcall(require, "noice")
-    local ok_sidekick_status, sidekick_status = pcall(require, "sidekick.status")
+  config.vim = {
+    startPlugins = with pkgs.vimPlugins; [
+      lualine-nvim
+      nvim-web-devicons
+    ];
 
-    local lualine_x = {}
+    luaConfigRC."lualine" = lib.nvim.dag.entryAnywhere ''
+      vim.g.gitblame_display_virtual_text = 0
 
-    if ok_noice then
-      table.insert(lualine_x, {
-        noice.api.status.mode.get,
-        cond = noice.api.status.mode.has,
-        color = { fg = "#ff9e64" },
-      })
-    end
-
-    if ok_gitblame then
-      table.insert(lualine_x, {
-        git_blame.get_current_blame_text,
-        cond = git_blame.is_blame_text_available,
-      })
-    end
-
-    table.insert(lualine_x, { "overseer" })
-
-    if ok_sidekick_status then
-      table.insert(lualine_x, {
-        function() return " " end,
-        color = function()
-          local status = sidekick_status.get()
-          if status then
-            return status.kind == "Error" and "DiagnosticError"
-              or status.busy and "DiagnosticWarn"
-              or "Special"
-          end
-        end,
-        cond = function() return sidekick_status.get() ~= nil end,
-      })
-      table.insert(lualine_x, {
-        function()
-          local status = sidekick_status.cli()
-          return " " .. (#status > 1 and #status or "")
-        end,
-        cond = function() return #sidekick_status.cli() > 0 end,
-        color = function() return "Special" end,
-      })
-    end
-
-    require("lualine").setup({
-      options = {
-        theme = "eldritch",
-        component_separators = "",
-        section_separators = { left = "", right = "" },
-        icons_enabled = true,
-        globalstatus = true,
-        refresh = { statusline = 1000, tabline = 1000 },
-        disabled_filetypes = { statusline = { "dashboard" }, tabline = { "dashboard" } },
-      },
-      sections = {
-        lualine_a = { { "mode", separator = { left = "", right = "" } } },
-        lualine_b = { "branch" },
-        lualine_c = {
-          { "filename", file_status = true, newfile_status = true, path = 0, shorting_target = 40 },
-          { "diff", symbols = { added = " ", modified = "󰣕 ", removed = " " } },
-          "diagnostics",
+      require("lualine").setup({
+        options = {
+          theme = "eldritch",
+          component_separators = "",
+          section_separators = { left = "", right = "" },
+          icons_enabled = true,
+          globalstatus = true,
+          refresh = { statusline = 1000, tabline = 1000 },
+          disabled_filetypes = { statusline = { "dashboard" }, tabline = { "dashboard" } },
         },
-        lualine_x = lualine_x,
-        lualine_y = {
-          "filetype",
-          { "location" },
+        extensions = { "lazy" },
+        sections = {
+          lualine_a = { { "mode", separator = { left = "", right = "" } } },
+          lualine_b = { "branch" },
+          lualine_c = {
+            { "filename", file_status = true, newfile_status = true, path = 0, shorting_target = 40 },
+            { "diff", symbols = { added = " ", modified = "󰣕 ", removed = " " } },
+            "diagnostics",
+          },
+          lualine_x = {
+            {
+              require("noice").api.status.mode.get,
+              cond = require("noice").api.status.mode.has,
+              color = { fg = "#ff9e64" },
+            },
+            {
+              require("gitblame").get_current_blame_text,
+              cond = require("gitblame").is_blame_text_available,
+            },
+            { "overseer" },
+          },
+          lualine_y = {
+            "filetype",
+            { "location" },
+          },
+          lualine_z = {
+            {
+              function()
+                -- Show lazy.nvim update count when available
+                local ok, lazy_status = pcall(require, "lazy.status")
+                if ok and lazy_status.has_updates() then
+                  return "󱧕 " .. lazy_status.updates()
+                end
+                return "󰏗 󰄵"
+              end,
+            },
+          },
         },
-        lualine_z = {
-          { function() return "󰏗 " end },
-        },
-      },
-    })
-  '';
+      })
+    '';
+  };
 }

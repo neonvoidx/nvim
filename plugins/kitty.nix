@@ -1,11 +1,13 @@
-{ pkgs, inputs, ... }:
+{ pkgs, lib, ... }:
 {
-  plugins = {
-    # vim-kitty-navigator (nixvim module: kitty-navigator)
-    kitty-navigator.enable = true;
+  config.vim = {
+    startPlugins = with pkgs.vimPlugins; [
+      vim-kitty          # syntax highlighting for kitty.conf
+    ];
 
-    # kitty-scrollback.nvim (nixvim module: kitty-scrollback)
-    kitty-scrollback.enable = true;
+    luaConfigRC."kitty" = lib.nvim.dag.entryAnywhere ''
+      -- Kitty navigator mappings are handled in keymaps.lua
+      -- (checked at runtime via os.getenv("TERM") == "xterm-kitty")
+    '';
   };
 }
-

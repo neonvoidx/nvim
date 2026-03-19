@@ -1,10 +1,12 @@
-{ ... }:
+{ pkgs, lib, ... }:
 {
-  plugins = {
-    # hmts: Home Manager Template Strings – Nix-aware treesitter injections
-    hmts.enable = true;
+  config.vim = {
+    startPlugins = with pkgs.vimPlugins; [
+      hmts-nvim          # home-manager treesitter integration
+    ];
 
-    # nil_ls LSP server for Nix (configured in lsp.nix via plugins.lsp.servers.nil_ls)
-    # nixd LSP server is an alternative; nil_ls is already in lsp.nix
+    luaConfigRC."nix-integration" = lib.nvim.dag.entryAnywhere ''
+      -- hmts.nvim loads automatically via treesitter; no extra setup needed
+    '';
   };
 }
