@@ -1,9 +1,6 @@
-{ inputs, pkgs, lib, ... }:
+{ userPlugins, pkgs, lib, ... }:
 let
-  markdown-toc-nvim = pkgs.vimUtils.buildVimPlugin {
-    name = "markdown-toc.nvim";
-    src = inputs.markdown-toc-nvim;
-  };
+  markdown-toc-nvim = userPlugins.markdown-toc-nvim;
 in
 {
   config.vim = {

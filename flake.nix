@@ -15,12 +15,12 @@
       url = "github:noamsto/resolved.nvim";
       flake = false;
     };
-    vim-kitty = {
-      url = "github:fladson/vim-kitty";
-      flake = false;
-    };
     markdown-toc-nvim = {
       url = "github:hedyhli/markdown-toc.nvim";
+      flake = false;
+    };
+    vim-kitty-navigator = {
+      url = "github:knubie/vim-kitty-navigator";
       flake = false;
     };
   };
@@ -47,10 +47,28 @@
             inherit system;
             config.allowUnfree = true;
           };
+          userPlugins = {
+            eldritch-nvim = pkgs.vimUtils.buildVimPlugin {
+              name = "eldritch.nvim";
+              src = inputs.eldritch-nvim;
+            };
+            resolved-nvim = pkgs.vimUtils.buildVimPlugin {
+              name = "resolved.nvim";
+              src = inputs.resolved-nvim;
+            };
+            vim-kitty-navigator = pkgs.vimUtils.buildVimPlugin {
+              name = "vim-kitty-navigator";
+              src = inputs.vim-kitty-navigator;
+            };
+            markdown-toc-nvim = pkgs.vimUtils.buildVimPlugin {
+              name = "markdown-toc.nvim";
+              src = inputs.markdown-toc-nvim;
+            };
+          };
           neovimConfig = nvf.lib.neovimConfiguration {
             inherit pkgs;
             modules = [ ./config ];
-            extraSpecialArgs = { inherit inputs pkgs; };
+            extraSpecialArgs = { inherit userPlugins; };
           };
         in
         {

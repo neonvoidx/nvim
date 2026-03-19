@@ -57,6 +57,7 @@
       wrap = false;
       autochdir = false;
       smoothscroll = true;
+      shada = "!,'300,<50,s10,h";
 
       # Folding
       foldcolumn = "1";
