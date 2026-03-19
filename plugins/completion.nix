@@ -3,6 +3,7 @@
   config.vim = {
     startPlugins = with pkgs.vimPlugins; [
       blink-cmp
+      blink-copilot        # copilot source for blink.cmp
       friendly-snippets
       nvim-web-devicons
       lspkind-nvim
@@ -20,7 +21,7 @@
           sorts = { "exact", "score", "sort_text" },
         },
         sources = {
-          default = { "lsp", "path", "lazydev", "snippets", "buffer" },
+          default = { "copilot", "lsp", "path", "lazydev", "snippets", "buffer" },
           providers = {
             path = {
               name = "path",
@@ -38,6 +39,12 @@
               name = "LSP",
               module = "blink.cmp.sources.lsp",
               score_offset = 7,
+            },
+            copilot = {
+              name = "copilot",
+              module = "blink-copilot",
+              score_offset = 4,
+              async = true,
             },
             snippets = {
               name = "snippets",

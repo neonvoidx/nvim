@@ -69,21 +69,21 @@
         local wk = require("which-key")
         wk.add({ { "<leader>o", group = "Obsidian", icon = "" } })
 
-        local p = "<leader>o"
+        local prefix = "<leader>o"
         local map = vim.keymap.set
-        map("n", p .. "o", "<cmd>Obsidian open<CR>",        { desc = "Open on App" })
-        map("n", p .. "n", "<cmd>Obsidian new<CR>",         { desc = "New Note" })
-        map("n", p .. "b", "<cmd>Obsidian backlinks<CR>",   { desc = "Backlinks" })
-        map("n", p .. "t", "<cmd>Obsidian tags<CR>",        { desc = "Tags" })
-        map("n", p .. "T", "<cmd>Obsidian template<CR>",    { desc = "Template" })
-        map("n", p .. "d", "<cmd>Obsidian dailies<CR>",     { desc = "Daily Notes" })
-        map("n", p .. "w", "<cmd>Obsidian workspace<CR>",   { desc = "Workspace" })
-        map("n", p .. "r", "<cmd>Obsidian rename<CR>",      { desc = "Rename" })
-        map("n", p .. "i", "<cmd>Obsidian paste_img<CR>",   { desc = "Paste Image" })
+        map("n", prefix .. "o", "<cmd>Obsidian open<CR>",        { desc = "Open on App" })
+        map("n", prefix .. "n", "<cmd>Obsidian new<CR>",         { desc = "New Note" })
+        map("n", prefix .. "b", "<cmd>Obsidian backlinks<CR>",   { desc = "Backlinks" })
+        map("n", prefix .. "t", "<cmd>Obsidian tags<CR>",        { desc = "Tags" })
+        map("n", prefix .. "T", "<cmd>Obsidian template<CR>",    { desc = "Template" })
+        map("n", prefix .. "d", "<cmd>Obsidian dailies<CR>",     { desc = "Daily Notes" })
+        map("n", prefix .. "w", "<cmd>Obsidian workspace<CR>",   { desc = "Workspace" })
+        map("n", prefix .. "r", "<cmd>Obsidian rename<CR>",      { desc = "Rename" })
+        map("n", prefix .. "i", "<cmd>Obsidian paste_img<CR>",   { desc = "Paste Image" })
         map("n", "<leader>sO", "<cmd>Obsidian search<CR>",  { desc = "Obsidian Grep" })
-        map("v", p .. "l", "<cmd>Obsidian link<CR>",        { desc = "Link" })
-        map("v", p .. "N", "<cmd>Obsidian linknew<CR>",     { desc = "New Link" })
-        map("v", p .. "e", "<cmd>Obsidian extractnote<CR>", { desc = "Extract Note" })
+        map("v", prefix .. "l", "<cmd>Obsidian link<CR>",        { desc = "Link" })
+        map("v", prefix .. "N", "<cmd>Obsidian linknew<CR>",     { desc = "New Link" })
+        map("v", prefix .. "e", "<cmd>Obsidian extractnote<CR>", { desc = "Extract Note" })
       end
 
       -- ── Markdown-toc ─────────────────────────────────────────────────

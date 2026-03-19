@@ -47,11 +47,7 @@
           lualine_z = {
             {
               function()
-                -- Show lazy.nvim update count when available
-                local ok, lazy_status = pcall(require, "lazy.status")
-                if ok and lazy_status.has_updates() then
-                  return "󱧕 " .. lazy_status.updates()
-                end
+                -- lazy.nvim is not used in NVF; show a static package indicator
                 return "󰏗 󰄵"
               end,
             },
