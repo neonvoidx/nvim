@@ -8,7 +8,6 @@ in
       render-markdown-nvim
       obsidian-nvim
       markdown-toc-nvim
-      nvim-web-devicons
     ];
 
     luaConfigRC."markdown" = lib.nvim.dag.entryAnywhere /* lua */ ''

@@ -75,7 +75,7 @@
       black
       isort
       stylua
-      nixfmt-rfc-style
+      nixfmt
       markdownlint-cli2
     ];
 
