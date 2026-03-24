@@ -72,14 +72,6 @@
 
         picker = {
           enabled = true;
-          layout.layout = {
-            backdrop = false;
-            width = 0.80;
-            min_width = 80;
-            height = 0.80;
-            min_height = 30;
-            box = "vertical";
-          };
         };
 
         dashboard = {
