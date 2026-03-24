@@ -1,6 +1,19 @@
 {
   description = "neonvoid's Neovim configuration (nvf)";
 
+  nixConfig = {
+    substituters = [
+      "https://cache.nixos.org"
+      "https://nix-community.cachix.org"
+      "https://cache.garnix.io"
+    ];
+    trusted-substituters = [
+      "https://cache.nixos.org"
+      "https://cache.garnix.io"
+      "https://nix-community.cachix.org"
+    ];
+  };
+
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
     nvf.url = "github:notashelf/nvf";
