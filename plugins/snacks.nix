@@ -79,9 +79,6 @@
             height = 0.80;
             min_height = 30;
             box = "vertical";
-            border = true;
-            title = "{title} {live} {flags}";
-            title_pos = "center";
           };
         };
 
