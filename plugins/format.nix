@@ -70,6 +70,7 @@
     startPlugins = [ pkgs.vimPlugins.nvim-lint ];
 
     extraPackages = with pkgs; [
+      nodePackages.eslint_d
       nodePackages.prettier
       prettierd
       black
@@ -81,6 +82,7 @@
 
     luaConfigRC."lint" = lib.nvim.dag.entryAnywhere /* lua */ ''
       vim.g.disable_autoformat = false
+      local has_eslint_d = vim.fn.executable("eslint_d") == 1
 
       -- Toggle autoformat keymaps
       vim.keymap.set("n", "<leader>cf", function()
@@ -97,17 +99,24 @@
       end, { desc = "Toggle autoformat (buffer)" })
 
       -- nvim-lint
-      vim.env.ESLINT_D_PPID = vim.fn.getpid()
+      if has_eslint_d then
+        vim.env.ESLINT_D_PPID = vim.fn.getpid()
+      end
 
-      require("lint").linters_by_ft = {
-        typescript       = { "eslint_d" },
-        typescriptreact  = { "eslint_d" },
-        javascript       = { "eslint_d" },
-        javascriptreact  = { "eslint_d" },
-        ["javascript.jsx"] = { "eslint_d" },
-        ["typescript.tsx"] = { "eslint_d" },
-        cmake            = { "cmakelint" },
+      local linters_by_ft = {
+        cmake = { "cmakelint" },
       }
+
+      if has_eslint_d then
+        linters_by_ft.typescript = { "eslint_d" }
+        linters_by_ft.typescriptreact = { "eslint_d" }
+        linters_by_ft.javascript = { "eslint_d" }
+        linters_by_ft.javascriptreact = { "eslint_d" }
+        linters_by_ft["javascript.jsx"] = { "eslint_d" }
+        linters_by_ft["typescript.tsx"] = { "eslint_d" }
+      end
+
+      require("lint").linters_by_ft = linters_by_ft
 
       vim.api.nvim_create_autocmd({ "BufEnter", "BufWritePost", "InsertLeave" }, {
         group    = vim.api.nvim_create_augroup("lint", { clear = true }),
