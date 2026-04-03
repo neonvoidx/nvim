@@ -70,8 +70,8 @@
     startPlugins = [ pkgs.vimPlugins.nvim-lint ];
 
     extraPackages = with pkgs; [
-      nodePackages.eslint_d
-      nodePackages.prettier
+      eslint_d
+      prettier
       prettierd
       black
       isort
