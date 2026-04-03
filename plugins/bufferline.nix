@@ -31,4 +31,9 @@
       };
     };
   };
+
+  config.vim.luaConfigRC."bufferline-pin" = lib.nvim.dag.entryAnywhere /* lua */ ''
+    vim.keymap.set("n", "<leader>bp", "<cmd>BufferLineTogglePin<cr>",           { desc = "Toggle pin buffer" })
+    vim.keymap.set("n", "<leader>bP", "<cmd>BufferLineGroupClose ungrouped<cr>", { desc = "Close non-pinned buffers" })
+  '';
 }

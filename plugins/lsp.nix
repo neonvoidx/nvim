@@ -143,9 +143,9 @@
               context = { only = { "source" }, diagnostics = {} },
             })
           end, e("Code action (buffer)"))
-          map("n", "<leader>Li", "<cmd>LspInfo<cr>",    e("LSP Info"))
-          map("n", "<leader>Ll", "<cmd>LspLog<cr>",     e("LSP Logs"))
-          map("n", "<leader>r",  "<cmd>LspRestart<cr>", e("LSP Restart"))
+          map("n", "<leader>Li", "<cmd>checkhealth lsp<cr>",              e("LSP Info"))
+          map("n", "<leader>Ll", "<cmd>lua vim.cmd('e '..vim.lsp.get_log_path())<cr>", e("LSP Logs"))
+          map("n", "<leader>r",  "<cmd>LspRestart<cr>",                 e("LSP Restart"))
         end,
       })
     '';
