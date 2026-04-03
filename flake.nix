@@ -59,6 +59,27 @@
           pkgs = import nixpkgs {
             inherit system;
             config.allowUnfree = true;
+            overlays = [
+              # hmts-nvim uses the old treesitter predicate API where match[id] was a single
+              # TSNode; nvim 0.11+ changed it to always be a list. Unwrap the first element.
+              (final: prev: {
+                vimPlugins = prev.vimPlugins // {
+                  hmts-nvim = prev.vimPlugins.hmts-nvim.overrideAttrs (old: {
+                    postPatch =
+                      (old.postPatch or "")
+                      + ''
+                        substituteInPlace plugin/hmts.lua \
+                          --replace-fail \
+                            'local node = match[predicate[2]]:parent()' \
+                            'local _n = match[predicate[2]]; local node = (type(_n) == "table" and _n[1] or _n):parent()' \
+                          --replace-fail \
+                            'local path_node = match[predicate[2]]' \
+                            'local _pn = match[predicate[2]]; local path_node = type(_pn) == "table" and _pn[1] or _pn'
+                      '';
+                  });
+                };
+              })
+            ];
           };
           userPlugins = {
             eldritch-nvim = pkgs.vimUtils.buildVimPlugin {
