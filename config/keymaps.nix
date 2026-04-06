@@ -105,7 +105,5 @@
     -- Diff vs clipboard
     map("n", "<leader>D", compareToClip, { desc = "Diff vs clipboard" })
 
-    -- Lazy UI
-    map("n", "<leader>l", "<cmd>Lazy<cr>", { desc = "Lazy", silent = true })
   '';
 }

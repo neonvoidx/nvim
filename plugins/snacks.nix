@@ -83,18 +83,61 @@
             █  ██    ██  ████████  ████  ████    ███████  █████  █  █  █
             █  ███   ██        ███      ██████  █████        ██  ████  █'';
           preset.keys = [
-            { icon = " "; key = "f"; desc = "Find File";       action = lib.generators.mkLuaInline "function() Snacks.picker.files() end"; }
-            { icon = " "; key = "n"; desc = "New File";        action = lib.generators.mkLuaInline "function() vim.cmd('enew') end"; }
-            { icon = " "; key = "g"; desc = "Find Text";       action = lib.generators.mkLuaInline "function() Snacks.picker.grep() end"; }
-            { icon = " "; key = "r"; desc = "Recent Files";    action = lib.generators.mkLuaInline "function() Snacks.picker.recent() end"; }
-            { icon = " "; key = "s"; desc = "Restore Session"; action = lib.generators.mkLuaInline "function() require('persistence').load() end"; }
-            { icon = "󰒲 "; key = "q"; desc = "Quit";           action = lib.generators.mkLuaInline "function() vim.cmd('qa') end"; }
+            {
+              icon = " ";
+              key = "f";
+              desc = "Find File";
+              action = lib.generators.mkLuaInline "function() Snacks.picker.files() end";
+            }
+            {
+              icon = " ";
+              key = "n";
+              desc = "New File";
+              action = lib.generators.mkLuaInline "function() vim.cmd('enew') end";
+            }
+            {
+              icon = " ";
+              key = "g";
+              desc = "Find Text";
+              action = lib.generators.mkLuaInline "function() Snacks.picker.grep() end";
+            }
+            {
+              icon = " ";
+              key = "r";
+              desc = "Recent Files";
+              action = lib.generators.mkLuaInline "function() Snacks.picker.recent({ filter = { cwd = true } }) end";
+            }
+            {
+              icon = " ";
+              key = "s";
+              desc = "Restore Session";
+              action = lib.generators.mkLuaInline "function() require('persistence').load() end";
+            }
+            {
+              icon = "󰒲 ";
+              key = "q";
+              desc = "Quit";
+              action = lib.generators.mkLuaInline "function() vim.cmd('qa') end";
+            }
           ];
           sections = [
             { section = "header"; }
-            { section = "keys"; gap = 1; padding = 1; }
-            { section = "recent_files"; gap = 1; padding = 1; }
-            { section = "projects"; gap = 1; padding = 1; }
+            {
+              section = "keys";
+              gap = 1;
+              padding = 1;
+            }
+            {
+              section = "recent_files";
+              gap = 1;
+              padding = 1;
+              cwd = true;
+            }
+            {
+              section = "projects";
+              gap = 1;
+              padding = 1;
+            }
           ];
         };
       };
@@ -139,12 +182,12 @@
       local wk = require("which-key")
       wk.add({
         { "<leader>f",  group = "+find",    icon = { icon = "󰍉 " } },
-        { "<leader>g",  group = "+git",     icon = { icon = " " } },
-        { "<leader>q",  group = "+session", icon = { icon = " " } },
+        { "<leader>g",  group = "+git",     icon = { icon = " " } },
+        { "<leader>q",  group = "+quickfix/session", icon = { icon = " " } },
         { "<leader>s",  group = "+search",  icon = { icon = "󰆘 " } },
-        { "<leader>u",  group = "+ui",      icon = { icon = "󰍹 " } },
-        { "<leader>c",  group = "+code",    icon = { icon = " " } },
-        { "<leader>x",  group = "+trouble", icon = { icon = " " } },
+        { "<leader>u",  group = "+ui",      icon = { icon = "󰔎 " } },
+        { "<leader>c",  group = "+code",    icon = { icon = "󰘦 " } },
+        { "<leader>x",  group = "+trouble", icon = { icon = " " } },
       })
 
       -- Picker keymaps
@@ -158,7 +201,7 @@
       map("n", "<leader>ff",      function() Snacks.picker.files() end,             { desc = "Find Files" })
       map("n", "<leader>fg",      function() Snacks.picker.git_files() end,         { desc = "Find Git Files" })
       map("n", "<leader>fp",      function() Snacks.picker.projects() end,          { desc = "Projects" })
-      map("n", "<leader>fr",      function() Snacks.picker.recent() end,            { desc = "Recent" })
+      map("n", "<leader>fr",      function() Snacks.picker.recent({ filter = { cwd = true } }) end, { desc = "Recent" })
       map("n", "<leader>gb",      function() Snacks.picker.git_branches() end,      { desc = "Git Branches" })
       map("n", "<leader>gl",      function() Snacks.picker.git_log() end,           { desc = "Git Log" })
       map("n", "<leader>gL",      function() Snacks.picker.git_log_line() end,      { desc = "Git Log Line" })

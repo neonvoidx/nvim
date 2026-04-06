@@ -97,7 +97,7 @@
           { "<", function() require("quicker").collapse() end, desc = "Collapse quickfix context" },
         },
       })
-      vim.keymap.set("n", "<leader>q", function() require("quicker").toggle() end, { desc = "Toggle quickfix" })
+      vim.keymap.set("n", "<leader>qq", function() require("quicker").toggle() end, { desc = "Toggle quickfix" })
 
       -- ── Guess indent ────────────────────────────────────────────────
       require("guess-indent").setup()
