@@ -84,37 +84,37 @@
             █  ███   ██        ███      ██████  █████        ██  ████  █'';
           preset.keys = [
             {
-              icon = " ";
+              icon = "󰈞 ";
               key = "f";
               desc = "Find File";
               action = lib.generators.mkLuaInline "function() Snacks.picker.files() end";
             }
             {
-              icon = " ";
+              icon = " ";
               key = "n";
               desc = "New File";
               action = lib.generators.mkLuaInline "function() vim.cmd('enew') end";
             }
             {
-              icon = " ";
+              icon = " ";
               key = "g";
               desc = "Find Text";
               action = lib.generators.mkLuaInline "function() Snacks.picker.grep() end";
             }
             {
-              icon = " ";
+              icon = " ";
               key = "r";
               desc = "Recent Files";
               action = lib.generators.mkLuaInline "function() Snacks.picker.recent({ filter = { cwd = true } }) end";
             }
             {
-              icon = " ";
+              icon = "󰒲 ";
               key = "s";
               desc = "Restore Session";
               action = lib.generators.mkLuaInline "function() require('persistence').load() end";
             }
             {
-              icon = "󰒲 ";
+              icon = "󰈆 ";
               key = "q";
               desc = "Quit";
               action = lib.generators.mkLuaInline "function() vim.cmd('qa') end";
@@ -128,15 +128,25 @@
               padding = 1;
             }
             {
+              title = "Recent Files";
+              icon = " ";
               section = "recent_files";
               gap = 1;
+              pane = 2;
               padding = 1;
               cwd = true;
             }
             {
-              section = "projects";
-              gap = 1;
+              title = "Git Status";
+              icon = " ";
+              pane = 2;
+              section = "terminal";
+              enabled = lib.generators.mkLuaInline "function() return Snacks.git.get_root() ~= nil end";
+              cmd = "git status --short --branch --renames";
+              height = 5;
               padding = 1;
+              ttl = 5 * 60;
+              indent = 3;
             }
           ];
         };
