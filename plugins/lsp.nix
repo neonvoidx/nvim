@@ -107,6 +107,8 @@
       ripgrep
       fd
       arduino-language-server
+      arduino-cli
+      clang-tools # provides clangd for arduino-language-server
     ];
 
     startPlugins = with pkgs.vimPlugins; [
@@ -139,7 +141,9 @@
         cmd = { "arduino-language-server", "-clangd", "clangd", "-cli", "arduino-cli" },
         filetypes = { "arduino" },
         root_dir = function(bufnr)
-          return vim.fs.root(bufnr, { "*.ino", "sketch.yaml", ".git" })
+          -- vim.fs.root does not support globs; fall back to buffer directory
+          return vim.fs.root(bufnr, { "sketch.yaml", ".git" })
+            or vim.fn.fnamemodify(vim.api.nvim_buf_get_name(bufnr), ":p:h")
         end,
       }
       vim.lsp.enable("arduino_language_server")
