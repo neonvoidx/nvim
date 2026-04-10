@@ -106,6 +106,7 @@
     extraPackages = with pkgs; [
       ripgrep
       fd
+      arduino-language-server
     ];
 
     startPlugins = with pkgs.vimPlugins; [
@@ -128,6 +129,20 @@
       -- ── Inc-Rename ─────────────────────────────────────────────────
       require("inc_rename").setup({})
       vim.keymap.set("n", "<leader>cr", ":IncRename ", { desc = "Rename symbol" })
+
+      -- ── Arduino Language Server ─────────────────────────────────────
+      -- Requires one-time setup: arduino-cli config init && arduino-cli core install arduino:avr
+      -- Per-project FQBN: set in .vscode/arduino.json → { "board": "arduino:avr:uno" }
+      vim.filetype.add({ extension = { ino = "arduino" } })
+
+      vim.lsp.config["arduino_language_server"] = {
+        cmd = { "arduino-language-server", "-clangd", "clangd", "-cli", "arduino-cli" },
+        filetypes = { "arduino" },
+        root_dir = function(bufnr)
+          return vim.fs.root(bufnr, { "*.ino", "sketch.yaml", ".git" })
+        end,
+      }
+      vim.lsp.enable("arduino_language_server")
 
       -- ── Extra LSP keymaps (LspAttach) ──────────────────────────────
       vim.api.nvim_create_autocmd("LspAttach", {
