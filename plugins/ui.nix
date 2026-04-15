@@ -120,6 +120,7 @@
         { "<leader>xl",      desc = "Location list",              icon = { icon = "󰍉 " }, mode = "n" },
         { "<leader>xq",      desc = "Quickfix",                   icon = { icon = "󰁨 " }, mode = "n" },
         { "<leader>xs",      desc = "Symbols",                    icon = { icon = "󰘦 " }, mode = "n" },
+        { "<leader>xx",      desc = "Buffer diagnostics",         icon = { icon = "󱖫 " }, mode = "n" },
       })
     '';
 

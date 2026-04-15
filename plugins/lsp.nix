@@ -128,6 +128,10 @@
       -- Disable built-in virtual_text since tiny-inline-diagnostic replaces it
       vim.diagnostic.config({ virtual_text = false })
 
+      -- ── Trouble ────────────────────────────────────────────────────
+      vim.keymap.set("n", "<leader>xx", "<cmd>Trouble diagnostics_buffer toggle<cr>",
+        { desc = "Buffer diagnostics (Trouble)" })
+
       -- ── Inc-Rename ─────────────────────────────────────────────────
       require("inc_rename").setup({})
       vim.keymap.set("n", "<leader>cr", ":IncRename ", { desc = "Rename symbol" })
