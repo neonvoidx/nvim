@@ -156,11 +156,7 @@
           local opts = { buffer = ev.buf }
           local e    = function(desc) return vim.tbl_extend("force", opts, { desc = desc }) end
 
-          map("n", "<leader>ca", function()
-            vim.lsp.buf.code_action({
-              context = { diagnostics = vim.diagnostic.get(ev.buf, { lnum = vim.fn.line(".") - 1 }) },
-            })
-          end, e("Code action (line)"))
+          map("n", "<leader>ca", vim.lsp.buf.code_action, e("Code action (line)"))
           map("n", "<leader>cA", function()
             vim.lsp.buf.code_action({
               apply = true,
