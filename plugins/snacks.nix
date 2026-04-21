@@ -87,7 +87,7 @@
               icon = "󰈞 ";
               key = "f";
               desc = "Find File";
-              action = lib.generators.mkLuaInline "function() Snacks.picker.files({cwd=true}) end";
+              action = lib.generators.mkLuaInline "function() Snacks.picker.files({ cwd = vim.uv.cwd() }) end";
             }
             {
               icon = " ";
@@ -198,13 +198,13 @@
 
       -- Picker keymaps
       local map = vim.keymap.set
-      map("n", "<leader><space>", function() Snacks.picker.smart({cwd=true}) end,            { desc = "Smart Find Files" })
+      map("n", "<leader><space>", function() Snacks.picker.smart({ cwd = vim.uv.cwd() }) end,            { desc = "Smart Find Files" })
       map("n", "<leader>'",       function() Snacks.picker.buffers() end,           { desc = "Buffers" })
-      map("n", "<leader>/",       function() Snacks.picker.grep({cwd=true}) end,              { desc = "Grep" })
+      map("n", "<leader>/",       function() Snacks.picker.grep({ cwd = vim.uv.cwd() }) end,              { desc = "Grep" })
       map("n", "<leader>:",       function() Snacks.picker.command_history() end,   { desc = "Command History" })
       map("n", "<leader>fb",      function() Snacks.picker.buffers() end,           { desc = "Buffers" })
       map("n", "<leader>fc",      function() Snacks.picker.files({ cwd = vim.fn.stdpath("config") }) end, { desc = "Find Config File" })
-      map("n", "<leader>ff",      function() Snacks.picker.files({cwd=true}) end,             { desc = "Find Files" })
+      map("n", "<leader>ff",      function() Snacks.picker.files({ cwd = vim.uv.cwd() }) end,             { desc = "Find Files" })
       map("n", "<leader>fg",      function() Snacks.picker.git_files() end,         { desc = "Find Git Files" })
       map("n", "<leader>fp",      function() Snacks.picker.projects() end,          { desc = "Projects" })
       map("n", "<leader>fr",      function() Snacks.picker.recent({ filter = { cwd = true } }) end, { desc = "Recent" })
@@ -216,8 +216,8 @@
       map("n", "<leader>gf",      function() Snacks.picker.git_log_file() end,      { desc = "Git Log File" })
       map("n", "<leader>sb",      function() Snacks.picker.lines() end,             { desc = "Buffer Lines" })
       map("n", "<leader>sB",      function() Snacks.picker.grep_buffers() end,      { desc = "Grep Open Buffers" })
-      map("n", "<leader>sg",      function() Snacks.picker.grep({cwd=true}) end,              { desc = "Grep" })
-      map({ "n", "x" }, "<leader>sw", function() Snacks.picker.grep_word() end,    { desc = "Word/Selection" })
+      map("n", "<leader>sg",      function() Snacks.picker.grep({ cwd = vim.uv.cwd() }) end,              { desc = "Grep" })
+      map({ "n", "x" }, "<leader>sw", function() Snacks.picker.grep_word({ cwd = vim.uv.cwd() }) end,    { desc = "Word/Selection" })
       map("n", '<leader>s"',      function() Snacks.picker.registers() end,         { desc = "Registers" })
       map("n", "<leader>s/",      function() Snacks.picker.search_history() end,    { desc = "Search History" })
       map("n", "<leader>sa",      function() Snacks.picker.autocmds() end,          { desc = "Autocmds" })
