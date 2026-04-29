@@ -17,8 +17,10 @@
     setupOpts = {
       options = {
         mode = "buffers";
+        numbers = "none";
+        show_buffer_close_icons = false;
         themable = true;
-        indicator.style = "none";
+        indicator.style = "underline";
         color_icons = true;
         separator_style = "thin";
         show_tab_indicators = false;
@@ -28,6 +30,10 @@
         max_prefix_length = 10;
         tab_size = 25;
         truncate_names = true;
+        hover = {
+          enabled = false;
+        };
+
       };
     };
   };
