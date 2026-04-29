@@ -29,7 +29,7 @@
       enableFormat = true;
       enableExtraDiagnostics = false; # null-ls not used
 
-      ts = {
+      typescript = {
         enable = true;
         lsp.enable = true;
         treesitter.enable = true;
