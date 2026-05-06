@@ -31,6 +31,8 @@
     luaConfigRC."sidekick" = lib.nvim.dag.entryAnywhere /* lua */ ''
       -- ── Sidekick ──────────────────────────────────────────────────────
       require("sidekick").setup({
+        nes = {enabled=false},
+        copilot={status={enabled=false}},
         cli = {
           default = "opencode",
           picker = "snacks",
