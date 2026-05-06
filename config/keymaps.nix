@@ -23,6 +23,17 @@
       vim.cmd("diffthis")
     end
 
+    local function goto_diag(next, severity)
+      local jump = next and vim.diagnostic.jump or function(opts)
+        opts = opts or {}
+        opts.count = -(opts.count or 1)
+        vim.diagnostic.jump(opts)
+      end
+      return function()
+        jump({ severity = severity, float = true })
+      end
+    end
+
     -- Better up/down (respect visual lines)
     map({ "n", "x" }, "j",      "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
     map({ "n", "x" }, "<Down>", "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
@@ -98,6 +109,12 @@
 
     -- Navigation
     map("n", "<Backspace>", "^", { desc = "Move to first non-blank character" })
+    map("n", "]e", goto_diag(true, vim.diagnostic.severity.ERROR),  { desc = "Next error" })
+    map("n", "[e", goto_diag(false, vim.diagnostic.severity.ERROR), { desc = "Prev error" })
+    map("n", "]w", goto_diag(true, vim.diagnostic.severity.WARN),   { desc = "Next warning" })
+    map("n", "[w", goto_diag(false, vim.diagnostic.severity.WARN),  { desc = "Prev warning" })
+    map("n", "]d", goto_diag(true, { min = vim.diagnostic.severity.WARN }),  { desc = "Next diagnostic" })
+    map("n", "[d", goto_diag(false, { min = vim.diagnostic.severity.WARN }), { desc = "Prev diagnostic" })
 
     -- Paste without overwriting the yank register
     map("v", "p", '"_dP')
