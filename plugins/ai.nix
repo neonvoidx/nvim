@@ -3,7 +3,6 @@
   config.vim = {
     extraPackages = [
       pkgs.nodejs
-      pkgs.opencode
       pkgs.lsof
     ];
 
@@ -27,7 +26,9 @@
         },
         nes = { enabled = false },
       })
+    '';
 
+    luaConfigRC."sidekick" = lib.nvim.dag.entryAnywhere /* lua */ ''
       -- ── Sidekick ──────────────────────────────────────────────────────
       require("sidekick").setup({
         cli = {
@@ -38,17 +39,20 @@
           },
         },
       })
+    '';
 
-      local wk = require("which-key")
-      wk.add({
-        { "<leader>a", group = "+ai", icon = { icon = "󱙺 " } },
-      })
+    luaConfigRC."sidekick-keymaps" = lib.nvim.dag.entryAnywhere /* lua */ ''
+      pcall(function()
+        require("which-key").add({
+          { "<leader>a", group = "+ai" },
+        })
+      end)
 
       local map = vim.keymap.set
       map({ "n", "t", "i", "x" }, "<C-.>", function() require("sidekick.cli").focus() end,
         { desc = "Sidekick Focus" })
       map("n", "<leader>aa", function() require("sidekick.cli").toggle({ name = "opencode" }) end,
-        { desc = "Sidekick Toggle OpenCode" })
+        { desc = "Sidekick Toggle (opencode)" })
       map("n", "<leader>as", function() require("sidekick.cli").select({ current = false }) end,
         { desc = "Sidekick Select CLI" })
       map("n", "<leader>ad", function() require("sidekick.cli").close() end,
