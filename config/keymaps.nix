@@ -24,13 +24,12 @@
     end
 
     local function goto_diag(next, severity)
-      local jump = next and vim.diagnostic.jump or function(opts)
-        opts = opts or {}
-        opts.count = -(opts.count or 1)
-        vim.diagnostic.jump(opts)
-      end
       return function()
-        jump({ severity = severity, float = true })
+        vim.diagnostic.jump({
+          count = next and 1 or -1,
+          severity = severity,
+          float = true,
+        })
       end
     end
 
