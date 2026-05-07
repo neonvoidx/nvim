@@ -76,6 +76,7 @@
 
         dashboard = {
           enabled = true;
+          pane_gap = 6;
           preset.header = ''
                                                         ░██                
 
@@ -88,35 +89,35 @@
             {
               icon = "󰈞 ";
               key = "f";
-              desc = "Find File";
+              desc = "Find file";
               action = lib.generators.mkLuaInline "function() Snacks.picker.files({ cwd = vim.uv.cwd() }) end";
             }
             {
-              icon = " ";
+              icon = " ";
               key = "n";
-              desc = "New File";
+              desc = "New file";
               action = lib.generators.mkLuaInline "function() vim.cmd('enew') end";
             }
             {
               icon = " ";
               key = "g";
-              desc = "Find Text";
+              desc = "Find text (grep)";
               action = lib.generators.mkLuaInline "function() Snacks.picker.grep() end";
             }
             {
               icon = " ";
               key = "r";
-              desc = "Recent Files";
+              desc = "Recent files";
               action = lib.generators.mkLuaInline "function() Snacks.picker.recent({ filter = { cwd = true } }) end";
             }
             {
-              icon = "󰒲 ";
+              icon = "󰁯 ";
               key = "s";
-              desc = "Restore Session";
+              desc = "Restore session";
               action = lib.generators.mkLuaInline "function() require('persistence').load() end";
             }
             {
-              icon = "󰈆 ";
+              icon = "󰩈 ";
               key = "q";
               desc = "Quit";
               action = lib.generators.mkLuaInline "function() vim.cmd('qa') end";
@@ -135,8 +136,27 @@
               section = "recent_files";
               gap = 1;
               pane = 2;
+              indent = 2;
               padding = 1;
               cwd = true;
+              text = lib.generators.mkLuaInline ''
+                function(item, ctx)
+                  local dir = vim.fn.fnamemodify(item.file, ":h:~")
+                  local max_dir = math.max((ctx.width or 60) - 32, 12)
+                  if #dir > max_dir then
+                    dir = vim.fn.pathshorten(dir)
+                  end
+                  if #dir > max_dir then
+                    dir = "..." .. dir:sub(-(max_dir - 3))
+                  end
+                  return {
+                    Snacks.dashboard.icon(item.file, "file"),
+                    { " ", width = 1 },
+                    { vim.fn.fnamemodify(item.file, ":t"), hl = "file", width = 28 },
+                    { dir, hl = "SnacksDashboardDir" },
+                  }
+                end
+              '';
             }
             {
               title = "Git Status";
@@ -148,7 +168,7 @@
               height = 5;
               padding = 1;
               ttl = 5 * 60;
-              indent = 3;
+              indent = 2;
             }
           ];
         };
