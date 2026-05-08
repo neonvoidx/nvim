@@ -68,12 +68,12 @@
           };
           trigger.prefetch_on_insert = false;
           menu = {
-            auto_show = false;
+            auto_show = true;
             min_width = 60;
             border = "rounded";
           };
           list.selection = {
-            preselect = true;
+            preselect = false;
             auto_insert = false;
           };
         };
@@ -88,6 +88,10 @@
             "fallback"
           ];
           "<CR>" = [
+            "accept"
+            "fallback"
+          ];
+          "<Tab>" = [
             "accept"
             "fallback"
           ];
