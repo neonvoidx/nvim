@@ -39,6 +39,11 @@
             copilot = {
               name = "copilot";
               module = "blink-copilot";
+              enabled = lib.generators.mkLuaInline ''
+                function()
+                  return vim.g.copilot_completion_enabled ~= false
+                end
+              '';
               score_offset = 4;
               async = true;
             };

@@ -64,26 +64,17 @@
       map("n", "<leader>aD", function()
         vim.g.copilot_completion_enabled = not vim.g.copilot_completion_enabled
 
-        local ok, blink = pcall(require, "blink.cmp")
-        if ok and blink and blink.setup then
-          blink.setup({
-            sources = {
-              default = vim.g.copilot_completion_enabled and {
-                "copilot",
-                "lsp",
-                "path",
-                "lazydev",
-                "snippets",
-                "buffer",
-              } or {
-                "lsp",
-                "path",
-                "lazydev",
-                "snippets",
-                "buffer",
-              },
-            },
-          })
+        local ok_sources, sources = pcall(require, "blink.cmp.sources")
+        if ok_sources then
+          sources.reload("copilot")
+        end
+
+        local ok_cmp, cmp = pcall(require, "blink.cmp")
+        if ok_cmp then
+          cmp.hide()
+          vim.schedule(function()
+            cmp.show()
+          end)
         end
 
         vim.notify(
