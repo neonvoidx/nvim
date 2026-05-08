@@ -13,6 +13,8 @@
 
     luaConfigRC."ai" = lib.nvim.dag.entryAnywhere /* lua */ ''
       -- ── GitHub Copilot ────────────────────────────────────────────────
+      vim.g.copilot_completion_enabled = true
+
       require("copilot").setup({
         filetypes = {
           markdown = false,
@@ -59,6 +61,36 @@
         { desc = "Sidekick Select CLI" })
       map("n", "<leader>ad", function() require("sidekick.cli").close() end,
         { desc = "Sidekick Detach CLI" })
+      map("n", "<leader>aD", function()
+        vim.g.copilot_completion_enabled = not vim.g.copilot_completion_enabled
+
+        local ok, blink = pcall(require, "blink.cmp")
+        if ok and blink and blink.setup then
+          blink.setup({
+            sources = {
+              default = vim.g.copilot_completion_enabled and {
+                "copilot",
+                "lsp",
+                "path",
+                "lazydev",
+                "snippets",
+                "buffer",
+              } or {
+                "lsp",
+                "path",
+                "lazydev",
+                "snippets",
+                "buffer",
+              },
+            },
+          })
+        end
+
+        vim.notify(
+          "Copilot completion " .. (vim.g.copilot_completion_enabled and "enabled" or "disabled"),
+          vim.log.levels.INFO
+        )
+      end, { desc = "Toggle Copilot Completion" })
       map({ "n", "x" }, "<leader>at", function() require("sidekick.cli").send({ msg = "{this}" }) end,
         { desc = "Sidekick Send This" })
       map("n", "<leader>af", function() require("sidekick.cli").send({ msg = "{file}" }) end,

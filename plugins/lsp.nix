@@ -4,7 +4,7 @@
     lsp = {
       enable = true;
       formatOnSave = false; # handled by conform.nvim
-      inlayHints.enable = true;
+      inlayHints.enable = false;
 
       lspkind = {
         enable = true;
