@@ -6,42 +6,42 @@
 
       setupOpts = {
         formatters_by_ft = {
-          javascript = [
-            [
+          javascript = {
+            "__unkeyed-1" = [
               "eslint_d"
               "prettierd"
-            ]
-          ];
-          typescript = [
-            [
+            ];
+          };
+          typescript = {
+            "__unkeyed-1" = [
               "eslint_d"
               "prettierd"
-            ]
-          ];
-          javascriptreact = [
-            [
+            ];
+          };
+          javascriptreact = {
+            "__unkeyed-1" = [
               "eslint_d"
               "prettierd"
-            ]
-          ];
-          typescriptreact = [
-            [
+            ];
+          };
+          typescriptreact = {
+            "__unkeyed-1" = [
               "eslint_d"
               "prettierd"
-            ]
-          ];
-          "javascript.jsx" = [
-            [
+            ];
+          };
+          "javascript.jsx" = {
+            "__unkeyed-1" = [
               "eslint_d"
               "prettierd"
-            ]
-          ];
-          "typescript.tsx" = [
-            [
+            ];
+          };
+          "typescript.tsx" = {
+            "__unkeyed-1" = [
               "eslint_d"
               "prettierd"
-            ]
-          ];
+            ];
+          };
           css = [ "prettierd" ];
           html = [ "prettierd" ];
           json = [ "prettierd" ];
