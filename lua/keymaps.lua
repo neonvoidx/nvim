@@ -133,16 +133,6 @@ end, { desc = "Update plugins" })
 
 -- Copy whole file to clipboard
 map("n", "<C-c>", ":%y+<CR>", { noremap = true, silent = true })
-
--- auto close pairs
--- map("i", "'", "''<left>") -- commented out - smart!
-map("i", "`", "``<left>")
-map("i", '"', '""<left>')
-map("i", "(", "()<left>")
-map("i", "[", "[]<left>")
-map("i", "{", "{}<left>")
-map("i", "<", "<><left>")
-
 -- Close all fold except the current one.
 map("n", "zv", "zMzvzz", {
 	desc = "Close all folds except the current one",

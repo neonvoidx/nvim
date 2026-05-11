@@ -21,6 +21,8 @@ vim.pack.add({
 	"https://github.com/nvim-treesitter/nvim-treesitter-context",
 	"https://github.com/lewis6991/gitsigns.nvim",
 	"https://github.com/ibhagwan/fzf-lua",
+	"https://github.com/nvim-mini/mini.surround",
+	"https://github.com/nvim-mini/mini.pairs",
 }, { confirm = false })
 
 require("plugins.colorscheme")
@@ -39,5 +41,6 @@ require("plugins.treesitter_context")
 require("plugins.which_key")
 require("plugins.gitsigns")
 require("plugins.todo_comments")
+require("plugins.mini")
 -- require("plugins.snacks")
 require("plugins.yazi")
