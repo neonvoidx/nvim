@@ -8,13 +8,13 @@ opt.conceallevel = 1
 opt.confirm = true
 opt.cursorline = true
 opt.expandtab = true
+opt.list = false
 opt.formatoptions = "jcroqlnt"
 opt.grepformat = "%f:%l:%c:%m"
 opt.grepprg = "rg --vimgrep"
 opt.ignorecase = true
 opt.inccommand = "nosplit"
 opt.laststatus = 3
-opt.list = true
 opt.mouse = "nv"
 opt.mousemoveevent = true
 opt.number = true
@@ -60,7 +60,7 @@ opt.fillchars = {
 	diff = "╱",
 	eob = " ",
 }
-vim.o.winborder = "rounded"
+opt.winborder = "rounded"
 
 vim.diagnostic.config({
 	virtual_text = true,
@@ -80,5 +80,6 @@ vim.diagnostic.config({
 		end,
 	},
 	underline = true,
-	jump = { float = true },
+
+	jump = { on_jump = true },
 })

@@ -73,8 +73,13 @@ end)
 map("n", "<Backspace>", "^", { desc = "Move to first non-blank character" })
 map("v", "p", '"_dP')
 map("n", "<leader>D", compare_to_clip, { desc = "Diff vs clipboard" })
+
+-- Bufferline
 map("n", "H", "<Cmd>BufferLineCyclePrev<CR>", { desc = "Previous buffer" })
 map("n", "L", "<Cmd>BufferLineCycleNext<CR>", { desc = "Next buffer" })
 map("n", "<leader>bd", "<Cmd>bdelete<CR>", { desc = "Delete buffer" })
 map("n", "<leader>bp", "<Cmd>BufferLineTogglePin<CR>", { desc = "Pin buffer" })
 map("n", "<leader>bP", "<Cmd>BufferLineGroupClose ungrouped<CR>", { desc = "Delete unpinned buffers" })
+
+-- reload ui
+map("n", "<leader>uR", "<cmd>restart<cr>", { desc = "Restart UI" })

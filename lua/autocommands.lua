@@ -34,33 +34,23 @@ vim.api.nvim_create_autocmd("BufReadPost", {
 })
 
 vim.api.nvim_create_autocmd("FileType", {
-	group = augroup("close_with_q"),
 	pattern = {
-		"PlenaryTestPopup",
 		"help",
 		"lspinfo",
-		"man",
-		"notify",
-		"qf",
-		"query",
-		"spectre_panel",
-		"startuptime",
-		"tsplayground",
-		"neotest-output",
 		"checkhealth",
-		"neotest-summary",
-		"neotest-output-panel",
-		"lazy",
+		"qf",
+		"grug-far",
 	},
 	callback = function(event)
-		vim.bo[event.buf].buflisted = false
-		vim.keymap.set("n", "q", "<cmd>close<cr>", { buffer = event.buf, silent = true })
+		vim.keymap.set("n", "q", function()
+			vim.cmd("close")
+		end, { buffer = event.buf, silent = true })
 	end,
 })
 
 vim.api.nvim_create_autocmd("FileType", {
 	group = augroup("wrap_ft"),
-	pattern = { "gitcommit", "markdown", "snacks_notif_history", "trouble" },
+	pattern = { "gitcommit", "markdown", "trouble" },
 	callback = function()
 		vim.opt_local.wrap = true
 		vim.opt_local.linebreak = true
