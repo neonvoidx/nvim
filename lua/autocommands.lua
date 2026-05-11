@@ -1,14 +1,12 @@
-local function augroup(name)
-	return vim.api.nvim_create_augroup("autocmd_" .. name, { clear = true })
-end
+local autocmd = vim.api.nvim_create_autocmd
 
-vim.api.nvim_create_autocmd({ "FocusGained", "TermClose", "TermLeave" }, {
-	group = augroup("checktime"),
+autocmd({ "FocusGained", "TermClose", "TermLeave" }, {
+	desc = "Check if we need to reload the file when it changed",
 	command = "checktime",
 })
 
-vim.api.nvim_create_autocmd("VimResized", {
-	group = augroup("resize_splits"),
+autocmd("VimResized", {
+	desc = "On terminal resize, resize splits",
 	callback = function()
 		local current_tab = vim.fn.tabpagenr()
 		vim.cmd("tabdo wincmd =")
@@ -16,40 +14,47 @@ vim.api.nvim_create_autocmd("VimResized", {
 	end,
 })
 
-vim.api.nvim_create_autocmd("BufReadPost", {
-	group = augroup("last_loc"),
+vim.api.nvim_create_autocmd("FileType", {
+	desc = "make it easier to close man-files when opened inline",
+	pattern = { "man" },
 	callback = function(event)
-		local exclude = { "gitcommit" }
-		local buf = event.buf
-		if vim.tbl_contains(exclude, vim.bo[buf].filetype) or vim.b[buf].autocmd_last_loc then
-			return
-		end
-		vim.b[buf].autocmd_last_loc = true
-		local mark = vim.api.nvim_buf_get_mark(buf, '"')
-		local lcount = vim.api.nvim_buf_line_count(buf)
-		if mark[1] > 0 and mark[1] <= lcount then
-			pcall(vim.api.nvim_win_set_cursor, 0, mark)
-		end
+		vim.bo[event.buf].buflisted = false
 	end,
 })
 
-vim.api.nvim_create_autocmd("FileType", {
+autocmd("FileType", {
+	desc = "q to quick close specific filetypes",
 	pattern = {
 		"help",
 		"lspinfo",
 		"checkhealth",
 		"qf",
-		"grug-far",
 	},
 	callback = function(event)
-		vim.keymap.set("n", "q", function()
-			vim.cmd("close")
-		end, { buffer = event.buf, silent = true })
+		vim.bo[event.buf].buflisted = false
+		vim.schedule(function()
+			vim.keymap.set("n", "q", function()
+				vim.cmd("close")
+				pcall(vim.api.nvim_buf_delete, event.buf, { force = true })
+			end, {
+				buffer = event.buf,
+				silent = true,
+				desc = "Quit buffer",
+			})
+		end)
 	end,
 })
 
-vim.api.nvim_create_autocmd("FileType", {
-	group = augroup("wrap_ft"),
+vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
+	pattern = { "*.env", ".env.*" },
+	desc = "Set filetype for .env and .env.* files",
+	callback = function()
+		vim.opt_local.filetype = "sh"
+	end,
+})
+
+autocmd("FileType", {
+	desc = "Autowrap lines in specific filetypes",
 	pattern = { "gitcommit", "markdown", "trouble" },
 	callback = function()
 		vim.opt_local.wrap = true
@@ -57,16 +62,16 @@ vim.api.nvim_create_autocmd("FileType", {
 	end,
 })
 
-vim.api.nvim_create_autocmd("FileType", {
-	group = augroup("spell_ft"),
+autocmd("FileType", {
+	desc = "Turn on spelling in specific filetypes",
 	pattern = { "gitcommit", "markdown" },
 	callback = function()
 		vim.opt_local.spell = true
 	end,
 })
 
-vim.api.nvim_create_autocmd("BufWritePre", {
-	group = augroup("auto_create_dir"),
+autocmd("BufWritePre", {
+	desc = "Autocreate directories when saving files if needed",
 	callback = function(event)
 		if event.match:match("^%w%w+://") then
 			return
@@ -76,9 +81,8 @@ vim.api.nvim_create_autocmd("BufWritePre", {
 	end,
 })
 
-local numtog = augroup("NumberToggle")
-vim.api.nvim_create_autocmd("InsertEnter", {
-	group = numtog,
+autocmd("InsertEnter", {
+	desc = "Turn on absolute line numbers on insert",
 	pattern = "*",
 	callback = function()
 		local ignore = { oil = true, fzf = true }
@@ -89,8 +93,8 @@ vim.api.nvim_create_autocmd("InsertEnter", {
 	end,
 })
 
-vim.api.nvim_create_autocmd("InsertLeave", {
-	group = numtog,
+autocmd("InsertLeave", {
+	desc = "Turn on relative line numbers on normal mode",
 	pattern = "*",
 	callback = function()
 		local ignore = { oil = true, fzf = true }
@@ -101,18 +105,17 @@ vim.api.nvim_create_autocmd("InsertLeave", {
 	end,
 })
 
-vim.api.nvim_create_autocmd("TextYankPost", {
-	group = augroup("highlight_yank"),
+autocmd("TextYankPost", {
 	desc = "Highlight when yanking (copying) text",
 	callback = function()
 		vim.hl.on_yank()
 	end,
 })
 
-vim.api.nvim_create_autocmd("BufReadPre", {
-	group = augroup("RestoreCursor"),
+autocmd("BufReadPre", {
+	desc = "Remember last location",
 	callback = function(args)
-		vim.api.nvim_create_autocmd("FileType", {
+		autocmd("FileType", {
 			buffer = args.buf,
 			once = true,
 			callback = function()

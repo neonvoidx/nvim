@@ -1,5 +1,17 @@
 local map = vim.keymap.set
 local is_kitty = vim.env.TERM == "xterm-kitty"
+local function project_root()
+	local cwd = vim.fn.getcwd()
+	local buf_path = vim.api.nvim_buf_get_name(0)
+	local start = buf_path ~= "" and vim.fn.fnamemodify(buf_path, ":p:h") or cwd
+	local git_dir = vim.fs.find(".git", { path = start, upward = true })[1]
+
+	if git_dir then
+		return vim.fn.fnamemodify(git_dir, ":h")
+	end
+
+	return cwd
+end
 
 vim.pack.add({
 	-- Theme
@@ -8,38 +20,122 @@ vim.pack.add({
 	"https://github.com/nvim-tree/nvim-web-devicons",
 	"https://github.com/MunifTanjim/nui.nvim",
 	"https://github.com/nvim-lua/plenary.nvim",
-	-- UI
-	"https://github.com/nvim-lualine/lualine.nvim",
+	-- Buffers
 	"https://github.com/akinsho/bufferline.nvim",
-	"https://github.com/folke/todo-comments.nvim",
-	"https://github.com/folke/which-key.nvim",
-	"https://github.com/folke/snacks.nvim",
-	"https://github.com/folke/flash.nvim",
-	"https://github.com/folke/persistence.nvim",
+	-- Statusline
+	"https://github.com/nvim-lualine/lualine.nvim",
+	-- Folke plugins
+	"https://github.com/folke/todo-comments.nvim", -- highlight TODOs
+	"https://github.com/folke/which-key.nvim", -- keymap popup
+	"https://github.com/folke/snacks.nvim", -- fuzzy find, dashboard, file picker etc
+	"https://github.com/folke/flash.nvim", -- jump search
+	"https://github.com/folke/persistence.nvim", -- Session management
+	-- Yazi instead of netrw
 	"https://github.com/mikavilpas/yazi.nvim",
+	-- Better clipboard/paste
 	"https://github.com/gbprod/yanky.nvim",
+	-- Kitty scrollback and navigation
 	"https://github.com/knubie/vim-kitty-navigator",
 	"https://github.com/mikesmithgh/kitty-scrollback.nvim",
-	"https://github.com/fladson/vim-kitty",
 	-- Coding: LSP, Formatters, Lint, Autocomplete, treesitter
-	"https://github.com/folke/trouble.nvim",
-	"https://github.com/neovim/nvim-lspconfig",
-	{ src = "https://github.com/saghen/blink.cmp", version = vim.version.range("1.x") },
-	"https://github.com/stevearc/conform.nvim",
-	"https://github.com/mfussenegger/nvim-lint",
-	"https://github.com/nvim-treesitter/nvim-treesitter",
-	"https://github.com/nvim-treesitter/nvim-treesitter-context",
+	"https://github.com/neovim/nvim-lspconfig", -- default LSP configs
+	"https://github.com/stevearc/conform.nvim", -- Formatter
+	"https://github.com/mfussenegger/nvim-lint", -- Linting
+	"https://github.com/nvim-treesitter/nvim-treesitter", -- Treesitter
+	"https://github.com/nvim-treesitter/nvim-treesitter-context", -- TS context for keeping scopes in vision
 	-- Git
-	"https://github.com/lewis6991/gitsigns.nvim",
+	"https://github.com/lewis6991/gitsigns.nvim", -- git signs in gutter and blame lines
 }, { confirm = false })
 
+-- Colorscheme
 require("eldritch").setup({ transparent = true })
 vim.cmd.colorscheme("eldritch")
 
-require("vim._core.ui2").enable({
-	enable = true,
+-- Statusline
+require("lualine").setup({
+	options = {
+		globalstatus = true,
+		icons_enabled = true,
+		refresh = {
+			statusline = 1000,
+			tabline = 1000,
+		},
+		disabled_filetypes = {
+			statusline = { "dashboard" },
+		},
+		section_separators = { left = "", right = "" },
+		component_separators = { left = "", right = "" },
+		theme = "eldritch",
+	},
+	sections = {
+		lualine_a = {
+			{ "mode", separator = { left = "", right = "" } },
+		},
+		lualine_b = { "branch" },
+		lualine_c = {
+			{ "filename", file_status = true, newfile_status = true, path = 0, shorting_target = 40 },
+			{ "diff", symbols = { added = " ", modified = "󰣕 ", removed = " " } },
+			"diagnostics",
+		},
+		lualine_x = {
+			-- 	{
+			-- 		function()
+			-- 			return require("noice").api.status.mode.get()
+			-- 		end,
+			-- 		cond = function()
+			-- 			local ok, noice = pcall(require, "noice")
+			-- 			return ok and noice.api.status.mode.has()
+			-- 		end,
+			-- 		color = { fg = "#ff9e64" },
+			-- 	},
+			-- 	{
+			-- 		function()
+			-- 			return require("gitblame").get_current_blame_text()
+			-- 		end,
+			-- 		cond = function()
+			-- 			local ok, gitblame = pcall(require, "gitblame")
+			-- 			return ok and gitblame.is_blame_text_available()
+			-- 		end,
+			-- 	},
+		},
+		lualine_y = {
+			"filetype",
+			{ "location" },
+		},
+		lualine_z = {},
+	},
 })
 
+-- New ui for neovim
+require("vim._core.ui2").enable({
+	enable = true,
+	msg = {
+		targets = "cmd",
+		cmd = {
+			height = 0.5,
+		},
+		dialog = {
+			height = 0.5,
+		},
+		msg = {
+			height = 0.5,
+			timeout = 4000,
+		},
+		pager = {
+			height = 1,
+		},
+	},
+})
+
+-- Bufferline
+require("bufferline").setup({
+	options = {
+		diagnostics = "nvim_lsp",
+		always_show_bufferline = true,
+	},
+})
+
+-- Kitty navigator kitty scrollback and vimkitty
 if is_kitty then
 	local pass_keys = vim.api.nvim_get_runtime_file("pass_keys.py", false)[1]
 	if pass_keys then
@@ -49,40 +145,22 @@ if is_kitty then
 	require("kitty-scrollback").setup()
 end
 
--- lazy load yanky
-local _yanky_loaded = false
-local function load_yanky()
-	if _yanky_loaded then
-		return
-	end
-	_yanky_loaded = true
-
-	require("yanky").setup({
-		highlight = {
-			timer = 150,
-		},
-	})
-end
--- Lazy load on first yank
-local group = vim.api.nvim_create_augroup("YankyLazyLoad", { clear = true })
-vim.api.nvim_create_autocmd({ "TextYankPost" }, {
-	pattern = "*",
-	group = group,
-	once = true,
-	callback = function()
-		load_yanky()
-	end,
+-- Yanky
+require("yanky").setup({
+	highlight = {
+		timer = 150,
+	},
 })
--- Keymaps
--- stylua: ignore start
-vim.keymap.set({ "n", "x" }, "<leader>y", function() load_yanky(); require("snacks").picker.yanky() end, { desc = "Yank History" })
-vim.keymap.set({ "n", "x" }, "y", function() load_yanky(); return "<Plug>(YankyYank)" end, { expr = true })
-vim.keymap.set({ "n", "x" }, "p", function() load_yanky(); return "<Plug>(YankyPutAfter)" end, { expr = true })
-vim.keymap.set({ "n", "x" }, "P", function() load_yanky(); return "<Plug>(YankyPutBefore)" end, { expr = true })
-vim.keymap.set("n", "<C-p>", function() load_yanky(); return "<Plug>(YankyCycleForward)" end, { expr = true })
-vim.keymap.set("n", "<C-n>", function() load_yanky(); return "<Plug>(YankyCycleBackward)" end, { expr = true })
--- stylua: ignore end
+vim.keymap.set({ "n", "x" }, "<leader>y", function()
+	require("snacks").picker.yanky()
+end, { desc = "Yank History" })
+vim.keymap.set({ "n", "x" }, "y", "<Plug>(YankyYank)", { remap = true, desc = "Yank text" })
+vim.keymap.set({ "n", "x" }, "p", "<Plug>(YankyPutAfter)", { remap = true, desc = "Put after cursor" })
+vim.keymap.set({ "n", "x" }, "P", "<Plug>(YankyPutBefore)", { remap = true, desc = "Put before cursor" })
+vim.keymap.set("n", "<C-p>", "<Plug>(YankyCycleForward)", { remap = true, desc = "Next yank history entry" })
+vim.keymap.set("n", "<C-n>", "<Plug>(YankyCycleBackward)", { remap = true, desc = "Previous yank history entry" })
 
+-- Flash
 local flash = require("flash")
 flash.setup({
 	auto_jump = true,
@@ -104,6 +182,7 @@ vim.keymap.set("c", "<c-s>", function()
 	flash.toggle()
 end, { desc = "Toggle Flash Search" })
 
+-- Treesitter context
 require("treesitter-context").setup({
 	enable = true,
 	multiwindow = true,
@@ -114,6 +193,7 @@ map("n", "[c", function()
 	require("treesitter-context").go_to_context(vim.v.count1)
 end, { desc = "Go to Treesitter context" })
 
+-- Which-key
 require("which-key").setup({
 	preset = "helix",
 	spec = {
@@ -137,6 +217,7 @@ require("which-key").setup({
 	},
 })
 
+-- Git signs
 require("gitsigns").setup({
 	current_line_blame = true,
 	signs = {
@@ -148,19 +229,7 @@ require("gitsigns").setup({
 	},
 })
 
-require("trouble").setup({
-	modes = {
-		diagnostics_buffer = {
-			mode = "diagnostics",
-			filter = { buf = 0 },
-		},
-	},
-})
-map("n", "<leader>xx", "<cmd>Trouble diagnostics_buffer toggle<cr>", { desc = "Buffer diagnostics (Trouble)" })
-map("n", "<leader>xq", "<cmd>Trouble qflist toggle<cr>", { desc = "Quickfix" })
-map("n", "<leader>xl", "<cmd>Trouble loclist toggle<cr>", { desc = "Location list" })
-map("n", "<leader>xs", "<cmd>Trouble symbols toggle focus=false<cr>", { desc = "Symbols" })
-
+-- TODO-comments
 require("todo-comments").setup({
 	signs = true,
 	merge_keywords = false,
@@ -201,16 +270,7 @@ require("todo-comments").setup({
 	},
 })
 
-package.preload["lazy.stats"] = function()
-	return {
-		stats = function()
-			return { startuptime = 0, count = 0, loaded = 0 }
-		end,
-	}
-end
-
-vim.api.nvim_set_hl(0, "SnacksDim", { link = "Comment" })
-
+-- Snacks
 require("snacks").setup({
 	animate = { enabled = true },
 	bigfile = { enabled = true },
@@ -355,19 +415,6 @@ require("snacks").setup({
 		},
 	},
 })
-
-_G.dd = function(...)
-	Snacks.debug.inspect(...)
-end
-
-_G.bt = function()
-	Snacks.debug.backtrace()
-end
-
-vim.print = _G.dd
-
-require("persistence").setup()
-
 Snacks.toggle.option("spell", { name = "Spelling" }):map("<leader>us")
 Snacks.toggle.option("wrap", { name = "Wrap" }):map("<leader>uw")
 Snacks.toggle.option("relativenumber", { name = "Relative Number" }):map("<leader>uL")
@@ -566,90 +613,23 @@ map({ "n", "t" }, "[[", function()
 	Snacks.words.jump(-vim.v.count1)
 end, { desc = "Prev Reference" })
 
-local function project_root()
-	local cwd = vim.fn.getcwd()
-	local buf_path = vim.api.nvim_buf_get_name(0)
-	local start = buf_path ~= "" and vim.fn.fnamemodify(buf_path, ":p:h") or cwd
-	local git_dir = vim.fs.find(".git", { path = start, upward = true })[1]
+-- Persistence (session management)
+require("persistence").setup()
 
-	if git_dir then
-		return vim.fn.fnamemodify(git_dir, ":h")
-	end
-
-	return cwd
-end
-
+-- Yazi
 require("yazi").setup({
 	open_for_directories = true,
 })
-
 map("n", "<leader>e", function()
 	local buf_path = vim.api.nvim_buf_get_name(0)
 	local path = buf_path ~= "" and vim.fn.fnamemodify(buf_path, ":p:h") or vim.fn.getcwd()
 	require("yazi").yazi(nil, path)
 end, { desc = "Yazi (here)" })
-
 map("n", "<leader>E", function()
 	require("yazi").yazi(nil, project_root())
 end, { desc = "Yazi (root)" })
 
-require("lualine").setup({ options = { theme = "eldritch", globalstatus = true } })
-
-require("bufferline").setup({
-	options = {
-		diagnostics = "nvim_lsp",
-		always_show_bufferline = true,
-	},
-})
-
-local blink = require("blink.cmp")
-blink.setup({
-	fuzzy = {
-		implementation = "prefer_rust",
-		sorts = { "exact", "score", "sort_text" },
-	},
-	completion = {
-		documentation = {
-			auto_show = true,
-			auto_show_delay_ms = 500,
-			window = { border = "rounded" },
-		},
-		trigger = { prefetch_on_insert = false },
-		menu = {
-			auto_show = true,
-			border = "rounded",
-			min_width = 60,
-		},
-		list = {
-			selection = {
-				preselect = true,
-				auto_insert = true,
-			},
-		},
-	},
-	signature = {
-		enabled = true,
-		window = { border = "rounded" },
-	},
-	keymap = {
-		preset = "none",
-		["<C-k>"] = { "select_prev", "fallback" },
-		["<C-j>"] = { "select_next", "fallback" },
-		["<Tab>"] = { "accept", "fallback" },
-		["<C-l>"] = { "scroll_documentation_up", "fallback" },
-		["<C-h>"] = { "scroll_documentation_down", "fallback" },
-		["<Up>"] = { "select_prev", "fallback" },
-		["<Down>"] = { "select_next", "fallback" },
-		["<S-Tab>"] = { "snippet_forward", "fallback" },
-		["<C-Tab>"] = { "snippet_backward", "fallback" },
-		["<C-e>"] = { "hide", "fallback" },
-		["<C-space>"] = { "show", "show_documentation", "hide_documentation" },
-	},
-	sources = {
-		default = { "lsp", "path", "snippets", "buffer" },
-	},
-})
-
+-- Conform (code formatting)
 require("conform").setup({
 	notify_on_error = false,
 	formatters = {
@@ -699,6 +679,7 @@ map("n", "<leader>cF", function()
 	)
 end, { desc = "Toggle autoformat (buffer)" })
 
+-- Linting
 local lint = require("lint")
 lint.linters_by_ft = {
 	cmake = { "cmakelint" },
@@ -716,6 +697,7 @@ vim.api.nvim_create_autocmd({ "BufEnter", "BufWritePost", "InsertLeave" }, {
 	end,
 })
 
+-- LSP
 local servers = {
 	basedpyright = {},
 	clangd = {},
@@ -776,13 +758,12 @@ local servers = {
 		},
 	},
 }
-local capabilities = blink.get_lsp_capabilities()
+-- enable all lsp servers above
 for server, config in pairs(servers) do
-	config.capabilities = vim.tbl_deep_extend("force", {}, capabilities, config.capabilities or {})
 	vim.lsp.config(server, config)
 	vim.lsp.enable(server)
 end
-
+-- LSP attach keymaps
 vim.api.nvim_create_autocmd("LspAttach", {
 	group = vim.api.nvim_create_augroup("UserLspConfig", { clear = true }),
 	callback = function(ev)
