@@ -49,8 +49,8 @@ opt.foldcolumn = "1"
 opt.foldlevel = 99
 opt.foldlevelstart = 99
 opt.foldenable = true
-opt.sessionoptions = { "buffers", "curdir", "tabpages", "winsize", "help", "globals", "skiprtp", "folds" }
-opt.shortmess:append({ W = true, I = true, c = true, C = true })
+opt.sessionoptions = { "blank", "buffers", "curdir", "winsize", "help", "globals", "skiprtp", "folds" }
+opt.shortmess:append({ a=true, A=true,W = true,  c = true, C = true })
 opt.spelllang = { "en" }
 opt.fillchars = {
 	foldopen = "▾",

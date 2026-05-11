@@ -126,6 +126,11 @@ map("n", "<A-a>", "ggVG", { noremap = true, silent = true, desc = "Select all" }
 -- reload ui
 map("n", "<leader>uR", "<cmd>restart<cr>", { desc = "Restart UI" })
 
+-- Update plugins
+map("n", "<leader>uu", function()
+	vim.pack.update()
+end, { desc = "Update plugins" })
+
 -- Copy whole file to clipboard
 map("n", "<C-c>", ":%y+<CR>", { noremap = true, silent = true })
 
@@ -170,6 +175,51 @@ end, { desc = "Quickfix List" })
 map("n", "[q", vim.cmd.cprev, { desc = "Previous Quickfix" })
 map("n", "]q", vim.cmd.cnext, { desc = "Next Quickfix" })
 
+local function open_lazygit_float()
+	local width = math.floor(vim.o.columns * 0.9)
+	local height = math.floor(vim.o.lines * 0.9)
+	local row = math.floor((vim.o.lines - height) / 2)
+	local col = math.floor((vim.o.columns - width) / 2)
+
+	local buf = vim.api.nvim_create_buf(false, true)
+	local win = vim.api.nvim_open_win(buf, true, {
+		relative = "editor",
+		border = "rounded",
+		width = width,
+		height = height,
+		row = row,
+		col = col,
+		style = "minimal",
+	})
+
+	vim.fn.termopen("lazygit", {
+		on_exit = function()
+			if vim.api.nvim_win_is_valid(win) then
+				vim.api.nvim_win_close(win, true)
+			end
+		end,
+	})
+	vim.cmd.startinsert()
+end
+
+map("n", "<leader>gg", open_lazygit_float, { desc = "Open Lazygit" })
+
+local function project_root()
+	local cwd = vim.fn.getcwd()
+	local buf_path = vim.api.nvim_buf_get_name(0)
+	local start = buf_path ~= "" and vim.fn.fnamemodify(buf_path, ":p:h") or cwd
+	local git_dir = vim.fs.find(".git", { path = start, upward = true })[1]
+
+	if git_dir then
+		return vim.fn.fnamemodify(git_dir, ":h")
+	end
+
+	return cwd
+end
+
 -- Inspection tools (useful for debugging highlights and treesitter)
 map("n", "<leader>ui", vim.show_pos, { desc = "Inspect Pos" })
 map("n", "<leader>uI", "<cmd>InspectTree<cr>", { desc = "Inspect Tree" })
+
+-- messages
+map("n", "<leader>nm", "<cmd>:message<cr>", { desc = "Message history" })

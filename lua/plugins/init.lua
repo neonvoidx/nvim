@@ -1,0 +1,43 @@
+vim.pack.add({
+	"https://github.com/eldritch-theme/eldritch.nvim",
+	"https://github.com/nvim-tree/nvim-web-devicons",
+	"https://github.com/MunifTanjim/nui.nvim",
+	"https://github.com/nvim-lua/plenary.nvim",
+	"https://github.com/akinsho/bufferline.nvim",
+	"https://github.com/nvim-lualine/lualine.nvim",
+	"https://github.com/folke/todo-comments.nvim",
+	"https://github.com/folke/which-key.nvim",
+	"https://github.com/folke/snacks.nvim",
+	"https://github.com/folke/flash.nvim",
+	"https://github.com/folke/persistence.nvim",
+	"https://github.com/mikavilpas/yazi.nvim",
+	"https://github.com/gbprod/yanky.nvim",
+	"https://github.com/knubie/vim-kitty-navigator",
+	"https://github.com/mikesmithgh/kitty-scrollback.nvim",
+	"https://github.com/neovim/nvim-lspconfig",
+	"https://github.com/stevearc/conform.nvim",
+	"https://github.com/mfussenegger/nvim-lint",
+	"https://github.com/nvim-treesitter/nvim-treesitter",
+	"https://github.com/nvim-treesitter/nvim-treesitter-context",
+	"https://github.com/lewis6991/gitsigns.nvim",
+	"https://github.com/ibhagwan/fzf-lua",
+}, { confirm = false })
+
+require("plugins.colorscheme")
+require("plugins.conform")
+require("plugins.lint")
+require("plugins.lspconfig")
+require("plugins.persistence")
+require("plugins.bufferline")
+require("plugins.statusline")
+require("plugins.ui")
+require("plugins.fzf")
+require("plugins.kitty")
+require("plugins.yanky")
+require("plugins.flash")
+require("plugins.treesitter_context")
+require("plugins.which_key")
+require("plugins.gitsigns")
+require("plugins.todo_comments")
+-- require("plugins.snacks")
+require("plugins.yazi")
