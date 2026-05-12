@@ -3,11 +3,11 @@
     "eldritch-nvim": {
       "flake": false,
       "locked": {
-        "lastModified": 1766498878,
-        "narHash": "sha256-nEt25TqsYePRCYkCI9zEk/awFBQ9ENyYWR0hSyy24GY=",
+        "lastModified": 1778546492,
+        "narHash": "sha256-7gK3a2zwQqDgdfeIMfsSHyMIEa4oVBwDAKYHaFqyBFw=",
         "owner": "eldritch-theme",
         "repo": "eldritch.nvim",
-        "rev": "0415fa72c348e814a7a6cc9405593a4f812fe12f",
+        "rev": "c9131a5a11f00a2f428f563a4eb2c4aeb680d963",
         "type": "github"
       },
       "original": {
@@ -181,11 +181,11 @@
         "systems": "systems"
       },
       "locked": {
-        "lastModified": 1778049651,
-        "narHash": "sha256-EC5pBiLcP/EVmYWldJRNfkChCqF9rkeTnTs8t9Cs+ZY=",
+        "lastModified": 1778408907,
+        "narHash": "sha256-QXjdRz5fssxAWDrtfBYxvjMtTqJzQAbnAmX3u22xCck=",
         "owner": "notashelf",
         "repo": "nvf",
-        "rev": "88dbbad1f44efe3d2c18903e2c7542452f7bdfd6",
+        "rev": "e86a92e4b29b499e5f1285b737b7612115103da9",
         "type": "github"
       },
       "original": {
