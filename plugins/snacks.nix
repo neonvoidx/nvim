@@ -140,7 +140,7 @@
               indent = 2;
               padding = 1;
               cwd = true;
-              text = lib.generators.mkLuaInline ''
+              text = lib.generators.mkLuaInline /* lua */ ''
                 function(item, ctx)
                   local dir = vim.fn.fnamemodify(item.file, ":h:~")
                   local max_dir = math.max((ctx.width or 60) - 32, 12)

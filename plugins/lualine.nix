@@ -25,7 +25,7 @@
 
       activeSection = {
         a = [
-          ''
+          /* lua */ ''
             {
               "mode",
               right_padding = 2,
@@ -48,7 +48,7 @@
           ''
         ];
         b = [
-          ''
+          /* lua */ ''
             {
               "branch",
               icon = "",
@@ -58,7 +58,7 @@
               end,
             }
           ''
-          ''
+          /* lua */ ''
             {
               "diff",
               colored = true,
@@ -74,7 +74,7 @@
               symbols = { added = " ", modified = "󰣕 ", removed = " " }
             }
           ''
-          ''
+          /* lua */ ''
             {
               require("gitblame").get_current_blame_text,
               cond = require("gitblame").is_blame_text_available,
@@ -85,7 +85,7 @@
             }
           ''
           ''{ "overseer" }''
-          ''
+          /* lua */ ''
             {
               function()
                 if vim.bo.modified then
@@ -104,7 +104,7 @@
         ];
         c = [ ];
         x = [
-          ''
+          /* lua */ ''
             {
               "filetype",
               colored = false,
@@ -116,7 +116,7 @@
               end,
             }
           ''
-          ''
+          /* lua */ ''
             {
               function()
                 local file = vim.api.nvim_buf_get_name(0)
@@ -141,7 +141,7 @@
               end,
             }
           ''
-          ''
+          /* lua */ ''
             {
               function()
                 local buf_ft = vim.bo.filetype
@@ -185,7 +185,7 @@
               end,
             }
           ''
-          ''
+          /* lua */ ''
             {
               "diagnostics",
               sources = { "nvim_diagnostic" },
@@ -211,7 +211,7 @@
               },
             }
           ''
-          ''
+          /* lua */ ''
             {
               function()
                 local ok, noice = pcall(require, "noice")
@@ -232,7 +232,7 @@
               end,
             }
           ''
-          ''
+          /* lua */ ''
             {
               function()
                 local line = vim.fn.line(".")
