@@ -59,6 +59,42 @@ local servers = {
   },
 }
 
+require("tiny-inline-diagnostic").setup({
+  options = {
+    show_source = {
+      enabled = true,
+    },
+    multilines = {
+      enabled = true,
+    },
+    add_messages = {
+      display_count = true,
+    },
+  },
+})
+vim.diagnostic.config({ virtual_text = false }) -- Disable Neovim's default virtual text diagnostics
+
+vim.diagnostic.config({
+  virtual_text = false,
+  signs = {
+    text = {
+      [vim.diagnostic.severity.ERROR] = "",
+      [vim.diagnostic.severity.WARN] = "",
+      [vim.diagnostic.severity.INFO] = "󰋼",
+      [vim.diagnostic.severity.HINT] = "󰌵",
+    },
+  },
+  float = {
+    border = "rounded",
+    format = function(d)
+      local code = d.code or (d.user_data and d.user_data.lsp and d.user_data.lsp.code) or ""
+      return ("%s (%s) [%s]"):format(d.message, d.source or "lsp", code)
+    end,
+  },
+  underline = true,
+  jump = { on_jump = true },
+})
+
 for server, config in pairs(servers) do
   vim.lsp.config(server, config)
   vim.lsp.enable(server)
