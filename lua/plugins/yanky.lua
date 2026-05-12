@@ -1,11 +1,11 @@
 require("yanky").setup({
-	highlight = {
-		timer = 150,
-	},
+  highlight = {
+    timer = 150,
+  },
 })
 
 vim.keymap.set({ "n", "x" }, "<leader>y", function()
-	require("snacks").picker.yanky()
+  require("snacks").picker.yanky()
 end, { desc = "Yank History" })
 vim.keymap.set({ "n", "x" }, "y", "<Plug>(YankyYank)", { remap = true, desc = "Yank text" })
 vim.keymap.set({ "n", "x" }, "p", "<Plug>(YankyPutAfter)", { remap = true, desc = "Put after cursor" })

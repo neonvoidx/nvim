@@ -32,10 +32,10 @@ map({ "i", "n" }, "<esc>", "<cmd>noh<cr><esc>", { desc = "Escape and clear hlsea
 
 -- redraw, clear highlights etc
 map(
-	"n",
-	"<leader>ur",
-	"<Cmd>nohlsearch<Bar>diffupdate<Bar>normal! <C-L><CR>",
-	{ desc = "Redraw / clear hlsearch / diff update" }
+  "n",
+  "<leader>ur",
+  "<Cmd>nohlsearch<Bar>diffupdate<Bar>normal! <C-L><CR>",
+  { desc = "Redraw / clear hlsearch / diff update" }
 )
 
 -- Better search
@@ -83,34 +83,34 @@ map({ "n", "v" }, "C", '"_c')
 
 -- Visual selection, into search and replace
 local function get_visual()
-	local start_pos = vim.fn.getpos("v")
-	local end_pos = vim.fn.getpos(".")
-	local ls, cs = start_pos[2], start_pos[3]
-	local le, ce = end_pos[2], end_pos[3]
-	if ls > le or (ls == le and cs > ce) then
-		ls, le = le, ls
-		cs, ce = ce, cs
-	end
-	return vim.api.nvim_buf_get_text(0, ls - 1, cs - 1, le - 1, ce, {})
+  local start_pos = vim.fn.getpos("v")
+  local end_pos = vim.fn.getpos(".")
+  local ls, cs = start_pos[2], start_pos[3]
+  local le, ce = end_pos[2], end_pos[3]
+  if ls > le or (ls == le and cs > ce) then
+    ls, le = le, ls
+    cs, ce = ce, cs
+  end
+  return vim.api.nvim_buf_get_text(0, ls - 1, cs - 1, le - 1, ce, {})
 end
 map("v", "<C-r>", function()
-	local pattern = table.concat(get_visual(), "\n")
-	pattern = vim.fn.substitute(vim.fn.escape(pattern, "^$.*\\/~[]"), "\n", "\\n", "g")
-	vim.cmd.normal({ bang = true, args = { "<Esc>" } })
-	vim.fn.feedkeys(vim.api.nvim_replace_termcodes(":%s/" .. pattern .. "//g<Left><Left>", true, false, true), "n")
+  local pattern = table.concat(get_visual(), "\n")
+  pattern = vim.fn.substitute(vim.fn.escape(pattern, "^$.*\\/~[]"), "\n", "\\n", "g")
+  vim.cmd.normal({ bang = true, args = { "<Esc>" } })
+  vim.fn.feedkeys(vim.api.nvim_replace_termcodes(":%s/" .. pattern .. "//g<Left><Left>", true, false, true), "n")
 end, { desc = "Search and replace selection" })
 
 -- Clipboard diff
 local function compare_to_clip()
-	local ftype = vim.api.nvim_get_option_value("filetype", { buf = 0 })
-	vim.cmd("vsplit")
-	vim.cmd("enew")
-	vim.cmd("normal! P")
-	vim.opt_local.buftype = "nowrite"
-	vim.opt_local.filetype = ftype
-	vim.cmd("diffthis")
-	vim.cmd([[execute "normal! \<C-w>h"]])
-	vim.cmd("diffthis")
+  local ftype = vim.api.nvim_get_option_value("filetype", { buf = 0 })
+  vim.cmd("vsplit")
+  vim.cmd("enew")
+  vim.cmd("normal! P")
+  vim.opt_local.buftype = "nowrite"
+  vim.opt_local.filetype = ftype
+  vim.cmd("diffthis")
+  vim.cmd([[execute "normal! \<C-w>h"]])
+  vim.cmd("diffthis")
 end
 map("n", "<leader>D", compare_to_clip, { desc = "Diff vs clipboard" })
 
@@ -128,19 +128,19 @@ map("n", "<leader>uR", "<cmd>restart<cr>", { desc = "Restart UI" })
 
 -- Update plugins
 map("n", "<leader>uu", function()
-	vim.pack.update()
+  vim.pack.update()
 end, { desc = "Update plugins" })
 
 -- Copy whole file to clipboard
 map("n", "<C-c>", ":%y+<CR>", { noremap = true, silent = true })
 -- Close all fold except the current one.
 map("n", "zv", "zMzvzz", {
-	desc = "Close all folds except the current one",
+  desc = "Close all folds except the current one",
 })
 
 -- Close current fold when open. Always open next fold.
 map("n", "zj", "zcjzOzz", {
-	desc = "Close current fold when open. Always open next fold.",
+  desc = "Close current fold when open. Always open next fold.",
 })
 
 -- Goto
@@ -149,16 +149,16 @@ map("n", "gh", "^", { desc = "Go to start of line" })
 
 -- Quickfix and location lists
 map("n", "<leader>xl", function()
-	local success, err = pcall(vim.fn.getloclist(0, { winid = 0 }).winid ~= 0 and vim.cmd.lclose or vim.cmd.lopen)
-	if not success and err then
-		vim.notify(err, vim.log.levels.ERROR)
-	end
+  local success, err = pcall(vim.fn.getloclist(0, { winid = 0 }).winid ~= 0 and vim.cmd.lclose or vim.cmd.lopen)
+  if not success and err then
+    vim.notify(err, vim.log.levels.ERROR)
+  end
 end, { desc = "Location List" })
 map("n", "<leader>xq", function()
-	local success, err = pcall(vim.fn.getqflist({ winid = 0 }).winid ~= 0 and vim.cmd.cclose or vim.cmd.copen)
-	if not success and err then
-		vim.notify(err, vim.log.levels.ERROR)
-	end
+  local success, err = pcall(vim.fn.getqflist({ winid = 0 }).winid ~= 0 and vim.cmd.cclose or vim.cmd.copen)
+  if not success and err then
+    vim.notify(err, vim.log.levels.ERROR)
+  end
 end, { desc = "Quickfix List" })
 
 -- Quickfix next/prev
@@ -166,16 +166,16 @@ map("n", "[q", vim.cmd.cprev, { desc = "Previous Quickfix" })
 map("n", "]q", vim.cmd.cnext, { desc = "Next Quickfix" })
 
 local function project_root()
-	local cwd = vim.fn.getcwd()
-	local buf_path = vim.api.nvim_buf_get_name(0)
-	local start = buf_path ~= "" and vim.fn.fnamemodify(buf_path, ":p:h") or cwd
-	local git_dir = vim.fs.find(".git", { path = start, upward = true })[1]
+  local cwd = vim.fn.getcwd()
+  local buf_path = vim.api.nvim_buf_get_name(0)
+  local start = buf_path ~= "" and vim.fn.fnamemodify(buf_path, ":p:h") or cwd
+  local git_dir = vim.fs.find(".git", { path = start, upward = true })[1]
 
-	if git_dir then
-		return vim.fn.fnamemodify(git_dir, ":h")
-	end
+  if git_dir then
+    return vim.fn.fnamemodify(git_dir, ":h")
+  end
 
-	return cwd
+  return cwd
 end
 
 -- Inspection tools (useful for debugging highlights and treesitter)
@@ -187,23 +187,23 @@ map("n", "<leader>nm", "<cmd>:message<cr>", { desc = "Message history" })
 
 -- autocomplete
 map("i", "<C-j>", function()
-	if vim.fn.pumvisible() == 1 then
-		vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Down>", true, false, true), "n", true)
-		return ""
-	end
-	return vim.api.nvim_replace_termcodes("<C-j>", true, false, true)
+  if vim.fn.pumvisible() == 1 then
+    vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Down>", true, false, true), "n", true)
+    return ""
+  end
+  return vim.api.nvim_replace_termcodes("<C-j>", true, false, true)
 end, { expr = true, silent = true, desc = "Next completion item" })
 map("i", "<C-k>", function()
-	if vim.fn.pumvisible() == 1 then
-		vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Up>", true, false, true), "n", true)
-		return ""
-	end
-	return vim.api.nvim_replace_termcodes("<C-k>", true, false, true)
+  if vim.fn.pumvisible() == 1 then
+    vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Up>", true, false, true), "n", true)
+    return ""
+  end
+  return vim.api.nvim_replace_termcodes("<C-k>", true, false, true)
 end, { expr = true, silent = true, desc = "Prev completion item" })
 map("i", "<CR>", 'pumvisible() ? (complete_info(["selected"]).selected != -1 ? "\\<C-y>" : "\\<CR>") : "\\<CR>"', {
-	expr = true,
-	silent = true,
-	desc = "Confirm completion",
+  expr = true,
+  silent = true,
+  desc = "Confirm completion",
 })
 -- lazygit
 map("n", "<leader>gg", "<cmd>LazyGit<cr>", { desc = "Open Lazygit" })

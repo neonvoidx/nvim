@@ -1,8 +1,8 @@
 require("bufferline").setup({
-	options = {
-		diagnostics = "nvim_lsp",
-		always_show_bufferline = true,
-	},
+  options = {
+    diagnostics = "nvim_lsp",
+    always_show_bufferline = true,
+  },
 })
 
 vim.keymap.set("n", "<leader>bp", "<cmd>BufferLineTogglePin<cr>", { desc = "Toggle pin buffer" })

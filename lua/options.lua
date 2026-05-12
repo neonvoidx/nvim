@@ -54,35 +54,35 @@ opt.foldlevel = 99
 opt.foldlevelstart = 99
 opt.foldenable = true
 opt.sessionoptions = { "blank", "buffers", "curdir", "winsize", "help", "globals", "skiprtp", "folds" }
-opt.shortmess:append({ a=true, A=true,W = true,  c = true, C = true })
+opt.shortmess:append({ a = true, A = true, W = true, c = true, C = true })
 opt.spelllang = { "en" }
 opt.fillchars = {
-	foldopen = "▾",
-	foldclose = "▸",
-	fold = " ",
-	foldsep = " ",
-	diff = "╱",
-	eob = " ",
+  foldopen = "▾",
+  foldclose = "▸",
+  fold = " ",
+  foldsep = " ",
+  diff = "╱",
+  eob = " ",
 }
 
 vim.diagnostic.config({
-	virtual_text = true,
-	signs = {
-		text = {
-			[vim.diagnostic.severity.ERROR] = "",
-			[vim.diagnostic.severity.WARN] = "",
-			[vim.diagnostic.severity.INFO] = "󰋼",
-			[vim.diagnostic.severity.HINT] = "󰌵",
-		},
-	},
-	float = {
-		border = "rounded",
-		format = function(d)
-			local code = d.code or (d.user_data and d.user_data.lsp and d.user_data.lsp.code) or ""
-			return ("%s (%s) [%s]"):format(d.message, d.source or "lsp", code)
-		end,
-	},
-	underline = true,
+  virtual_text = true,
+  signs = {
+    text = {
+      [vim.diagnostic.severity.ERROR] = "",
+      [vim.diagnostic.severity.WARN] = "",
+      [vim.diagnostic.severity.INFO] = "󰋼",
+      [vim.diagnostic.severity.HINT] = "󰌵",
+    },
+  },
+  float = {
+    border = "rounded",
+    format = function(d)
+      local code = d.code or (d.user_data and d.user_data.lsp and d.user_data.lsp.code) or ""
+      return ("%s (%s) [%s]"):format(d.message, d.source or "lsp", code)
+    end,
+  },
+  underline = true,
 
-	jump = { on_jump = true },
+  jump = { on_jump = true },
 })
