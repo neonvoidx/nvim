@@ -112,7 +112,24 @@
               icon = { align = "right" },
               color = function()
                 local colors = require("eldritch.colors").default
-                return { bg = colors.fg_gutter, gui = "bold" }
+                local ft = vim.bo.filetype
+                local ok, devicons = pcall(require, "nvim-web-devicons")
+
+                if not ok then
+                  return { fg = colors.cyan, bg = colors.bg_highlight, gui = "bold" }
+                end
+
+                local icon, icon_color = devicons.get_icon_color_by_filetype(ft)
+                if not icon then
+                  local name = vim.api.nvim_buf_get_name(0)
+                  _, icon_color = devicons.get_icon_color(name, nil, { default = true })
+                end
+
+                return {
+                  fg = icon_color or colors.cyan,
+                  bg = colors.bg_highlight,
+                  gui = "bold",
+                }
               end,
             }
           ''
