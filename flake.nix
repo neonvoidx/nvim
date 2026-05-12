@@ -37,7 +37,6 @@
               nodejs_24
               basedpyright
               clang-tools
-              gopls
               lua-language-server
               nil
               rust-analyzer
@@ -57,7 +56,6 @@
               markdown-toc
               nixfmt
               rustfmt
-              gofmt
 
               # tools
               fzf
