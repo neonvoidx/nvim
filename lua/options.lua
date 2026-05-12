@@ -3,7 +3,11 @@ local opt = vim.opt
 opt.autowrite = true
 opt.autoread = true
 opt.clipboard = "unnamedplus"
-opt.completeopt = "menu,menuone,noselect"
+opt.complete = ".,w,b,o"
+opt.completeopt = "menu,noselect,fuzzy"
+opt.winborder = "rounded"
+opt.autocomplete = true
+opt.autocompletedelay = 250
 opt.conceallevel = 1
 opt.confirm = true
 opt.cursorline = true
@@ -60,7 +64,6 @@ opt.fillchars = {
 	diff = "╱",
 	eob = " ",
 }
-opt.winborder = "rounded"
 
 vim.diagnostic.config({
 	virtual_text = true,

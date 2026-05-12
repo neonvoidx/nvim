@@ -67,11 +67,18 @@ end
 vim.api.nvim_create_autocmd("LspAttach", {
 	group = vim.api.nvim_create_augroup("UserLspConfig", { clear = true }),
 	callback = function(ev)
+		local client = vim.lsp.get_client_by_id(ev.data.client_id)
+    -- Enable autocompletion (native)
+		if client and client:supports_method("textDocument/completion") then
+			vim.lsp.completion.enable(true, client.id, ev.buf, {
+				autotrigger = true,
+			})
+		end
+
 		local opts = { buffer = ev.buf }
 		local function lmap(lhs, rhs, desc)
 			vim.keymap.set("n", lhs, rhs, vim.tbl_extend("force", opts, { desc = desc }))
 		end
-
 		lmap("K", vim.lsp.buf.hover, "Hover documentation")
 		lmap("<leader>ca", vim.lsp.buf.code_action, "Code action")
 		lmap("<leader>cA", function()

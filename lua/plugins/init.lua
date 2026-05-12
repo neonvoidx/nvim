@@ -7,7 +7,6 @@ vim.pack.add({
 	"https://github.com/nvim-lualine/lualine.nvim",
 	"https://github.com/folke/todo-comments.nvim",
 	"https://github.com/folke/which-key.nvim",
-	"https://github.com/folke/snacks.nvim",
 	"https://github.com/folke/flash.nvim",
 	"https://github.com/folke/persistence.nvim",
 	"https://github.com/mikavilpas/yazi.nvim",
@@ -19,8 +18,10 @@ vim.pack.add({
 	"https://github.com/mfussenegger/nvim-lint",
 	"https://github.com/nvim-treesitter/nvim-treesitter",
 	"https://github.com/nvim-treesitter/nvim-treesitter-context",
+  "https://github.com/rrethy/nvim-treesitter-endwise",
 	"https://github.com/lewis6991/gitsigns.nvim",
 	"https://github.com/ibhagwan/fzf-lua",
+	"https://github.com/kdheepak/lazygit.nvim",
 	"https://github.com/nvim-mini/mini.surround",
 	"https://github.com/nvim-mini/mini.pairs",
 }, { confirm = false })
@@ -28,7 +29,7 @@ vim.pack.add({
 require("plugins.colorscheme")
 require("plugins.conform")
 require("plugins.lint")
-require("plugins.lspconfig")
+require("plugins.lsp")
 require("plugins.persistence")
 require("plugins.bufferline")
 require("plugins.statusline")
@@ -37,10 +38,9 @@ require("plugins.fzf")
 require("plugins.kitty")
 require("plugins.yanky")
 require("plugins.flash")
-require("plugins.treesitter_context")
+require("plugins.treesitter")
 require("plugins.which_key")
 require("plugins.gitsigns")
 require("plugins.todo_comments")
 require("plugins.mini")
--- require("plugins.snacks")
 require("plugins.yazi")

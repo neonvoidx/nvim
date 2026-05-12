@@ -134,3 +134,32 @@ autocmd("BufReadPre", {
 		})
 	end,
 })
+
+local cmdline_completion_state = nil
+
+autocmd("CmdlineEnter", {
+	desc = "Enable popup completion for search cmdline",
+	pattern = { "/", "?" },
+	callback = function()
+		cmdline_completion_state = {
+			wildmode = vim.o.wildmode,
+			wildoptions = vim.o.wildoptions,
+		}
+
+		vim.opt.wildmode = "noselect:lastused,full"
+		vim.opt.wildoptions = "pum"
+	end,
+})
+
+autocmd("CmdlineLeave", {
+	desc = "Restore cmdline completion settings",
+	pattern = { "/", "?" },
+	callback = function()
+		if not cmdline_completion_state then
+			return
+		end
+		vim.opt.wildmode = cmdline_completion_state.wildmode
+		vim.opt.wildoptions = cmdline_completion_state.wildoptions
+		cmdline_completion_state = nil
+	end,
+})

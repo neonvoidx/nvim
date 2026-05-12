@@ -165,35 +165,6 @@ end, { desc = "Quickfix List" })
 map("n", "[q", vim.cmd.cprev, { desc = "Previous Quickfix" })
 map("n", "]q", vim.cmd.cnext, { desc = "Next Quickfix" })
 
-local function open_lazygit_float()
-	local width = math.floor(vim.o.columns * 0.9)
-	local height = math.floor(vim.o.lines * 0.9)
-	local row = math.floor((vim.o.lines - height) / 2)
-	local col = math.floor((vim.o.columns - width) / 2)
-
-	local buf = vim.api.nvim_create_buf(false, true)
-	local win = vim.api.nvim_open_win(buf, true, {
-		relative = "editor",
-		border = "rounded",
-		width = width,
-		height = height,
-		row = row,
-		col = col,
-		style = "minimal",
-	})
-
-	vim.fn.termopen("lazygit", {
-		on_exit = function()
-			if vim.api.nvim_win_is_valid(win) then
-				vim.api.nvim_win_close(win, true)
-			end
-		end,
-	})
-	vim.cmd.startinsert()
-end
-
-map("n", "<leader>gg", open_lazygit_float, { desc = "Open Lazygit" })
-
 local function project_root()
 	local cwd = vim.fn.getcwd()
 	local buf_path = vim.api.nvim_buf_get_name(0)
@@ -213,3 +184,26 @@ map("n", "<leader>uI", "<cmd>InspectTree<cr>", { desc = "Inspect Tree" })
 
 -- messages
 map("n", "<leader>nm", "<cmd>:message<cr>", { desc = "Message history" })
+
+-- autocomplete
+map("i", "<C-j>", function()
+	if vim.fn.pumvisible() == 1 then
+		vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Down>", true, false, true), "n", true)
+		return ""
+	end
+	return vim.api.nvim_replace_termcodes("<C-j>", true, false, true)
+end, { expr = true, silent = true, desc = "Next completion item" })
+map("i", "<C-k>", function()
+	if vim.fn.pumvisible() == 1 then
+		vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Up>", true, false, true), "n", true)
+		return ""
+	end
+	return vim.api.nvim_replace_termcodes("<C-k>", true, false, true)
+end, { expr = true, silent = true, desc = "Prev completion item" })
+map("i", "<CR>", 'pumvisible() ? (complete_info(["selected"]).selected != -1 ? "\\<C-y>" : "\\<CR>") : "\\<CR>"', {
+	expr = true,
+	silent = true,
+	desc = "Confirm completion",
+})
+-- lazygit
+map("n", "<leader>gg", "<cmd>LazyGit<cr>", { desc = "Open Lazygit" })

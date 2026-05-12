@@ -3,16 +3,11 @@ require("todo-comments").setup({
 	merge_keywords = false,
 	keywords = {
 		BUG = { icon = "", color = "error" },
-		FIXME = { icon = "", color = "error" },
-		fixme = { icon = "", color = "error" },
+		FIXME = { icon = "", color = "error", alt={"fixme"} },
 		HACK = { icon = "", color = "info" },
-		NOTE = { icon = "❦", color = "info" },
-		note = { icon = "❦", color = "info" },
-		TODO = { icon = "★", color = "actionItem" },
-		todo = { icon = "★", color = "actionItem" },
-		WARN = { icon = "󰀦", color = "warning" },
-		warn = { icon = "󰀦", color = "warning" },
-		WARNING = { icon = "󰀦", color = "warning" },
+		NOTE = { icon = "❦", color = "info", alt={"note"} },
+		TODO = { icon = "★", color = "actionItem", alt={"todo"} },
+		WARN = { icon = "󰀦", color = "warning", alt={"warning", "warn"} },
 	},
 	colors = {
 		actionItem = { "ActionItem", "#f1fc79" },
@@ -38,4 +33,5 @@ require("todo-comments").setup({
 	},
 })
 
--- TODO add keymap to find all TODOs etc
+vim.keymap.set("n", "<leader>st", function() require("todo-comments.fzf").todo({ keywords = { "TODO", "todo" } }) end, { desc = "TODOs" })
+vim.keymap.set("n", "<leader>sT", ":TodoFzfLua<cr>", { desc = "TODO/BUG/FIXME/HACK/NOTE/WARN" })
