@@ -11,7 +11,7 @@ in
   config.vim = {
     startPlugins = [ eldritch-nvim ];
 
-    luaConfigRC."colorscheme" = lib.nvim.dag.entryAnywhere /* lua */ ''
+    luaConfigRC."colorscheme" = lib.nvim.dag.entryAfter [ "startupConfigs" ] /* lua */ ''
       require("eldritch").setup({ transparent = true })
       vim.cmd.colorscheme("eldritch")
     '';
