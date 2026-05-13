@@ -101,6 +101,12 @@
         treesitter.enable = true;
         format.enable = true;
       };
+
+      zig = {
+        enable = true;
+        lsp.enable = true;
+        treesitter.enable = true;
+      };
     };
 
     extraPackages = with pkgs; [
