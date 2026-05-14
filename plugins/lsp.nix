@@ -106,7 +106,6 @@
         enable = true;
         lsp.enable = true;
         treesitter.enable = true;
-        format.enable = true;
       };
     };
 
@@ -125,6 +124,12 @@
     ];
 
     luaConfigRC."lsp-extra" = lib.nvim.dag.entryAnywhere /* lua */ ''
+      -- ── Zig ────────────────────────────────────────────────────────
+      -- Disable zig.vim's built-in fmt-on-save; conform's lsp_format="fallback"
+      -- already delegates to ZLS (which runs zig fmt) on BufWritePre.
+      vim.g.zig_fmt_autosave = 0
+      vim.g.zig_fmt_parse_errors = 0
+
       -- ── Tiny Inline Diagnostic ─────────────────────────────────────
       require("tiny-inline-diagnostic").setup({
         options = {
