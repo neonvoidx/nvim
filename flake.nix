@@ -32,6 +32,10 @@
       url = "github:hedyhli/markdown-toc.nvim";
       flake = false;
     };
+    presenting-nvim = {
+      url = "github:sotte/presenting.nvim";
+      flake = false;
+    };
     vim-kitty-navigator = {
       url = "github:knubie/vim-kitty-navigator";
       flake = false;
@@ -95,6 +99,10 @@
             markdown-toc-nvim = pkgs.vimUtils.buildVimPlugin {
               name = "markdown-toc.nvim";
               src = inputs.markdown-toc-nvim;
+            };
+            presenting-nvim = pkgs.vimUtils.buildVimPlugin {
+              name = "presenting.nvim";
+              src = inputs.presenting-nvim;
             };
           };
           neovimConfig = nvf.lib.neovimConfiguration {
