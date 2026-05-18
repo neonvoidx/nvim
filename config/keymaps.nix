@@ -5,9 +5,17 @@
 
         -- Helper: get visual selection as a list of lines
         local function get_visual()
-          local _, ls, cs = table.unpack(vim.fn.getpos("v"))
-          local _, le, ce = table.unpack(vim.fn.getpos("."))
-          return vim.api.nvim_buf_get_text(0, ls - 1, cs - 1, le - 1, ce, {})
+          local start_pos = vim.fn.getpos("v")
+          local end_pos = vim.fn.getpos(".")
+          local start_row, start_col = start_pos[2], start_pos[3]
+          local end_row, end_col = end_pos[2], end_pos[3]
+
+          if start_row > end_row or (start_row == end_row and start_col > end_col) then
+            start_row, end_row = end_row, start_row
+            start_col, end_col = end_col, start_col
+          end
+
+          return vim.api.nvim_buf_get_text(0, start_row - 1, start_col - 1, end_row - 1, end_col, {})
         end
 
         -- Helper: diff current buffer against clipboard
@@ -123,11 +131,17 @@
         map({ "n", "v" }, "C", '"_c')
 
         -- Visual search-and-replace for the current selection
-        map("v", "<C-r>", function()
-          local pattern = table.concat(get_visual())
-          pattern = vim.fn.substitute(vim.fn.escape(pattern, "^$.*\\/~[]"), "\n", "\\n", "g")
-          vim.api.nvim_input("<Esc>:%s/" .. pattern .. "//g<Left><Left>")
-        end)
+        map("x", "<C-r>", function()
+          local selection = get_visual()
+          if vim.tbl_isempty(selection) then
+            return
+          end
+
+          local pattern = table.concat(selection, "\n")
+          pattern = vim.fn.substitute(vim.fn.escape(pattern, [[\^$.*~/[]]]), "\n", [[\\n]], "g")
+          vim.cmd("normal! <Esc>")
+          vim.fn.feedkeys(":%s/" .. pattern .. "//g", "n")
+        end, { desc = "Substitute visual selection" })
 
         -- Navigation
         map("n", "<Backspace>", "^", { desc = "Move to first non-blank character" })
