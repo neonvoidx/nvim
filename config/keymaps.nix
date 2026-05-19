@@ -3,21 +3,6 @@
   config.vim.luaConfigRC."keymaps" = lib.nvim.dag.entryAnywhere /* lua */ ''
         local map = vim.keymap.set
 
-        -- Helper: get visual selection as a list of lines
-        local function get_visual()
-          local start_pos = vim.fn.getpos("v")
-          local end_pos = vim.fn.getpos(".")
-          local start_row, start_col = start_pos[2], start_pos[3]
-          local end_row, end_col = end_pos[2], end_pos[3]
-
-          if start_row > end_row or (start_row == end_row and start_col > end_col) then
-            start_row, end_row = end_row, start_row
-            start_col, end_col = end_col, start_col
-          end
-
-          return vim.api.nvim_buf_get_text(0, start_row - 1, start_col - 1, end_row - 1, end_col, {})
-        end
-
         -- Helper: diff current buffer against clipboard
         local function compareToClip()
           local ftype = vim.api.nvim_eval("&filetype")
@@ -131,17 +116,7 @@
         map({ "n", "v" }, "C", '"_c')
 
         -- Visual search-and-replace for the current selection
-        map("x", "<C-r>", function()
-          local selection = get_visual()
-          if vim.tbl_isempty(selection) then
-            return
-          end
-
-          local pattern = table.concat(selection, "\n")
-          pattern = vim.fn.substitute(vim.fn.escape(pattern, [[\^$.*~/[]]]), "\n", [[\\n]], "g")
-          vim.cmd("normal! <Esc>")
-          vim.fn.feedkeys(":%s/" .. pattern .. "//g", "n")
-        end, { desc = "Substitute visual selection" })
+        map("x", "<C-r>", '"hy:%s/<C-r>h//g<Left><Left>', { desc = "Substitute visual selection" })
 
         -- Navigation
         map("n", "<Backspace>", "^", { desc = "Move to first non-blank character" })

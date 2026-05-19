@@ -149,8 +149,11 @@
     startPlugins = [ pkgs.vimPlugins.nvim-scissors ];
 
     luaConfigRC."scissors" = lib.nvim.dag.entryAnywhere /* lua */ ''
+      local snippet_dir = ${builtins.toJSON (toString ../snippets)}
+      vim.fn.mkdir(snippet_dir, "p")
+
       require("scissors").setup({
-        snippetDir = vim.fn.stdpath("config") .. "/snippets",
+        snippetDir = snippet_dir,
       })
       vim.keymap.set("v", "<leader>Sa", function() require("scissors").addNewSnippet() end,
         { desc = "✀  Add Snippet" })
