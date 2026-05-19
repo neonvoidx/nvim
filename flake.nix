@@ -40,6 +40,10 @@
       url = "github:knubie/vim-kitty-navigator";
       flake = false;
     };
+    opencode-nvim = {
+      url = "github:sudo-tee/opencode.nvim";
+      flake = false;
+    };
   };
 
   outputs =
@@ -103,6 +107,11 @@
             presenting-nvim = pkgs.vimUtils.buildVimPlugin {
               name = "presenting.nvim";
               src = inputs.presenting-nvim;
+            };
+            opencode-nvim = pkgs.vimUtils.buildVimPlugin {
+              name = "opencode.nvim";
+              src = inputs.opencode-nvim;
+              doCheck = false;
             };
           };
           neovimConfig = nvf.lib.neovimConfiguration {

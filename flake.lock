@@ -194,6 +194,22 @@
         "type": "github"
       }
     },
+    "opencode-nvim": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1779191747,
+        "narHash": "sha256-+NQYqJuMwnEJeTjrwzq5h1mDmsmoWvWWg9KTO/+uXyY=",
+        "owner": "sudo-tee",
+        "repo": "opencode.nvim",
+        "rev": "1a400673610e969ebbb7298705ef242c5348d5e8",
+        "type": "github"
+      },
+      "original": {
+        "owner": "sudo-tee",
+        "repo": "opencode.nvim",
+        "type": "github"
+      }
+    },
     "presenting-nvim": {
       "flake": false,
       "locked": {
@@ -233,6 +249,7 @@
         "markdown-toc-nvim": "markdown-toc-nvim",
         "nixpkgs": "nixpkgs",
         "nvf": "nvf",
+        "opencode-nvim": "opencode-nvim",
         "presenting-nvim": "presenting-nvim",
         "resolved-nvim": "resolved-nvim",
         "vim-kitty-navigator": "vim-kitty-navigator"
