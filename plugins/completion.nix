@@ -4,12 +4,6 @@
     autocomplete.blink-cmp = {
       enable = true;
 
-      sourcePlugins.copilot = {
-        enable = true;
-        package = pkgs.vimPlugins.blink-copilot;
-        module = "blink-copilot";
-      };
-
       setupOpts = {
         enabled = lib.generators.mkLuaInline ''
           function()
@@ -28,7 +22,6 @@
 
         sources = {
           default = [
-            "copilot"
             "lsp"
             "path"
             "lazydev"
@@ -36,17 +29,6 @@
             "buffer"
           ];
           providers = {
-            copilot = {
-              name = "copilot";
-              module = "blink-copilot";
-              enabled = lib.generators.mkLuaInline ''
-                function()
-                  return vim.g.copilot_completion_enabled ~= false
-                end
-              '';
-              score_offset = 4;
-              async = true;
-            };
             path = {
               name = "path";
               score_offset = 5;

@@ -21,6 +21,5 @@
     ../plugins/session.nix
     ../plugins/kitty.nix
     ../plugins/nix-integration.nix
-    ../plugins/ai.nix
   ];
 }

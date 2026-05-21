@@ -47,6 +47,7 @@
           json = [ "prettierd" ];
           yaml = [ "prettierd" ];
           lua = [ "stylua" ];
+          odin = [ "odinfmt" ];
           python = [
             "isort"
             "black"
