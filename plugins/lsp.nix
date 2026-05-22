@@ -130,37 +130,6 @@
     ];
 
     luaConfigRC."lsp-extra" = lib.nvim.dag.entryAnywhere /* lua */ ''
-      -- Add Hyprland Lua stubs to LuaLS when running in a Nix environment.
-      do
-        if vim.fn.executable("nix") == 1 then
-          local handle = io.popen("nix eval nixpkgs#hyprland.outPath --raw 2>/dev/null")
-          if handle then
-            local out = handle:read("*a")
-            handle:close()
-
-            local hyprland_out = vim.trim(out)
-            if hyprland_out ~= "" then
-              local stub_dir = hyprland_out .. "/share/hypr/stubs"
-              local stub_file = stub_dir .. "/hl.meta.lua"
-
-              if vim.uv.fs_stat(stub_file) then
-                vim.lsp.config("lua_ls", {
-                  settings = {
-                    Lua = {
-                      workspace = {
-                        library = {
-                          [stub_dir] = true,
-                        },
-                      },
-                    },
-                  },
-                })
-              end
-            end
-          end
-        end
-      end
-
       -- ── Zig ────────────────────────────────────────────────────────
       -- Disable zig.vim's built-in fmt-on-save; conform's lsp_format="fallback"
       -- already delegates to ZLS (which runs zig fmt) on BufWritePre.

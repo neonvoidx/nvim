@@ -131,19 +131,24 @@
     startPlugins = [ pkgs.vimPlugins.nvim-scissors ];
 
     luaConfigRC."scissors" = lib.nvim.dag.entryAnywhere /* lua */ ''
-      local metadata = vim.system({ "nix", "flake", "metadata", "--json" }, { text = true }):wait()
-      local snippet_dir = vim.fn.stdpath("config") .. "/snippets"
+      local function find_snippet_dir()
+        if vim.env.NVIM_SNIPPETS_DIR and vim.env.NVIM_SNIPPETS_DIR ~= "" then
+          return vim.env.NVIM_SNIPPETS_DIR
+        end
 
-      if metadata.code == 0 and metadata.stdout then
-        local ok, flake = pcall(vim.json.decode, metadata.stdout)
-        local url = ok and flake and flake.locked and flake.locked.url or nil
-        if type(url) == "string" then
-          local repo_root = url:match("^file://(.+)$")
+        local cwd = vim.uv.cwd()
+        local flake = cwd and vim.fs.find("flake.nix", { path = cwd, upward = true })[1] or nil
+        if flake then
+          local repo_root = vim.fs.dirname(flake)
           if repo_root and vim.fn.isdirectory(repo_root) == 1 then
-            snippet_dir = repo_root .. "/snippets"
+            return repo_root .. "/snippets"
           end
         end
+
+        return vim.fn.stdpath("config") .. "/snippets"
       end
+
+      local snippet_dir = find_snippet_dir()
 
       vim.fn.mkdir(snippet_dir, "p")
 
