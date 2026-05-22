@@ -133,19 +133,28 @@
     luaConfigRC."scissors" = lib.nvim.dag.entryAnywhere /* lua */ ''
       local function find_snippet_dir()
         if vim.env.NVIM_SNIPPETS_DIR and vim.env.NVIM_SNIPPETS_DIR ~= "" then
-          return vim.env.NVIM_SNIPPETS_DIR
+          return vim.fn.expand(vim.env.NVIM_SNIPPETS_DIR)
         end
 
-        local cwd = vim.uv.cwd()
-        local flake = cwd and vim.fs.find("flake.nix", { path = cwd, upward = true })[1] or nil
-        if flake then
-          local repo_root = vim.fs.dirname(flake)
-          if repo_root and vim.fn.isdirectory(repo_root) == 1 then
-            return repo_root .. "/snippets"
+        local home_snippets = vim.fn.expand("~/nvim/snippets")
+        if vim.fn.isdirectory(home_snippets) == 1 and vim.fn.filewritable(home_snippets) == 2 then
+          return home_snippets
+        end
+
+        local config_snippets = vim.fn.stdpath("config") .. "/snippets"
+        if vim.fn.isdirectory(config_snippets) == 1 and vim.fn.filewritable(config_snippets) == 2 then
+          return config_snippets
+        end
+
+        local data_snippets = vim.fn.stdpath("data") .. "/scissors/snippets"
+        if vim.fn.isdirectory(data_snippets) == 0 then
+          local data_parent = vim.fs.dirname(data_snippets)
+          if data_parent and vim.fn.isdirectory(data_parent) == 1 and vim.fn.filewritable(data_parent) == 2 then
+            return data_snippets
           end
         end
 
-        return vim.fn.stdpath("config") .. "/snippets"
+        return data_snippets
       end
 
       local snippet_dir = find_snippet_dir()
