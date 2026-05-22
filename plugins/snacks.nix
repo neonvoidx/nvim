@@ -101,7 +101,7 @@
             }
             {
               icon = " ";
-              key = "g";
+              key = "/";
               desc = "Find text (grep)";
               action = lib.generators.mkLuaInline "function() Snacks.picker.grep() end";
             }
