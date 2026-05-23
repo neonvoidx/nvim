@@ -6,6 +6,52 @@
       formatOnSave = false; # handled by conform.nvim
       inlayHints.enable = false;
 
+      servers."lua-language-server" = {
+        root_markers = [
+          ".luarc.json"
+          ".luarc.jsonc"
+          ".luacheckrc"
+          ".stylua.toml"
+          "stylua.toml"
+          "selene.toml"
+          "selene.yml"
+          "hyprland.lua"
+          ".git"
+        ];
+        before_init = lib.generators.mkLuaInline /* lua */ ''
+          function(params, config)
+            local stub_library = "${pkgs.hyprland}/share/hypr/stubs"
+            if vim.fn.isdirectory(stub_library) ~= 1 then
+              return
+            end
+
+            local root_dir = config.root_dir or params.rootPath
+            if not root_dir and params.rootUri then
+              root_dir = vim.uri_to_fname(params.rootUri)
+            end
+            root_dir = vim.fs.normalize(root_dir or "")
+
+            local hypr_roots = {
+              vim.fs.normalize(vim.fn.expand("~/.config/hypr")),
+              vim.fs.normalize(vim.fn.expand("~/nix/assets/hypr")),
+            }
+            if not vim.tbl_contains(hypr_roots, root_dir) then
+              return
+            end
+
+            config.settings = vim.tbl_deep_extend("force", config.settings or {}, {
+              Lua = {
+                diagnostics = { globals = { "hl" } },
+                workspace = {
+                  checkThirdParty = false,
+                  library = { stub_library },
+                },
+              },
+            })
+          end
+        '';
+      };
+
       lspkind = {
         enable = true;
         setupOpts.mode = "symbol_text";
