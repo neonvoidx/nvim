@@ -33,7 +33,7 @@
 
             local hypr_roots = {
               vim.fs.normalize(vim.fn.expand("~/.config/hypr")),
-              vim.fs.normalize(vim.fn.expand("~/nix/assets/hypr")),
+              vim.fs.normalize(vim.fn.expand("~/nix")),
             }
             if not vim.tbl_contains(hypr_roots, root_dir) then
               return
