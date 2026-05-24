@@ -31,11 +31,19 @@
             end
             root_dir = vim.fs.normalize(root_dir or "")
 
+            local has_hyprland_marker = vim.fn.filereadable(root_dir .. "/hyprland.lua") == 1
             local hypr_roots = {
               vim.fs.normalize(vim.fn.expand("~/.config/hypr")),
               vim.fs.normalize(vim.fn.expand("~/nix")),
             }
-            if not vim.tbl_contains(hypr_roots, root_dir) then
+            local use_hypr_stubs = has_hyprland_marker
+            for _, hypr_root in ipairs(hypr_roots) do
+              if root_dir == hypr_root or vim.startswith(root_dir, hypr_root .. "/") then
+                use_hypr_stubs = true
+                break
+              end
+            end
+            if not use_hypr_stubs then
               return
             end
 
