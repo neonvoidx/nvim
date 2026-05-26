@@ -16,6 +16,7 @@ vim.pack.add({
   "https://github.com/mikavilpas/yazi.nvim",
   -- Coding
   "https://github.com/folke/flash.nvim",
+  "https://github.com/j-hui/fidget.nvim",
   "https://github.com/lewis6991/gitsigns.nvim",
   "https://github.com/kdheepak/lazygit.nvim",
   "https://github.com/nvim-mini/mini.pairs",
@@ -213,12 +214,22 @@ vim.api.nvim_create_autocmd({ "BufEnter", "BufWritePost", "InsertLeave" }, {
   end,
 })
 
+-- Fidget: LSP progress spinner
+require("fidget").setup({})
+
 -- LSP
 local servers = {
   basedpyright = {},
   clangd = {},
   gopls = {},
-  nixd = {},
+  nixd = {
+    nixpkgs = {
+      expr = "import <nixpkgs> { }",
+    },
+    formatting = {
+      command = { "nixfmt" },
+    },
+  },
   rust_analyzer = {},
   yamlls = {},
   lua_ls = {
@@ -236,6 +247,13 @@ local servers = {
     },
     settings = {
       Lua = {
+        hint = {
+          enable = true,
+          setType = true,
+          paramType = true,
+          paramName = "all",
+          arrayIndex = "auto",
+        },
         runtime = { version = "LuaJIT" },
         diagnostics = { globals = { "vim", "require" } },
         workspace = { library = vim.api.nvim_get_runtime_file("", true) },
@@ -267,6 +285,9 @@ local servers = {
     },
   },
 }
+-- Enable inlay hints globally before LSP starts
+vim.lsp.inlay_hint.enable(true)
+
 for server, config in pairs(servers) do
   vim.lsp.config(server, config)
   vim.lsp.enable(server)
@@ -293,10 +314,10 @@ vim.api.nvim_create_autocmd("LspAttach", {
       vim.cmd("edit " .. vim.lsp.log.get_filename())
     end, "LSP Logs")
     lmap("<leader>lr", "<cmd>LspRestart<cr>", "LSP Restart")
-    vim.lsp.inlay_hint.enable(false)
     lmap("<leader>lI", function()
       local enabled = not vim.lsp.inlay_hint.is_enabled({})
       vim.lsp.inlay_hint.enable(enabled)
+      vim.g.inlay_hints_manually_disabled = not enabled
       vim.notify("Inlay hints: " .. (enabled and " on" or "off"))
     end, "Toggle inlay hints")
   end,

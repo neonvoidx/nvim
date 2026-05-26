@@ -156,6 +156,26 @@ autocmd("BufReadPre", {
   end,
 })
 
+-- Hide inlay hints in insert mode, respect manual toggle
+vim.g.inlay_hints_manually_disabled = false
+local inlay_hints_group = vim.api.nvim_create_augroup("InlayHintsInsert", { clear = true })
+autocmd("InsertEnter", {
+  group = inlay_hints_group,
+  desc = "Disable inlay hints in insert mode",
+  callback = function()
+    vim.lsp.inlay_hint.enable(false)
+  end,
+})
+autocmd("InsertLeave", {
+  group = inlay_hints_group,
+  desc = "Re-enable inlay hints when leaving insert mode",
+  callback = function()
+    if not vim.g.inlay_hints_manually_disabled then
+      vim.lsp.inlay_hint.enable(true)
+    end
+  end,
+})
+
 -- Cmdline completion
 local cmdline_completion_state = nil
 autocmd("CmdlineEnter", {
