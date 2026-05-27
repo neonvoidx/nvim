@@ -36,7 +36,10 @@ local servers = {
         },
         runtime = { version = "LuaJIT" },
         diagnostics = { globals = { "vim", "require" } },
-        workspace = { library = vim.api.nvim_get_runtime_file("", true) },
+        workspace = {
+          checkThirdParty = false,
+          library = { vim.env.VIMRUNTIME },
+        },
         telemetry = { enable = false },
       },
     },

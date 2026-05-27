@@ -11,7 +11,7 @@ vim.pack.add({
   "https://github.com/folke/which-key.nvim",
   "https://github.com/mikavilpas/yazi.nvim",
   "https://github.com/folke/flash.nvim",
-  "https://github.com/j-hui/fidget.nvim",
+  "https://github.com/rcarriga/nvim-notify",
   "https://github.com/lewis6991/gitsigns.nvim",
   "https://github.com/kdheepak/lazygit.nvim",
   "https://github.com/nvim-mini/mini.pairs",
@@ -45,7 +45,7 @@ require("plugins.native-ui")
 require("plugins.persistence")
 require("plugins.conform")
 require("plugins.lint")
-require("plugins.fidget")
+require("plugins.notify")
 require("plugins.lsp")
 require("plugins.todo-comments")
 require("plugins.treesitter")

@@ -11,6 +11,7 @@ opt.completeopt = "menu,noselect,fuzzy,popup"
 opt.winborder = "rounded"
 opt.autocomplete = true
 opt.autocompletedelay = 250
+opt.cmdheight = 0
 opt.conceallevel = 1
 opt.confirm = true
 opt.cursorline = true

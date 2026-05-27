@@ -58,7 +58,7 @@ local status_highlights = {
   StatusDiffAdd = { guibg = palette.bg_highlight, guifg = palette.green, gui = "bold" },
   StatusDiffChange = { guibg = palette.bg_highlight, guifg = palette.yellow, gui = "bold" },
   StatusDiffDelete = { guibg = palette.bg_highlight, guifg = palette.red, gui = "bold" },
-  StatusCenter = { guibg = palette.bg_highlight, guifg = palette.fg, gui = "bold" },
+  StatusCenter = { guibg = palette.bg_highlight, guifg = palette.muted, gui = "bold" },
   StatusFiletype = { guibg = palette.bg_highlight, guifg = palette.purple, gui = "bold" },
   StatusLocation = { guibg = palette.bg_highlight, guifg = palette.green, gui = "bold" },
   StatusLSP = { guibg = palette.bg_highlight, guifg = palette.cyan, gui = "bold" },
@@ -98,7 +98,7 @@ local function get_git_branch()
   end
   local gs = vim.b.gitsigns_status_dict
   if gs and gs.root then
-    return vim.fn.fnamemodify(gs.root, ":t") .. "/" .. branch
+    return branch
   end
   return branch
 end
@@ -154,14 +154,6 @@ local function get_diagnostics()
   return table.concat(parts, "%#StatusMeta# ") .. "%*"
 end
 
-local function get_git_blame()
-  local blame = vim.b.gitsigns_blame_line
-  if not blame or blame == "" then
-    return ""
-  end
-  return blame
-end
-
 local function get_lsp_clients()
   local clients = vim.lsp.get_clients({ bufnr = 0 })
   if #clients == 0 then
@@ -189,7 +181,7 @@ end
 local function get_filename()
   local filename = fn.expand("%:t")
   if filename == "" then
-    filename = "[No Name]"
+    filename = "  "
   end
   if vim.bo.modified then
     filename = filename .. " [+]"
@@ -209,12 +201,6 @@ local function build_left_section()
     if diff ~= "" then
       left[#left + 1] = " "
       left[#left + 1] = diff
-    end
-    local blame = get_git_blame()
-    if blame ~= "" then
-      left[#left + 1] = " %#StatusMeta#"
-      left[#left + 1] = blame
-      left[#left + 1] = "%*"
     end
   end
   return table.concat(left)
@@ -236,12 +222,6 @@ local function build_right_section()
   if diagnostics ~= "" then
     right[#right + 1] = " "
     right[#right + 1] = diagnostics
-  end
-  local progress = (vim.ui and vim.ui.progress_status and vim.ui.progress_status()) or ""
-  if progress ~= "" then
-    right[#right + 1] = " %#StatusMeta#"
-    right[#right + 1] = progress
-    right[#right + 1] = "%*"
   end
   right[#right + 1] = " %#StatusLocation# %l:%c %*"
   return table.concat(right)
