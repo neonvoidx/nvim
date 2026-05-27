@@ -1,4 +1,5 @@
 require("opts")
+require("marks").setup()
 require("keymaps")
 require("autocommands")
 require("plugins")

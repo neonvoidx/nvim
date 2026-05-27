@@ -35,7 +35,7 @@ opt.shiftround = true
 opt.shiftwidth = 2
 opt.showmode = false
 opt.sidescrolloff = 8
-opt.signcolumn = "yes"
+opt.signcolumn = "yes:2"
 opt.smartcase = true
 opt.smartindent = true
 opt.splitbelow = true
@@ -55,6 +55,15 @@ opt.wrap = false
 opt.autochdir = false
 opt.smoothscroll = true
 opt.shada = "!,'300,<50,s10,h"
+do
+  local cwd = vim.fn.getcwd()
+  local git_dir = vim.fs.find(".git", { path = cwd, upward = true })[1]
+  local root = git_dir and vim.fn.fnamemodify(git_dir, ":h") or cwd
+  local shada_dir = vim.fn.stdpath("state") .. "/shada-projects"
+
+  vim.fn.mkdir(shada_dir, "p")
+  opt.shadafile = shada_dir .. "/" .. vim.fn.sha256(root) .. ".shada"
+end
 opt.foldcolumn = "0"
 vim.diagnostic.config({
   signs = {
