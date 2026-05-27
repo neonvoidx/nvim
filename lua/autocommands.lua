@@ -50,8 +50,8 @@ autocmd("FileType", {
   end,
 })
 autocmd("FileType", {
-  desc = "Hide line numbers in Lazygit",
-  pattern = { "lazygit" },
+  desc = "Hide line numbers in filetypes",
+  pattern = { "lazygit", "dashboard" },
   callback = function()
     vim.wo.number = false
     vim.wo.relativenumber = false
