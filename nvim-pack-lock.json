@@ -31,7 +31,7 @@
     "hmts.nvim": {
       "rev": "a32cd413f7d0a69d7f3d279c631f20cb117c8d30",
       "src": "https://github.com/calops/hmts.nvim",
-      "version": ">=0.0.0"
+      "version": "'v1.3.0'"
     },
     "kitty-scrollback.nvim": {
       "rev": "53fd294658941719d7622471f28e70179d6737a6",
@@ -114,7 +114,7 @@
       "src": "https://github.com/folke/which-key.nvim"
     },
     "yazi.nvim": {
-      "rev": "c3d71b172fa12c029c72f9848e0338da90de74ab",
+      "rev": "b48b375b810e02616d50150bfcd6298f8b37c3fa",
       "src": "https://github.com/mikavilpas/yazi.nvim"
     }
   }

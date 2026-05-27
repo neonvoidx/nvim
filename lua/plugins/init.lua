@@ -25,7 +25,7 @@ vim.pack.add({
   "https://github.com/folke/trouble.nvim",
   {
     src = "https://github.com/calops/hmts.nvim",
-    version = vim.version.range("*"),
+    version = "v1.3.0",
   },
   "https://github.com/kevinhwang91/promise-async",
   "https://github.com/kevinhwang91/nvim-ufo",
