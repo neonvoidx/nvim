@@ -1,6 +1,8 @@
 vim.pack.add({
   "https://github.com/nvim-lua/plenary.nvim",
   "https://github.com/nvim-tree/nvim-web-devicons",
+  "https://github.com/nvimdev/dashboard-nvim",
+  "https://github.com/Amansingh-afk/milli.nvim",
   "https://github.com/akinsho/bufferline.nvim",
   "https://github.com/eldritch-theme/eldritch.nvim",
   "https://github.com/dmtrKovalenko/fff.nvim",
@@ -23,10 +25,6 @@ vim.pack.add({
   "https://github.com/RRethy/nvim-treesitter-endwise",
   "https://github.com/folke/todo-comments.nvim",
   "https://github.com/folke/trouble.nvim",
-  {
-    src = "https://github.com/calops/hmts.nvim",
-    version = "v1.3.0",
-  },
   "https://github.com/kevinhwang91/promise-async",
   "https://github.com/kevinhwang91/nvim-ufo",
   "https://github.com/nvim-mini/mini.surround",
@@ -34,6 +32,7 @@ vim.pack.add({
 }, { confirm = false })
 
 require("plugins.eldritch")
+require("plugins.dashboard")
 require("plugins.bufferline")
 require("plugins.fff")
 require("plugins.flash")
@@ -51,7 +50,6 @@ require("plugins.todo-comments")
 require("plugins.treesitter")
 require("plugins.treesitter-context")
 require("plugins.ufo")
-require("plugins.hmts")
 require("plugins.tiny-inline-diagnostic")
 require("plugins.trouble")
 require("plugins.which-key")

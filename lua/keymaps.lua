@@ -143,7 +143,6 @@ map("n", "<leader>uR", "<cmd>restart<cr>", { desc = "Restart UI" })
 map("n", "<leader>uu", function()
   vim.pack.update()
 end, { desc = "Update plugins" })
-map("n", "<leader>um", "<cmd>messages<cr>", { desc = "Messages", silent = true })
 map("n", "<leader>ud", delete_installed_plugin, { desc = "Delete plugin" })
 map("n", "<leader>uw", function()
   vim.wo.wrap = not vim.wo.wrap

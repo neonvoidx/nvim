@@ -8,6 +8,10 @@
       "rev": "619363c30309d29ffa631e67c8183f2a72caa373",
       "src": "https://github.com/stevearc/conform.nvim"
     },
+    "dashboard-nvim": {
+      "rev": "f787e3462c2ee2b6117b17c1aa4ddf66cb6f57fe",
+      "src": "https://github.com/nvimdev/dashboard-nvim"
+    },
     "eldritch.nvim": {
       "rev": "c9131a5a11f00a2f428f563a4eb2c4aeb680d963",
       "src": "https://github.com/eldritch-theme/eldritch.nvim"
@@ -24,11 +28,6 @@
       "rev": "dd3f588bacbeb041be6facf1742e42097f62165d",
       "src": "https://github.com/lewis6991/gitsigns.nvim"
     },
-    "hmts.nvim": {
-      "rev": "a32cd413f7d0a69d7f3d279c631f20cb117c8d30",
-      "src": "https://github.com/calops/hmts.nvim",
-      "version": "'v1.3.0'"
-    },
     "kitty-scrollback.nvim": {
       "rev": "53fd294658941719d7622471f28e70179d6737a6",
       "src": "https://github.com/mikesmithgh/kitty-scrollback.nvim"
@@ -40,6 +39,10 @@
     "lualine.nvim": {
       "rev": "131a558e13f9f28b15cd235557150ccb23f89286",
       "src": "https://github.com/nvim-lualine/lualine.nvim"
+    },
+    "milli.nvim": {
+      "rev": "00274623b76a66356e31e1861360b269987a7f64",
+      "src": "https://github.com/Amansingh-afk/milli.nvim"
     },
     "mini.pairs": {
       "rev": "30cf2f01c4aaa2033db67376b9924fa2442c05d6",
