@@ -133,10 +133,17 @@ map("n", "<S-Left>", "<cmd>BufferLineMovePrev<cr>", { desc = "Move buffer left" 
 -- UI and editor helpers
 map("n", "==", "gg<S-v>G")
 map("n", "<A-a>", "ggVG", { noremap = true, silent = true, desc = "Select all" })
+map(
+  "n",
+  "<leader>ur",
+  "<Cmd>nohlsearch<Bar>diffupdate<Bar>normal! <C-L><CR>",
+  { desc = "Redraw / clear hlsearch / diff update" }
+)
 map("n", "<leader>uR", "<cmd>restart<cr>", { desc = "Restart UI" })
 map("n", "<leader>uu", function()
   vim.pack.update()
 end, { desc = "Update plugins" })
+map("n", "<leader>um", "<cmd>messages<cr>", { desc = "Update plugins", silent = true })
 map("n", "<leader>ud", delete_installed_plugin, { desc = "Delete plugin" })
 map("n", "<C-c>", ":%y+<CR>", { noremap = true, silent = true })
 map("n", "zv", "zMzvzz", { desc = "Close all folds except the current one" })
