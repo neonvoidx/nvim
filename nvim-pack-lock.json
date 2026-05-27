@@ -30,7 +30,8 @@
     },
     "hmts.nvim": {
       "rev": "a32cd413f7d0a69d7f3d279c631f20cb117c8d30",
-      "src": "https://github.com/calops/hmts.nvim"
+      "src": "https://github.com/calops/hmts.nvim",
+      "version": ">=0.0.0"
     },
     "kitty-scrollback.nvim": {
       "rev": "53fd294658941719d7622471f28e70179d6737a6",
@@ -77,7 +78,7 @@
       "src": "https://github.com/kevinhwang91/nvim-ufo"
     },
     "nvim-web-devicons": {
-      "rev": "0d7d35fa946837b8738b17c18d1faa1ac351e7f9",
+      "rev": "dfbfaa967a6f7ec50789bead7ef87e336c1fa63c",
       "src": "https://github.com/nvim-tree/nvim-web-devicons"
     },
     "persistence.nvim": {
@@ -113,7 +114,7 @@
       "src": "https://github.com/folke/which-key.nvim"
     },
     "yazi.nvim": {
-      "rev": "c45cc195a871cd83eb2c901dd0269af3b2921bee",
+      "rev": "c3d71b172fa12c029c72f9848e0338da90de74ab",
       "src": "https://github.com/mikavilpas/yazi.nvim"
     }
   }

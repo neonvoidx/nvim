@@ -1,23 +1,23 @@
-require("persistence").setup()
--- vim.schedule(function()
---   require("persistence").load()
--- end)
+local project_root = require("util").project_root()
+
+require("persistence").setup({
+  main = project_root,
+})
+
+vim.schedule(function()
+  require("persistence").load()
+end)
 -- load the session for the current directory
 vim.keymap.set("n", "<leader>qs", function()
   require("persistence").load()
-end)
+end, { desc = "Load session" })
 
 -- select a session to load
 vim.keymap.set("n", "<leader>qS", function()
   require("persistence").select()
-end)
+end, { desc = "Select session" })
 
 -- load the last session
 vim.keymap.set("n", "<leader>ql", function()
   require("persistence").load({ last = true })
-end)
-
--- stop Persistence => session won't be saved on exit
-vim.keymap.set("n", "<leader>qd", function()
-  require("persistence").stop()
-end)
+end, { desc = "Load last session" })
