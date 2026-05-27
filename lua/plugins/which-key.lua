@@ -8,6 +8,7 @@ require("which-key").setup({
       { "<leader>g", group = "+git", icon = { icon = " " } },
       { "<leader>", group = "+lsp", icon = { icon = " " } },
       { "<leader>u", group = "+ui", icon = { icon = " " } },
+      { "<leader>q", group = "+session", icon = { icon = "󱘖 " } },
       { "<leader>b", group = "+buffer", icon = { icon = " " } },
       { "<leader>a", group = "+ai", icon = { icon = " " } },
       { "<leader>f", group = "+file", icon = { icon = " " } },
