@@ -2,6 +2,7 @@ vim.opt.shortmess:append("I")
 
 local splashchoice = "shader"
 local splash = require("milli").load({ splash = splashchoice })
+local fff = require("fff")
 require("dashboard").setup({
   theme = "doom",
   hide = {
@@ -17,21 +18,21 @@ require("dashboard").setup({
         desc = "Find Files",
         key = "f",
         action = function()
-          require("fff").find_files()
+          fff.find_files()
         end,
       },
       {
         desc = "Grep",
         key = "/",
         action = function()
-          require("fff").live_grep()
+          fff.live_grep()
         end,
       },
       {
         desc = "Recent Files",
         key = "r",
         action = function()
-          require("fff").find_files({ title = "Recent Files" })
+          fff.find_files({ title = "Recent Files" })
         end,
       },
       {
