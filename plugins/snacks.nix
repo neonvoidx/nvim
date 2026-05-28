@@ -1,7 +1,13 @@
-{ pkgs, lib, ... }:
+{
+  userPlugins,
+  pkgs,
+  lib,
+  ...
+}:
 {
   config.vim = {
     extraPackages = [ pkgs.lazygit ];
+    startPlugins = [ userPlugins.milli-nvim ];
 
     utility.snacks-nvim = {
       enable = true;
@@ -77,14 +83,9 @@
         dashboard = {
           enabled = true;
           pane_gap = 6;
-          preset.header = ''
-                                  ░██                
-                                                     
-            ░████████  ░██    ░██ ░██░█████████████  
-            ░██    ░██ ░██    ░██ ░██░██   ░██   ░██ 
-            ░██    ░██  ░██  ░██  ░██░██   ░██   ░██ 
-            ░██    ░██   ░██░██   ░██░██   ░██   ░██ 
-            ░██    ░██    ░███    ░██░██   ░██   ░██ '';
+          preset.header = lib.generators.mkLuaInline ''
+            table.concat(require("milli").load({ splash = "shader" }).frames[1], "\n")
+          '';
 
           preset.keys = [
             {
@@ -159,18 +160,6 @@
                 end
               '';
             }
-            {
-              title = "Git Status";
-              icon = " ";
-              pane = 2;
-              section = "terminal";
-              enabled = lib.generators.mkLuaInline "function() return Snacks.git.get_root() ~= nil end";
-              cmd = "git status --short --branch --renames";
-              height = 5;
-              padding = 1;
-              ttl = 5 * 60;
-              indent = 2;
-            }
           ];
         };
       };
@@ -192,6 +181,19 @@
       _G.dd  = function(...) Snacks.debug.inspect(...) end
       _G.bt  = function() Snacks.debug.backtrace() end
       vim.print = _G.dd
+      require("milli").snacks({ splash = "shader", loop = true })
+
+      local function get_visual()
+        local start_pos = vim.fn.getpos("v")
+        local end_pos = vim.fn.getpos(".")
+        local ls, cs = start_pos[2], start_pos[3]
+        local le, ce = end_pos[2], end_pos[3]
+        if ls > le or (ls == le and cs > ce) then
+          ls, le = le, ls
+          cs, ce = ce, cs
+        end
+        return vim.api.nvim_buf_get_text(0, ls - 1, cs - 1, le - 1, ce, {})
+      end
 
       Snacks.toggle.option("spell",         { name = "Spelling" }):map("<leader>us")
       Snacks.toggle.option("wrap",          { name = "Wrap" }):map("<leader>uw")
@@ -222,11 +224,18 @@
       -- Picker keymaps
       local map = vim.keymap.set
       map("n", "<leader><space>", function() Snacks.picker.smart({ cwd = vim.uv.cwd() }) end,            { desc = "Smart Find Files" })
+      map("n", "<leader><leader>", function() Snacks.picker.files({ cwd = vim.uv.cwd() }) end,           { desc = "Find Files" })
       map("n", "<leader>'",       function() Snacks.picker.buffers() end,           { desc = "Buffers" })
       map("n", "<leader>/",       function() Snacks.picker.grep({ cwd = vim.uv.cwd() }) end,              { desc = "Grep" })
+      map("v", "<leader>/", function()
+        local query = table.concat(get_visual(), "\n")
+        vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Esc>", true, false, true), "nx", false)
+        Snacks.picker.grep({ cwd = vim.uv.cwd(), search = query })
+      end, { desc = "Grep Selection" })
       map("n", "<leader>:",       function() Snacks.picker.command_history() end,   { desc = "Command History" })
       map("n", "<leader>fb",      function() Snacks.picker.buffers() end,           { desc = "Buffers" })
       map("n", "<leader>fc",      function() Snacks.picker.files({ cwd = vim.fn.stdpath("config") }) end, { desc = "Find Config File" })
+      map("n", "<leader>f",       function() Snacks.picker.files({ cwd = vim.uv.cwd() }) end,             { desc = "Find Files" })
       map("n", "<leader>ff",      function() Snacks.picker.files({ cwd = vim.uv.cwd() }) end,             { desc = "Find Files" })
       map("n", "<leader>fg",      function() Snacks.picker.git_files() end,         { desc = "Find Git Files" })
       map("n", "<leader>fp",      function() Snacks.picker.projects() end,          { desc = "Projects" })

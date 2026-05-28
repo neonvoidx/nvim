@@ -19,6 +19,7 @@
       completeopt = "menu,menuone,noselect";
       conceallevel = 1;
       confirm = true;
+      cmdheight = 0;
       cursorline = true;
       expandtab = true;
       formatoptions = "jcroqlnt";
@@ -27,11 +28,12 @@
       ignorecase = true;
       inccommand = "nosplit";
       laststatus = 3;
-      list = true;
+      list = false;
       mouse = "nv";
       mousemoveevent = true;
       number = true;
       pumblend = 10;
+      pumborder = "rounded";
       pumheight = 10;
       relativenumber = true;
       scrolloff = 4;
@@ -39,12 +41,14 @@
       shiftwidth = 2;
       showmode = false;
       sidescrolloff = 8;
+      # TODO: Revisit whether marks/statuscolumn behavior makes a wider sign column useful.
       signcolumn = "yes";
       smartcase = true;
       smartindent = true;
       splitbelow = true;
       splitkeep = "screen";
       splitright = true;
+      softtabstop = 2;
       tabstop = 2;
       termguicolors = true;
       timeoutlen = 300;
@@ -72,9 +76,19 @@
       vim.o.winborder = "rounded"
 
       -- Complex option types
-      vim.opt.sessionoptions = { "buffers", "curdir", "tabpages", "winsize", "help", "globals", "skiprtp", "folds" }
-      vim.opt.shortmess:append({ W = true, I = true, c = true, C = true })
+      vim.opt.sessionoptions = { "blank", "buffers", "curdir", "winsize", "help", "globals", "skiprtp", "folds" }
+      vim.opt.shortmess:append({ a = true, A = true, W = true, I = true, c = true, C = true })
       vim.opt.spelllang = { "en" }
+
+      do
+        local cwd = vim.fn.getcwd()
+        local git_dir = vim.fs.find(".git", { path = cwd, upward = true })[1]
+        local root = git_dir and vim.fn.fnamemodify(git_dir, ":h") or cwd
+        local shada_dir = vim.fn.stdpath("state") .. "/shada-projects"
+
+        vim.fn.mkdir(shada_dir, "p")
+        vim.opt.shadafile = shada_dir .. "/" .. vim.fn.sha256(root) .. ".shada"
+      end
 
       vim.opt.fillchars = {
         foldopen = "▾",

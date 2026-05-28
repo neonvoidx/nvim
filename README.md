@@ -54,6 +54,7 @@ stylua.toml        # Lua formatter config (120-col, 2-space, double quotes)
 - [lualine.nvim](https://github.com/nvim-lualine/lualine.nvim) — Statusline
 - [bufferline.nvim](https://github.com/akinsho/bufferline.nvim) — Buffer tabs
 - [snacks.nvim](https://github.com/folke/snacks.nvim) — Dashboard, picker, notifier, indent guides, scrollbar, lazygit, and more
+- [milli.nvim](https://github.com/Amansingh-afk/milli.nvim) — Animated Snacks dashboard header
 - [noice.nvim](https://github.com/folke/noice.nvim) — Enhanced cmdline/messages UI
 - [which-key.nvim](https://github.com/folke/which-key.nvim) — Keybinding hints
 - [nvim-highlight-colors](https://github.com/brenoprata10/nvim-highlight-colors) — Inline color previews
@@ -109,7 +110,7 @@ stylua.toml        # Lua formatter config (120-col, 2-space, double quotes)
 ### 📄 Markdown
 
 - [render-markdown.nvim](https://github.com/MeanderingProgrammer/render-markdown.nvim) — In-editor rendering
-- [obsidian.nvim](https://github.com/epwalsh/obsidian.nvim) — Obsidian vault integration
+- [obsidian.nvim](https://github.com/obsidian-nvim/obsidian.nvim) — Obsidian vault integration
 - [markdown-toc.nvim](https://github.com/hedyhli/markdown-toc.nvim) — TOC generator
 
 ### 🛠️ Utilities

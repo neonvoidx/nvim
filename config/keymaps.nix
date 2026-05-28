@@ -102,6 +102,16 @@
         map("n", "gl", "$", { desc = "Go to end of line" })
         map("n", "gh", "^", { desc = "Go to start of line" })
 
+        -- Fold helpers
+        map("n", "zv", "zMzvzz", { desc = "Close all folds except the current one" })
+        map("n", "zj", "zcjzOzz", { desc = "Close current fold when open. Always open next fold." })
+
+        -- UI helpers
+        map("n", "<leader>uR", "<cmd>restart<cr>", { desc = "Restart UI" })
+        map("n", "<leader>ui", vim.show_pos, { desc = "Inspect Pos" })
+        map("n", "<leader>uI", "<cmd>InspectTree<cr>", { desc = "Inspect Tree" })
+        map("n", "<leader>nm", "<cmd>message<cr>", { desc = "Message history" })
+
         -- CAPS LOCK is bound to Insert on the desktop – remap to Esc
         local esc_modes = { "i", "n", "v", "x", "o", "t", "s", "c", "l" }
         map(esc_modes, "<Insert>", "<Esc>")

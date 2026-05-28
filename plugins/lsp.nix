@@ -4,7 +4,9 @@
     lsp = {
       enable = true;
       formatOnSave = false; # handled by conform.nvim
-      inlayHints.enable = false;
+      inlayHints.enable = true;
+
+      presets.vtsls.enable = true;
 
       servers."lua-language-server" = {
         root_markers = [
@@ -15,49 +17,60 @@
           "stylua.toml"
           "selene.toml"
           "selene.yml"
-          "hyprland.lua"
           ".git"
         ];
-        before_init = lib.generators.mkLuaInline /* lua */ ''
-          function(params, config)
-            local stub_library = "${pkgs.hyprland}/share/hypr/stubs"
-            if vim.fn.isdirectory(stub_library) ~= 1 then
-              return
-            end
+        settings.Lua = {
+          hint = {
+            enable = true;
+            setType = true;
+            paramType = true;
+            paramName = "all";
+            arrayIndex = "auto";
+          };
+          runtime.version = "LuaJIT";
+          diagnostics.globals = [
+            "vim"
+            "require"
+          ];
+          workspace = {
+            checkThirdParty = false;
+            library = lib.generators.mkLuaInline "{ vim.env.VIMRUNTIME }";
+          };
+          telemetry.enable = false;
+        };
+      };
 
-            local root_dir = config.root_dir or params.rootPath
-            if not root_dir and params.rootUri then
-              root_dir = vim.uri_to_fname(params.rootUri)
-            end
-            root_dir = vim.fs.normalize(root_dir or "")
-
-            local has_hyprland_marker = vim.fn.filereadable(root_dir .. "/hyprland.lua") == 1
-            local hypr_roots = {
-              vim.fs.normalize(vim.fn.expand("~/.config/hypr")),
-              vim.fs.normalize(vim.fn.expand("~/nix")),
-            }
-            local use_hypr_stubs = has_hyprland_marker
-            for _, hypr_root in ipairs(hypr_roots) do
-              if root_dir == hypr_root or vim.startswith(root_dir, hypr_root .. "/") then
-                use_hypr_stubs = true
-                break
-              end
-            end
-            if not use_hypr_stubs then
-              return
-            end
-
-            config.settings = vim.tbl_deep_extend("force", config.settings or {}, {
-              Lua = {
-                diagnostics = { globals = { "hl" } },
-                workspace = {
-                  checkThirdParty = false,
-                  library = { stub_library },
-                },
-              },
-            })
-          end
-        '';
+      servers.vtsls = {
+        filetypes = [
+          "typescript"
+          "typescriptreact"
+          "javascript"
+          "javascriptreact"
+        ];
+        settings = {
+          complete_function_calls = true;
+          vtsls = {
+            enableMoveToFileCodeAction = true;
+            autoUseWorkspaceTsdk = true;
+            experimental = {
+              maxInlayHintLength = 30;
+              completion.enableServerSideFuzzyMatch = true;
+            };
+          };
+          typescript = {
+            updateImportsOnFileMove.enabled = "always";
+            suggest.completeFunctionCalls = true;
+            inlayHints = {
+              enumMemberValues.enabled = true;
+              functionLikeReturnTypes.enabled = true;
+              parameterNames.enabled = "literals";
+              parameterTypes.enabled = true;
+              propertyDeclarationTypes.enabled = true;
+              variableTypes.enabled = false;
+            };
+            preferences.importModuleSpecifier = "relative";
+          };
+        };
       };
 
       lspkind = {
@@ -86,6 +99,7 @@
       typescript = {
         enable = true;
         lsp.enable = true;
+        lsp.servers = [ ];
         treesitter.enable = true;
         format.enable = true;
       };
@@ -158,7 +172,10 @@
 
       odin = {
         enable = true;
-        lsp.enable = true;
+        # TODO: Re-enable once OLS/odin-dev no longer pulls a broken
+        # compiler-rt build on Darwin in this lockfile. Keep Odin editing
+        # support without making Neovim depend on that toolchain.
+        lsp.enable = false;
         treesitter.enable = true;
       };
 
@@ -189,6 +206,27 @@
       -- already delegates to ZLS (which runs zig fmt) on BufWritePre.
       vim.g.zig_fmt_autosave = 0
       vim.g.zig_fmt_parse_errors = 0
+      vim.g.inlay_hints_manually_disabled = false
+
+      vim.lsp.inlay_hint.enable(true)
+
+      local inlay_hints_group = vim.api.nvim_create_augroup("InlayHintsInsert", { clear = true })
+      vim.api.nvim_create_autocmd("InsertEnter", {
+        group = inlay_hints_group,
+        desc = "Disable inlay hints in insert mode",
+        callback = function()
+          vim.lsp.inlay_hint.enable(false)
+        end,
+      })
+      vim.api.nvim_create_autocmd("InsertLeave", {
+        group = inlay_hints_group,
+        desc = "Re-enable inlay hints when leaving insert mode",
+        callback = function()
+          if not vim.g.inlay_hints_manually_disabled then
+            vim.lsp.inlay_hint.enable(true)
+          end
+        end,
+      })
 
       -- ── Tiny Inline Diagnostic ─────────────────────────────────────
       require("tiny-inline-diagnostic").setup({
@@ -232,6 +270,9 @@
           local opts = { buffer = ev.buf }
           local e    = function(desc) return vim.tbl_extend("force", opts, { desc = desc }) end
 
+          map("n", "K", vim.lsp.buf.hover, e("Hover documentation"))
+          map("n", "gK", vim.lsp.buf.signature_help, e("Signature help"))
+          map("n", "gi", vim.lsp.buf.implementation, e("Go to implementation"))
           map("n", "<leader>ca", vim.lsp.buf.code_action, e("Code action (line)"))
           map("n", "<leader>cA", function()
             vim.lsp.buf.code_action({
@@ -239,9 +280,17 @@
               context = { only = { "source" }, diagnostics = {} },
             })
           end, e("Code action (buffer)"))
+          map("n", "<leader>cs", vim.lsp.buf.document_symbol, e("Document symbols"))
+          map("n", "<leader>cS", vim.lsp.buf.workspace_symbol, e("Workspace symbols"))
           map("n", "<leader>li", "<cmd>checkhealth lsp<cr>",              e("LSP Info"))
           map("n", "<leader>ll", "<cmd>lua vim.cmd('e '..vim.lsp.get_log_path())<cr>", e("LSP Logs"))
-          map("n", "<leader>r",  "<cmd>LspRestart<cr>",                 e("LSP Restart"))
+          map("n", "<leader>lr", "<cmd>LspRestart<cr>",                 e("LSP Restart"))
+          map("n", "<leader>lI", function()
+            local enabled = not vim.lsp.inlay_hint.is_enabled({})
+            vim.lsp.inlay_hint.enable(enabled)
+            vim.g.inlay_hints_manually_disabled = not enabled
+            vim.notify("Inlay hints: " .. (enabled and "on" or "off"))
+          end, e("Toggle inlay hints"))
         end,
       })
     '';

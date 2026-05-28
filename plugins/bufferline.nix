@@ -41,5 +41,10 @@
   config.vim.luaConfigRC."bufferline-pin" = lib.nvim.dag.entryAnywhere /* lua */ ''
     vim.keymap.set("n", "<leader>bp", "<cmd>BufferLineTogglePin<cr>",           { desc = "Toggle pin buffer" })
     vim.keymap.set("n", "<leader>bP", "<cmd>BufferLineGroupClose ungrouped<cr>", { desc = "Close non-pinned buffers" })
+    vim.keymap.set("n", "<leader>bo", "<cmd>BufferLineCloseOthers<cr>",          { desc = "Close other buffers" })
+    vim.keymap.set("n", "<leader>br", "<cmd>BufferLineCloseRight<cr>",           { desc = "Close buffers to the right" })
+    vim.keymap.set("n", "<leader>bl", "<cmd>BufferLineCloseLeft<cr>",            { desc = "Close buffers to the left" })
+    vim.keymap.set("n", "<S-Right>", "<cmd>BufferLineMoveNext<cr>",              { desc = "Move buffer right" })
+    vim.keymap.set("n", "<S-Left>", "<cmd>BufferLineMovePrev<cr>",               { desc = "Move buffer left" })
   '';
 }

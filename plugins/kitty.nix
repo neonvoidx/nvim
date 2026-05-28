@@ -1,15 +1,7 @@
-{
-  userPlugins,
-  pkgs,
-  lib,
-  ...
-}:
-let
-  vim-kitty-navigator = userPlugins.vim-kitty-navigator;
-in
+{ pkgs, lib, ... }:
 {
   config.vim = {
-    startPlugins = [ vim-kitty-navigator ];
+    startPlugins = [ pkgs.vimPlugins.vim-kitty-navigator ];
 
     luaConfigRC."kitty-navigator" = lib.nvim.dag.entryAnywhere /* lua */ ''
       vim.g.kitty_navigator_no_mappings = 1

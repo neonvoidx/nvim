@@ -46,11 +46,41 @@
         "PlenaryTestPopup", "help", "lspinfo", "man", "notify", "qf",
         "query", "spectre_panel", "startuptime", "tsplayground",
         "neotest-output", "checkhealth", "neotest-summary",
-        "neotest-output-panel", "lazy",
+        "neotest-output-panel", "lazy", "gitsigns-blame",
       },
       callback = function(event)
         vim.bo[event.buf].buflisted = false
         vim.keymap.set("n", "q", "<cmd>close<cr>", { buffer = event.buf, silent = true })
+      end,
+    })
+
+    -- Shell syntax for environment files
+    vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
+      group = augroup("env_filetype"),
+      pattern = { "*.env", ".env.*" },
+      callback = function()
+        vim.opt_local.filetype = "sh"
+      end,
+    })
+
+    -- Lazygit owns its whole terminal-like window.
+    vim.api.nvim_create_autocmd("FileType", {
+      group = augroup("lazygit_numbers"),
+      pattern = { "lazygit" },
+      callback = function()
+        vim.wo.number = false
+        vim.wo.relativenumber = false
+      end,
+    })
+
+    vim.api.nvim_create_autocmd("BufWinEnter", {
+      group = augroup("lazygit_number_refresh"),
+      callback = function(args)
+        if vim.bo[args.buf].filetype ~= "lazygit" then
+          return
+        end
+        vim.wo.number = false
+        vim.wo.relativenumber = false
       end,
     })
 
@@ -89,7 +119,7 @@
       group = numtog,
       pattern = "*",
       callback = function()
-        local ignore = { oil = true, fzf = true }
+        local ignore = { oil = true, fzf = true, lazygit = true }
         if ignore[vim.bo.filetype] then return end
         vim.wo.relativenumber = false
       end,
@@ -98,7 +128,7 @@
       group = numtog,
       pattern = "*",
       callback = function()
-        local ignore = { oil = true, fzf = true }
+        local ignore = { oil = true, fzf = true, lazygit = true }
         if ignore[vim.bo.filetype] then return end
         vim.wo.relativenumber = true
       end,

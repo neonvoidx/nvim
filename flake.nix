@@ -36,8 +36,8 @@
       url = "github:sotte/presenting.nvim";
       flake = false;
     };
-    vim-kitty-navigator = {
-      url = "github:knubie/vim-kitty-navigator";
+    milli-nvim = {
+      url = "github:Amansingh-afk/milli.nvim";
       flake = false;
     };
   };
@@ -92,10 +92,6 @@
               name = "resolved.nvim";
               src = inputs.resolved-nvim;
             };
-            vim-kitty-navigator = pkgs.vimUtils.buildVimPlugin {
-              name = "vim-kitty-navigator";
-              src = inputs.vim-kitty-navigator;
-            };
             markdown-toc-nvim = pkgs.vimUtils.buildVimPlugin {
               name = "markdown-toc.nvim";
               src = inputs.markdown-toc-nvim;
@@ -103,6 +99,10 @@
             presenting-nvim = pkgs.vimUtils.buildVimPlugin {
               name = "presenting.nvim";
               src = inputs.presenting-nvim;
+            };
+            milli-nvim = pkgs.vimUtils.buildVimPlugin {
+              name = "milli.nvim";
+              src = inputs.milli-nvim;
             };
           };
           neovimConfig = nvf.lib.neovimConfiguration {

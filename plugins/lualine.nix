@@ -12,7 +12,7 @@
         tabline = 1000;
       };
 
-      disabledFiletypes = [ "dashboard" ];
+      disabledFiletypes.statusline = [ "dashboard" ];
 
       sectionSeparator = {
         left = "";
