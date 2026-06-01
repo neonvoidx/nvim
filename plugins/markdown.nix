@@ -4,7 +4,6 @@
   ...
 }:
 let
-  markdown-toc-nvim = userPlugins.markdown-toc-nvim;
   presenting-nvim = userPlugins.presenting-nvim;
 in
 {
@@ -93,7 +92,6 @@ in
     };
 
     startPlugins = [
-      markdown-toc-nvim
       presenting-nvim
     ];
 

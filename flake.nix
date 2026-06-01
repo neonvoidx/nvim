@@ -28,10 +28,6 @@
       url = "github:noamsto/resolved.nvim";
       flake = false;
     };
-    markdown-toc-nvim = {
-      url = "github:hedyhli/markdown-toc.nvim";
-      flake = false;
-    };
     presenting-nvim = {
       url = "github:sotte/presenting.nvim";
       flake = false;
