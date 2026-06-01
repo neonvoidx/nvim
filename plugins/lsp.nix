@@ -89,6 +89,20 @@
           };
         };
       };
+
+      # nixd settings for nixpkgs + home-manager completions
+      servers.nixd.settings = {
+        nixd = {
+          nixpkgs = {
+            expr = "import <nixpkgs> { }";
+          };
+          options = {
+            home-manager = {
+              expr = "(builtins.getFlake \"github:nix-community/home-manager\").options";
+            };
+          };
+        };
+      };
     };
 
     languages = {
@@ -124,20 +138,6 @@
         format = {
           enable = true;
           type = [ "nixfmt" ];
-        };
-      };
-
-      # nixd settings for nixpkgs + home-manager completions
-      lsp.servers.nixd.settings = {
-        nixd = {
-          nixpkgs = {
-            expr = "import <nixpkgs> { }";
-          };
-          options = {
-            home-manager = {
-              expr = "(builtins.getFlake \"github:nix-community/home-manager\").options";
-            };
-          };
         };
       };
 
