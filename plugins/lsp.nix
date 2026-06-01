@@ -98,7 +98,7 @@
           };
           options = {
             home-manager = {
-              expr = "(builtins.getFlake \"github:nix-community/home-manager\").options";
+              expr = "(import <home-manager/modules> { configuration = { home.username = \"_\"; home.homeDirectory = \"/tmp\"; home.stateVersion = \"26.05\"; }; pkgs = import <nixpkgs> {}; }).options";
             };
           };
         };
