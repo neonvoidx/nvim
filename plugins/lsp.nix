@@ -127,6 +127,20 @@
         };
       };
 
+      # nixd settings for nixpkgs + home-manager completions
+      lsp.servers.nixd.settings = {
+        nixd = {
+          nixpkgs = {
+            expr = "import <nixpkgs> { }";
+          };
+          options = {
+            home-manager = {
+              expr = "(builtins.getFlake \"github:nix-community/home-manager\").options";
+            };
+          };
+        };
+      };
+
       rust = {
         enable = true;
         lsp.enable = true;
