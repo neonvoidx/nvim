@@ -137,7 +137,6 @@
               icon = " ";
               section = "recent_files";
               gap = 1;
-              pane = 2;
               indent = 2;
               padding = 1;
               cwd = true;

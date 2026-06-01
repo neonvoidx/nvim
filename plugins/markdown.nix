@@ -115,11 +115,6 @@ in
       map("v", prefix .. "N", "<cmd>Obsidian linknew<CR>",     { desc = "New Link" })
       map("v", prefix .. "e", "<cmd>Obsidian extractnote<CR>", { desc = "Extract Note" })
 
-      require("mtoc").setup({
-        heading = { before_toc = false },
-        auto_update = true,
-      })
-
       require("presenting").setup({})
 
       vim.keymap.set("n", "<leader>cp", "<cmd>MarkdownPreview<CR>", { desc = "Markdown preview" })
