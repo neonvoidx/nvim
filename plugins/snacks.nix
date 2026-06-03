@@ -84,7 +84,7 @@
           enabled = true;
           pane_gap = 6;
           preset.header = lib.generators.mkLuaInline ''
-            table.concat(require("milli").load({ splash = "shader" }).frames[1], "\n")
+            table.concat(require("milli").load({ splash = "retrocircle" }).frames[1], "\n")
           '';
 
           preset.keys = [
@@ -180,7 +180,7 @@
       _G.dd  = function(...) Snacks.debug.inspect(...) end
       _G.bt  = function() Snacks.debug.backtrace() end
       vim.print = _G.dd
-      require("milli").snacks({ splash = "shader", loop = true })
+      require("milli").snacks({ splash = "retrocircle", loop = true })
 
       local function get_visual()
         local start_pos = vim.fn.getpos("v")
