@@ -15,8 +15,8 @@
       disabledFiletypes.statusline = [ "dashboard" ];
 
       sectionSeparator = {
-        left = "";
-        right = "";
+        left = "";
+        right = "";
       };
       componentSeparator = {
         left = "";
@@ -29,21 +29,41 @@
             {
               "mode",
               right_padding = 2,
-              color = function()
+              separator = { left = '' },
+              theme = function()
                 local colors = require("eldritch.colors").default
-                local mode = vim.fn.mode()
-                local fg = colors.cyan
-
-                if mode:match("^[iR]") then
-                  fg = colors.green
-                elseif mode:match("^[vV\22]") then
-                  fg = colors.magenta or colors.pink
-                elseif mode == "c" then
-                  fg = colors.orange
-                end
-
-                return { fg = fg, bg = colors.bg_highlight, gui = "bold" }
-              end,
+                return {              
+                  normal = {
+                    a = { fg = colors.black, bg = colors.violet },
+                    b = { fg = colors.white, bg = colors.grey },
+                    c = { fg = colors.white },
+                  },
+                  insert = { a = { fg = colors.black, bg = colors.blue } },
+                  visual = { a = { fg = colors.black, bg = colors.cyan } },
+                  replace = { a = { fg = colors.black, bg = colors.red } },
+                  inactive = {
+                    a = { fg = colors.white, bg = colors.black },
+                    b = { fg = colors.white, bg = colors.black },
+                    c = { fg = colors.white },
+                  }
+                }
+              end
+              -- color = function()
+              --   local colors = require("eldritch.colors").default
+              --   local mode = vim.fn.mode()
+              --   local fg = colors.cyan
+              --
+              --   if mode:match("^[iR]") then
+              --     fg = colors.black
+              --     bg = colors.green
+              --   elseif mode:match("^[vV\22]") then
+              --     fg = colors.magenta or colors.pink
+              --   elseif mode == "c" then
+              --     fg = colors.orange
+              --   end
+              --
+              --   return { fg = fg, bg = bg or colors.bg_highlight, gui = "bold" }
+              -- end,
             }
           ''
         ];
@@ -152,7 +172,7 @@
                 local colors = require("eldritch.colors").default
                 return {
                   fg = colors.pink,
-                  bg = colors.fg_gutter,
+                  bg = colors.bg_highlight,
                   gui = "bold",
                 }
               end,
@@ -276,7 +296,8 @@
 
                 return { fg = colors.red, gui = "bold" }
               end,
-            }
+            separator = { right = '' }, left_padding = 2
+            },
           ''
         ];
         y = [ ];
