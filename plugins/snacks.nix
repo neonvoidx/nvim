@@ -89,22 +89,10 @@
 
           preset.keys = [
             {
-              icon = "󰈞 ";
-              key = "f";
-              desc = "Find file";
-              action = lib.generators.mkLuaInline "function() Snacks.picker.files({ cwd = vim.uv.cwd() }) end";
-            }
-            {
               icon = " ";
               key = "n";
               desc = "New file";
               action = lib.generators.mkLuaInline "function() vim.cmd('enew') end";
-            }
-            {
-              icon = " ";
-              key = "/";
-              desc = "Find text (grep)";
-              action = lib.generators.mkLuaInline "function() Snacks.picker.grep() end";
             }
             {
               icon = " ";

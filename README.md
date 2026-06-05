@@ -110,7 +110,6 @@ stylua.toml        # Lua formatter config (120-col, 2-space, double quotes)
 ### 📄 Markdown
 
 - [render-markdown.nvim](https://github.com/MeanderingProgrammer/render-markdown.nvim) — In-editor rendering
-- [obsidian.nvim](https://github.com/obsidian-nvim/obsidian.nvim) — Obsidian vault integration
 - [markdown-toc.nvim](https://github.com/hedyhli/markdown-toc.nvim) — TOC generator
 
 ### 🛠️ Utilities

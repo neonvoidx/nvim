@@ -23,7 +23,6 @@ in
           };
         };
         completions.blink.enabled = true;
-        preset = "obsidian";
         bullet.right_pad = 1;
         checkbox = {
           enabled = true;
@@ -31,57 +30,6 @@ in
           checked.icon = "✓ ";
           custom.todo.rendered = "◯ ";
           right_pad = 1;
-        };
-      };
-    };
-
-    notes.obsidian = {
-      enable = true;
-      setupOpts = {
-        attachments = {
-          image_text_func = lib.generators.mkLuaInline /* lua */ ''
-            function(path)
-              local name = vim.fs.basename(tostring(path))
-              local encoded_name = require("obsidian.util").urlencode(name)
-              return string.format("![%s](%s)", name, encoded_name)
-            end
-          '';
-          folder = "./";
-        };
-        legacy_commands = false;
-        checkbox.order = [
-          " "
-          "x"
-          "!"
-          ">"
-          "~"
-        ];
-        ui.enable = false;
-        workspaces = [
-          {
-            name = "vault";
-            path = lib.generators.mkLuaInline ''vim.fn.expand("~/vault")'';
-          }
-        ];
-        daily_notes = {
-          folder = "Daily Notes";
-          date_format = "%d %b %Y";
-          template = lib.generators.mkLuaInline ''vim.fn.expand("~/vault/templates/daily-note.md")'';
-        };
-        completion = {
-          nvim_cmp = false;
-          blink = true;
-        };
-        link.style = "markdown";
-        frontmatter.enabled = true;
-        templates = {
-          folder = "templates";
-          date_format = "%d %b %Y";
-        };
-        picker = {
-          name = "snacks.pick";
-          new = "<C-x>";
-          insert_link = "<C-l>";
         };
       };
     };
@@ -96,25 +44,6 @@ in
     ];
 
     luaConfigRC."markdown-extra" = lib.nvim.dag.entryAnywhere /* lua */ ''
-      local wk = require("which-key")
-      wk.add({ { "<leader>o", group = "Obsidian", icon = "" } })
-
-      local prefix = "<leader>o"
-      local map = vim.keymap.set
-      map("n", prefix .. "o", "<cmd>Obsidian open<CR>",        { desc = "Open on App" })
-      map("n", prefix .. "n", "<cmd>Obsidian new<CR>",         { desc = "New Note" })
-      map("n", prefix .. "b", "<cmd>Obsidian backlinks<CR>",   { desc = "Backlinks" })
-      map("n", prefix .. "t", "<cmd>Obsidian tags<CR>",        { desc = "Tags" })
-      map("n", prefix .. "T", "<cmd>Obsidian template<CR>",    { desc = "Template" })
-      map("n", prefix .. "d", "<cmd>Obsidian dailies<CR>",     { desc = "Daily Notes" })
-      map("n", prefix .. "w", "<cmd>Obsidian workspace<CR>",   { desc = "Workspace" })
-      map("n", prefix .. "r", "<cmd>Obsidian rename<CR>",      { desc = "Rename" })
-      map("n", prefix .. "i", "<cmd>Obsidian paste_img<CR>",   { desc = "Paste Image" })
-      map("n", "<leader>sO", "<cmd>Obsidian search<CR>",       { desc = "Obsidian Grep" })
-      map("v", prefix .. "l", "<cmd>Obsidian link<CR>",        { desc = "Link" })
-      map("v", prefix .. "N", "<cmd>Obsidian linknew<CR>",     { desc = "New Link" })
-      map("v", prefix .. "e", "<cmd>Obsidian extractnote<CR>", { desc = "Extract Note" })
-
       require("presenting").setup({})
 
       vim.keymap.set("n", "<leader>cp", "<cmd>MarkdownPreview<CR>", { desc = "Markdown preview" })
