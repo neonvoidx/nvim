@@ -58,7 +58,13 @@
         let
           pkgs = import nixpkgs {
             inherit system;
-            config.allowUnfree = true;
+            config = {
+              allowUnfree = true;
+              # https://github.com/NixOS/nixpkgs/issues/535580
+              permittedInsecurePackages = [
+                "pnpm-10.34.0"
+              ];
+            };
             overlays = [
               # hmts-nvim uses the old treesitter predicate API where match[id] was a single
               # TSNode; nvim 0.11+ changed it to always be a list. Unwrap the first element.
