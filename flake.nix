@@ -77,6 +77,11 @@
                   });
                 };
               })
+              # Pin pnpm to secure versions
+              (final: prev: {
+                pnpm_10_29_2 = final.pnpm_10;
+                pnpm_10_34_0 = final.pnpm_10;
+              })
             ];
           };
           userPlugins = {
