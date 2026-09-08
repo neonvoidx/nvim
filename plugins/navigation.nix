@@ -24,9 +24,13 @@
 
     luaConfigRC."yanky-keymaps" = lib.nvim.dag.entryAnywhere /* lua */ ''
       local map = vim.keymap.set
-      map({ "n", "x" }, "y",     "<Plug>(YankyYank)")
-      map({ "n", "x" }, "p",     "<Plug>(YankyPutAfter)")
-      map({ "n", "x" }, "P",     "<Plug>(YankyPutBefore)")
+      map({ "n", "x" }, "y",  "<Plug>(YankyYank)")
+      map("n", "p", "<Plug>(YankyPutAfterLinewise)") -- put on new line below current
+      map("n", "P", "<Plug>(YankyPutBeforeLinewise)") -- put on new line above current
+      map("x", "p", "<Plug>(YankyPutAfter)")
+      map("x", "P", "<Plug>(YankyPutBefore)")
+      map({ "n", "x" }, "gp", "<Plug>(YankyGPutAfter)")
+      map({ "n", "x" }, "gP", "<Plug>(YankyGPutBefore)")
       map("n",          "<c-p>", "<Plug>(YankyCycleForward)")
       map("n",          "<c-n>", "<Plug>(YankyCycleBackward)")
       map("n", "<leader>pp", "<cmd>YankyRingHistory<cr>", { desc = "Yank history" })
