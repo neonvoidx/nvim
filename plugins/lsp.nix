@@ -211,7 +211,6 @@
     startPlugins = with pkgs.vimPlugins; [
       tiny-inline-diagnostic-nvim
       inc-rename-nvim
-      vim-illuminate # also enabled via vim.ui.illuminate but kept here for awareness
     ];
 
     luaConfigRC."lsp-extra" = lib.nvim.dag.entryAnywhere /* lua */ ''
