@@ -19,7 +19,7 @@
     ../plugins/markdown.nix
     ../plugins/navigation.nix
     ../plugins/session.nix
-    ../plugins/kitty.nix
+    ../plugins/tmux.nix
     ../plugins/nix-integration.nix
   ];
 }

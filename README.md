@@ -119,9 +119,9 @@ stylua.toml        # Lua formatter config (120-col, 2-space, double quotes)
 - [todo-comments.nvim](https://github.com/folke/todo-comments.nvim) — TODO highlights
 - [guess-indent.nvim](https://github.com/NMAC427/guess-indent.nvim) — Auto-detect indentation
 
-### 🐱 Kitty
+### 🧠 Split Navigation
 
-- [vim-kitty-navigator](https://github.com/knubie/vim-kitty-navigator) — Seamless pane navigation (`<C-h/j/k/l>`)
+- [smart-splits.nvim](https://github.com/smart-splits-nvim/smart-splits.nvim) — Seamless navigation between nvim splits & tmux panes (`<C-h/j/k/l>`, resize `<C-S-h/j/k/l>`)
 
 ## ⚙️ Highlights
 

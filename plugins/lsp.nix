@@ -122,8 +122,8 @@
         enable = true;
         lsp = {
           enable = true;
-          lazydev.enable = true; # lazydev.nvim for neovim API completions
         };
+        extensions.lazydev.enable = true; # lazydev.nvim for neovim API completions
         treesitter.enable = true;
         format.enable = true;
       };

@@ -4,313 +4,301 @@
     statusline.lualine = {
       enable = true;
 
-      globalStatus = true;
-      icons.enable = true;
-
-      refresh = {
-        statusline = 1000;
-        tabline = 1000;
-      };
-
-      disabledFiletypes.statusline = [ "dashboard" ];
-
-      sectionSeparator = {
-        left = "";
-        right = "";
-      };
-      componentSeparator = {
-        left = "";
-        right = "";
-      };
-
-      activeSection = {
-        a = [
-          /* lua */ ''
-            {
-              "mode",
-              right_padding = 2,
-              separator = { left = '' },
-              theme = function()
-                local colors = require("eldritch.colors").default
-                return {              
-                  normal = {
-                    a = { fg = colors.black, bg = colors.violet },
-                    b = { fg = colors.white, bg = colors.grey },
-                    c = { fg = colors.white },
-                  },
-                  insert = { a = { fg = colors.black, bg = colors.blue } },
-                  visual = { a = { fg = colors.black, bg = colors.cyan } },
-                  replace = { a = { fg = colors.black, bg = colors.red } },
-                  inactive = {
-                    a = { fg = colors.white, bg = colors.black },
-                    b = { fg = colors.white, bg = colors.black },
-                    c = { fg = colors.white },
+      setupOpts = {
+        options = {
+          globalstatus = true;
+          icons_enabled = true;
+          section_separators = {
+            left = "";
+            right = "";
+          };
+          component_separators = {
+            left = "";
+            right = "";
+          };
+          theme = lib.generators.mkLuaInline ''
+            vim.g.__nvf_lualine_theme_override or "auto"
+          '';
+        };
+        refresh = {
+          statusline = 1000;
+          tabline = 1000;
+        };
+        disabled_filetypes = {
+          statusline = [ "dashboard" ];
+        };
+        sections = {
+          lualine_a = [
+            /* lua */ ''
+              {
+                "mode",
+                right_padding = 2,
+                separator = { left = '' },
+                theme = function()
+                  local colors = require("eldritch.colors").default
+                  return {
+                    normal = {
+                      a = { fg = colors.black, bg = colors.violet },
+                      b = { fg = colors.white, bg = colors.grey },
+                      c = { fg = colors.white },
+                    },
+                    insert = { a = { fg = colors.black, bg = colors.blue } },
+                    visual = { a = { fg = colors.black, bg = colors.cyan } },
+                    replace = { a = { fg = colors.black, bg = colors.red } },
+                    inactive = {
+                      a = { fg = colors.white, bg = colors.black },
+                      b = { fg = colors.white, bg = colors.black },
+                      c = { fg = colors.white },
+                    }
                   }
-                }
-              end
-              -- color = function()
-              --   local colors = require("eldritch.colors").default
-              --   local mode = vim.fn.mode()
-              --   local fg = colors.cyan
-              --
-              --   if mode:match("^[iR]") then
-              --     fg = colors.black
-              --     bg = colors.green
-              --   elseif mode:match("^[vV\22]") then
-              --     fg = colors.magenta or colors.pink
-              --   elseif mode == "c" then
-              --     fg = colors.orange
-              --   end
-              --
-              --   return { fg = fg, bg = bg or colors.bg_highlight, gui = "bold" }
-              -- end,
-            }
-          ''
-        ];
-        b = [
-          /* lua */ ''
-            {
-              "branch",
-              icon = "",
-              color = function()
-                local colors = require("eldritch.colors").default
-                return { fg = colors.purple or colors.magenta, bg = colors.bg_highlight }
-              end,
-            }
-          ''
-          /* lua */ ''
-            {
-              "diff",
-              colored = true,
-              diff_color = {
-                added = { fg = (vim.g.__eldritch_lualine_colors or {}).green },
-                modified = { fg = (vim.g.__eldritch_lualine_colors or {}).orange },
-                removed = { fg = (vim.g.__eldritch_lualine_colors or {}).red },
-              },
-              color = function()
-                local colors = require("eldritch.colors").default
-                return { bg = colors.bg_highlight }
-              end,
-              symbols = { added = " ", modified = "󰣕 ", removed = " " }
-            }
-          ''
-          /* lua */ ''
-            {
-              require("gitblame").get_current_blame_text,
-              cond = require("gitblame").is_blame_text_available,
-              color = function()
-                local colors = require("eldritch.colors").default
-                return { fg=colors.comment, bg = colors.bg_highlight }
-              end,
-            }
-          ''
-          ''{ "overseer" }''
-          /* lua */ ''
-            {
-              function()
-                if vim.bo.modified then
-                  return "●"
                 end
+              }
+            ''
+          ];
+          lualine_b = [
+            /* lua */ ''
+              {
+                "branch",
+                icon = "",
+                color = function()
+                  local colors = require("eldritch.colors").default
+                  return { fg = colors.purple or colors.magenta, bg = colors.bg_highlight }
+                end,
+              }
+            ''
+            /* lua */ ''
+              {
+                "diff",
+                colored = true,
+                diff_color = {
+                  added = { fg = (vim.g.__eldritch_lualine_colors or {}).green },
+                  modified = { fg = (vim.g.__eldritch_lualine_colors or {}).orange },
+                  removed = { fg = (vim.g.__eldritch_lualine_colors or {}).red },
+                },
+                color = function()
+                  local colors = require("eldritch.colors").default
+                  return { bg = colors.bg_highlight }
+                end,
+                symbols = { added = " ", modified = "󰣕 ", removed = " " }
+              }
+            ''
+            /* lua */ ''
+              {
+                require("gitblame").get_current_blame_text,
+                cond = require("gitblame").is_blame_text_available,
+                color = function()
+                  local colors = require("eldritch.colors").default
+                  return { fg=colors.comment, bg = colors.bg_highlight }
+                end,
+              }
+            ''
+            ''{ "overseer" }''
+            /* lua */ ''
+              {
+                function()
+                  if vim.bo.modified then
+                    return "●"
+                  end
 
-                return ""
-              end,
-              icon = " ",
-              color = function()
-                local colors = require("eldritch.colors").default
-                return { fg = colors.orange, gui = "bold" }
-              end,
-            }
-          ''
-        ];
-        c = [ ];
-        x = [
-          /* lua */ ''
-            {
-              "filetype",
-              colored = false,
-              icon_only = false,
-              icon = { align = "right" },
-              color = function()
-                local colors = require("eldritch.colors").default
-                local ft = vim.bo.filetype
-                local ok, devicons = pcall(require, "nvim-web-devicons")
-
-                if not ok then
-                  return { fg = colors.cyan, bg = colors.bg_highlight, gui = "bold" }
-                end
-
-                local icon, icon_color = devicons.get_icon_color_by_filetype(ft)
-                if not icon then
-                  local name = vim.api.nvim_buf_get_name(0)
-                  _, icon_color = devicons.get_icon_color(name, nil, { default = true })
-                end
-
-                return {
-                  fg = icon_color or colors.cyan,
-                  bg = colors.bg_highlight,
-                  gui = "bold",
-                }
-              end,
-            }
-          ''
-          /* lua */ ''
-            {
-              function()
-                local file = vim.api.nvim_buf_get_name(0)
-                if file == "" then
-                  return "[No Name]"
-                end
-
-                local cwd = vim.loop.cwd()
-                if cwd and file:sub(1, #cwd + 1) == cwd .. "/" then
-                  return vim.fn.fnamemodify(file, ":.")
-                end
-
-                return vim.fn.fnamemodify(file, ":t")
-              end,
-              color = function()
-                local colors = require("eldritch.colors").default
-                return {
-                  fg = colors.pink,
-                  bg = colors.bg_highlight,
-                  gui = "bold",
-                }
-              end,
-            }
-          ''
-          /* lua */ ''
-            {
-              function()
-                local buf_ft = vim.bo.filetype
-                local clients = vim.lsp.get_clients({ bufnr = 0 })
-
-                if not clients or vim.tbl_isempty(clients) then
                   return ""
-                end
+                end,
+                icon = " ",
+                color = function()
+                  local colors = require("eldritch.colors").default
+                  return { fg = colors.orange, gui = "bold" }
+                end,
+              }
+            ''
+          ];
+          lualine_c = [];
+          lualine_x = [
+            /* lua */ ''
+              {
+                "filetype",
+                colored = false,
+                icon_only = false,
+                icon = { align = "right" },
+                color = function()
+                  local colors = require("eldritch.colors").default
+                  local ft = vim.bo.filetype
+                  local ok, devicons = pcall(require, "nvim-web-devicons")
 
-                for _, client in ipairs(clients) do
-                  local filetypes = client.config and client.config.filetypes
-                  if not filetypes or vim.fn.index(filetypes, buf_ft) ~= -1 then
+                  if not ok then
+                    return { fg = colors.cyan, bg = colors.bg_highlight, gui = "bold" }
+                  end
+
+                  local icon, icon_color = devicons.get_icon_color_by_filetype(ft)
+                  if not icon then
+                    local name = vim.api.nvim_buf_get_name(0)
+                    _, icon_color = devicons.get_icon_color(name, nil, { default = true })
+                  end
+
+                  return {
+                    fg = icon_color or colors.cyan,
+                    bg = colors.bg_highlight,
+                    gui = "bold",
+                  }
+                end,
+              }
+            ''
+            /* lua */ ''
+              {
+                function()
+                  local file = vim.api.nvim_buf_get_name(0)
+                  if file == "" then
+                    return "[No Name]"
+                  end
+
+                  local cwd = vim.loop.cwd()
+                  if cwd and file:sub(1, #cwd + 1) == cwd .. "/" then
+                    return vim.fn.fnamemodify(file, ":.")
+                  end
+
+                  return vim.fn.fnamemodify(file, ":t")
+                end,
+                color = function()
+                  local colors = require("eldritch.colors").default
+                  return {
+                    fg = colors.pink,
+                    bg = colors.bg_highlight,
+                    gui = "bold",
+                  }
+                end,
+              }
+            ''
+            /* lua */ ''
+              {
+                function()
+                  local buf_ft = vim.bo.filetype
+                  local clients = vim.lsp.get_clients({ bufnr = 0 })
+
+                  if not clients or vim.tbl_isempty(clients) then
                     return ""
                   end
-                end
 
-                return ""
-              end,
-              icon = " ",
-              color = function()
-                local colors = require("eldritch.colors").default
-                local buf_ft = vim.bo.filetype
-                local clients = vim.lsp.get_clients({ bufnr = 0 })
-                local fg = colors.fg_dark
-
-                if clients and not vim.tbl_isempty(clients) then
                   for _, client in ipairs(clients) do
                     local filetypes = client.config and client.config.filetypes
                     if not filetypes or vim.fn.index(filetypes, buf_ft) ~= -1 then
-                      fg = colors.green
-                      break
+                      return ""
                     end
                   end
-                end
 
-                return {
-                  fg = fg,
-                  bg = colors.bg_highlight,
-                  gui = "bold",
-                }
-              end,
-            }
-          ''
-          /* lua */ ''
-            {
-              "diagnostics",
-              sources = { "nvim_diagnostic" },
-              sections = { "error", "warn", "info", "hint" },
-              symbols = { error = " ", warn = " ", info = " ", hint = "󰌵 " },
-              diagnostics_color = {
-                error = function()
-                  local colors = require("eldritch.colors").default
-                  return { fg = colors.red }
+                  return ""
                 end,
-                warn = function()
+                icon = " ",
+                color = function()
+                  local colors = require("eldritch.colors").default
+                  local buf_ft = vim.bo.filetype
+                  local clients = vim.lsp.get_clients({ bufnr = 0 })
+                  local fg = colors.fg_dark
+
+                  if clients and not vim.tbl_isempty(clients) then
+                    for _, client in ipairs(clients) do
+                      local filetypes = client.config and client.config.filetypes
+                      if not filetypes or vim.fn.index(filetypes, buf_ft) ~= -1 then
+                        fg = colors.green
+                        break
+                      end
+                    end
+                  end
+
+                  return {
+                    fg = fg,
+                    bg = colors.bg_highlight,
+                    gui = "bold",
+                  }
+                end,
+              }
+            ''
+            /* lua */ ''
+              {
+                "diagnostics",
+                sources = { "nvim_diagnostic" },
+                sections = { "error", "warn", "info", "hint" },
+                symbols = { error = " ", warn = " ", info = " ", hint = "󰌵 " },
+                diagnostics_color = {
+                  error = function()
+                    local colors = require("eldritch.colors").default
+                    return { fg = colors.red }
+                  end,
+                  warn = function()
+                    local colors = require("eldritch.colors").default
+                    return { fg = colors.orange }
+                  end,
+                  info = function()
+                    local colors = require("eldritch.colors").default
+                    return { fg = colors.cyan }
+                  end,
+                  hint = function()
+                    local colors = require("eldritch.colors").default
+                    return { fg = colors.green }
+                  end,
+                },
+              }
+            ''
+            /* lua */ ''
+              {
+                function()
+                  local ok, noice = pcall(require, "noice")
+                  if not ok then
+                    return ""
+                  end
+
+                  return noice.api.status.mode.get()
+                end,
+                cond = function()
+                  local ok, noice = pcall(require, "noice")
+                  return ok and noice.api.status.mode.has()
+                end,
+                icon = " ",
+                color = function()
                   local colors = require("eldritch.colors").default
                   return { fg = colors.orange }
                 end,
-                info = function()
-                  local colors = require("eldritch.colors").default
-                  return { fg = colors.cyan }
+              }
+            ''
+            /* lua */ ''
+              {
+                function()
+                  local line = vim.fn.line(".")
+                  local col = vim.fn.virtcol(".")
+                  return string.format("%d:%d", line, col)
                 end,
-                hint = function()
+                color = function()
                   local colors = require("eldritch.colors").default
-                  return { fg = colors.green }
+                  local line = vim.fn.line(".")
+                  local total = vim.fn.line("$")
+                  local ratio = 0
+
+                  if total > 1 then
+                    ratio = (line - 1) / (total - 1)
+                  end
+
+                  if ratio < 0.33 then
+                    return { fg = colors.green, gui = "bold" }
+                  end
+
+                  if ratio < 0.66 then
+                    return { fg = colors.yellow, gui = "bold" }
+                  end
+
+                  return { fg = colors.red, gui = "bold" }
                 end,
+              separator = { right = '' }, left_padding = 2
               },
-            }
-          ''
-          /* lua */ ''
-            {
-              function()
-                local ok, noice = pcall(require, "noice")
-                if not ok then
-                  return ""
-                end
-
-                return noice.api.status.mode.get()
-              end,
-              cond = function()
-                local ok, noice = pcall(require, "noice")
-                return ok and noice.api.status.mode.has()
-              end,
-              icon = " ",
-              color = function()
-                local colors = require("eldritch.colors").default
-                return { fg = colors.orange }
-              end,
-            }
-          ''
-          /* lua */ ''
-            {
-              function()
-                local line = vim.fn.line(".")
-                local col = vim.fn.virtcol(".")
-                return string.format("%d:%d", line, col)
-              end,
-              color = function()
-                local colors = require("eldritch.colors").default
-                local line = vim.fn.line(".")
-                local total = vim.fn.line("$")
-                local ratio = 0
-
-                if total > 1 then
-                  ratio = (line - 1) / (total - 1)
-                end
-
-                if ratio < 0.33 then
-                  return { fg = colors.green, gui = "bold" }
-                end
-
-                if ratio < 0.66 then
-                  return { fg = colors.yellow, gui = "bold" }
-                end
-
-                return { fg = colors.red, gui = "bold" }
-              end,
-            separator = { right = '' }, left_padding = 2
-            },
-          ''
-        ];
-        y = [ ];
-        z = [ ];
-      };
-
-      inactiveSection = {
-        a = [ ];
-        b = [ ];
-        c = [ ];
-        x = [ ];
-        y = [ ];
-        z = [ ];
+            ''
+          ];
+          lualine_y = [];
+          lualine_z = [];
+        };
+        inactive_sections = {
+          lualine_a = [];
+          lualine_b = [];
+          lualine_c = [];
+          lualine_x = [];
+          lualine_y = [];
+          lualine_z = [];
+        };
       };
     };
 
@@ -333,10 +321,6 @@
         lualine_theme.inactive.b = { fg = colors.fg_dark, bg = colors.bg_highlight }
         vim.g.__nvf_lualine_theme_override = lualine_theme
       end
-    '';
-
-    statusline.lualine.setupOpts.options.theme = lib.generators.mkLuaInline ''
-      vim.g.__nvf_lualine_theme_override or "auto"
     '';
   };
 }
