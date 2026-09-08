@@ -1,4 +1,7 @@
 { lib, ... }:
+let
+  mkLua = lib.generators.mkLuaInline;
+in
 {
   config.vim = {
     statusline.lualine = {
@@ -16,7 +19,7 @@
             left = "";
             right = "";
           };
-          theme = lib.generators.mkLuaInline ''
+          theme = mkLua ''
             vim.g.__nvf_lualine_theme_override or "auto"
           '';
         };
@@ -29,12 +32,12 @@
         };
         sections = {
           lualine_a = [
-            /* lua */ ''
-              {
-                "mode",
-                right_padding = 2,
-                separator = { left = '' },
-                theme = function()
+            {
+              "@1" = "mode";
+              right_padding = 2;
+              separator = { left = ""; };
+              theme = mkLua ''
+                function()
                   local colors = require("eldritch.colors").default
                   return {
                     normal = {
@@ -52,73 +55,83 @@
                     }
                   }
                 end
-              }
-            ''
+              '';
+            }
           ];
           lualine_b = [
-            /* lua */ ''
-              {
-                "branch",
-                icon = "",
-                color = function()
+            {
+              "@1" = "branch";
+              icon = "";
+              color = mkLua ''
+                function()
                   local colors = require("eldritch.colors").default
                   return { fg = colors.purple or colors.magenta, bg = colors.bg_highlight }
-                end,
-              }
-            ''
-            /* lua */ ''
-              {
-                "diff",
-                colored = true,
-                diff_color = {
+                end
+              '';
+            }
+            {
+              "@1" = "diff";
+              colored = true;
+              diff_color = mkLua ''
+                {
                   added = { fg = (vim.g.__eldritch_lualine_colors or {}).green },
                   modified = { fg = (vim.g.__eldritch_lualine_colors or {}).orange },
                   removed = { fg = (vim.g.__eldritch_lualine_colors or {}).red },
-                },
-                color = function()
+                }
+              '';
+              color = mkLua ''
+                function()
                   local colors = require("eldritch.colors").default
                   return { bg = colors.bg_highlight }
-                end,
-                symbols = { added = " ", modified = "󰣕 ", removed = " " }
-              }
-            ''
-            /* lua */ ''
-              {
-                require("gitblame").get_current_blame_text,
-                cond = require("gitblame").is_blame_text_available,
-                color = function()
+                end
+              '';
+              symbols = {
+                added = " ";
+                modified = "󰣕 ";
+                removed = " ";
+              };
+            }
+            {
+              "@1" = mkLua ''require("gitblame").get_current_blame_text'';
+              cond = mkLua ''require("gitblame").is_blame_text_available'';
+              color = mkLua ''
+                function()
                   local colors = require("eldritch.colors").default
                   return { fg=colors.comment, bg = colors.bg_highlight }
-                end,
-              }
-            ''
-            ''{ "overseer" }''
-            /* lua */ ''
-              {
+                end
+              '';
+            }
+            {
+              "@1" = "overseer";
+            }
+            {
+              "@1" = mkLua ''
                 function()
                   if vim.bo.modified then
                     return "●"
                   end
 
                   return ""
-                end,
-                icon = " ",
-                color = function()
+                end
+              '';
+              icon = " ";
+              color = mkLua ''
+                function()
                   local colors = require("eldritch.colors").default
                   return { fg = colors.orange, gui = "bold" }
-                end,
-              }
-            ''
+                end
+              '';
+            }
           ];
           lualine_c = [];
           lualine_x = [
-            /* lua */ ''
-              {
-                "filetype",
-                colored = false,
-                icon_only = false,
-                icon = { align = "right" },
-                color = function()
+            {
+              "@1" = "filetype";
+              colored = false;
+              icon_only = false;
+              icon = { align = "right"; };
+              color = mkLua ''
+                function()
                   local colors = require("eldritch.colors").default
                   local ft = vim.bo.filetype
                   local ok, devicons = pcall(require, "nvim-web-devicons")
@@ -138,11 +151,11 @@
                     bg = colors.bg_highlight,
                     gui = "bold",
                   }
-                end,
-              }
-            ''
-            /* lua */ ''
-              {
+                end
+              '';
+            }
+            {
+              "@1" = mkLua ''
                 function()
                   local file = vim.api.nvim_buf_get_name(0)
                   if file == "" then
@@ -155,19 +168,21 @@
                   end
 
                   return vim.fn.fnamemodify(file, ":t")
-                end,
-                color = function()
+                end
+              '';
+              color = mkLua ''
+                function()
                   local colors = require("eldritch.colors").default
                   return {
                     fg = colors.pink,
                     bg = colors.bg_highlight,
                     gui = "bold",
                   }
-                end,
-              }
-            ''
-            /* lua */ ''
-              {
+                end
+              '';
+            }
+            {
+              "@1" = mkLua ''
                 function()
                   local buf_ft = vim.bo.filetype
                   local clients = vim.lsp.get_clients({ bufnr = 0 })
@@ -184,9 +199,11 @@
                   end
 
                   return ""
-                end,
-                icon = " ",
-                color = function()
+                end
+              '';
+              icon = " ";
+              color = mkLua ''
+                function()
                   local colors = require("eldritch.colors").default
                   local buf_ft = vim.bo.filetype
                   local clients = vim.lsp.get_clients({ bufnr = 0 })
@@ -207,37 +224,48 @@
                     bg = colors.bg_highlight,
                     gui = "bold",
                   }
-                end,
-              }
-            ''
-            /* lua */ ''
-              {
-                "diagnostics",
-                sources = { "nvim_diagnostic" },
-                sections = { "error", "warn", "info", "hint" },
-                symbols = { error = " ", warn = " ", info = " ", hint = "󰌵 " },
-                diagnostics_color = {
-                  error = function()
+                end
+              '';
+            }
+            {
+              "@1" = "diagnostics";
+              sources = [ "nvim_diagnostic" ];
+              sections = [ "error" "warn" "info" "hint" ];
+              symbols = {
+                error = " ";
+                warn = " ";
+                info = " ";
+                hint = "󰌵 ";
+              };
+              diagnostics_color = {
+                error = mkLua ''
+                  function()
                     local colors = require("eldritch.colors").default
                     return { fg = colors.red }
-                  end,
-                  warn = function()
+                  end
+                '';
+                warn = mkLua ''
+                  function()
                     local colors = require("eldritch.colors").default
                     return { fg = colors.orange }
-                  end,
-                  info = function()
+                  end
+                '';
+                info = mkLua ''
+                  function()
                     local colors = require("eldritch.colors").default
                     return { fg = colors.cyan }
-                  end,
-                  hint = function()
+                  end
+                '';
+                hint = mkLua ''
+                  function()
                     local colors = require("eldritch.colors").default
                     return { fg = colors.green }
-                  end,
-                },
-              }
-            ''
-            /* lua */ ''
-              {
+                  end
+                '';
+              };
+            }
+            {
+              "@1" = mkLua ''
                 function()
                   local ok, noice = pcall(require, "noice")
                   if not ok then
@@ -245,26 +273,32 @@
                   end
 
                   return noice.api.status.mode.get()
-                end,
-                cond = function()
+                end
+              '';
+              cond = mkLua ''
+                function()
                   local ok, noice = pcall(require, "noice")
                   return ok and noice.api.status.mode.has()
-                end,
-                icon = " ",
-                color = function()
+                end
+              '';
+              icon = " ";
+              color = mkLua ''
+                function()
                   local colors = require("eldritch.colors").default
                   return { fg = colors.orange }
-                end,
-              }
-            ''
-            /* lua */ ''
-              {
+                end
+              '';
+            }
+            {
+              "@1" = mkLua ''
                 function()
                   local line = vim.fn.line(".")
                   local col = vim.fn.virtcol(".")
                   return string.format("%d:%d", line, col)
-                end,
-                color = function()
+                end
+              '';
+              color = mkLua ''
+                function()
                   local colors = require("eldritch.colors").default
                   local line = vim.fn.line(".")
                   local total = vim.fn.line("$")
@@ -283,10 +317,11 @@
                   end
 
                   return { fg = colors.red, gui = "bold" }
-                end,
-              separator = { right = '' }, left_padding = 2
-              },
-            ''
+                end
+              '';
+              separator = { right = ""; };
+              left_padding = 2;
+            }
           ];
           lualine_y = [];
           lualine_z = [];
