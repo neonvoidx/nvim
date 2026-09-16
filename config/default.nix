@@ -13,6 +13,7 @@
     ../plugins/completion.nix
     ../plugins/format.nix
     ../plugins/git.nix
+    ../plugins/github-pr-status.nix
     ../plugins/folds.nix
     ../plugins/editing.nix
     ../plugins/ui.nix
