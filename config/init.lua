@@ -11,4 +11,6 @@ require("lsp")
 
 require("plugins")
 
+require("statusline").setup()
+
 vim.cmd.colorscheme("eldritch")

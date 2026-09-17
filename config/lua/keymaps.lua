@@ -1,26 +1,25 @@
--- Keymaps (ported from ~/nvim, trimmed)
 local map = vim.keymap.set
 
 local function compareToClip()
-  local ftype = vim.api.nvim_eval("&filetype")
-  vim.cmd("vsplit")
-  vim.cmd("enew")
-  vim.cmd("normal! P")
-  vim.cmd("setlocal buftype=nowrite")
-  vim.cmd("set filetype=" .. ftype)
-  vim.cmd("diffthis")
-  vim.cmd([[execute "normal! \<C-w>h"]])
-  vim.cmd("diffthis")
+	local ftype = vim.api.nvim_eval("&filetype")
+	vim.cmd("vsplit")
+	vim.cmd("enew")
+	vim.cmd("normal! P")
+	vim.cmd("setlocal buftype=nowrite")
+	vim.cmd("set filetype=" .. ftype)
+	vim.cmd("diffthis")
+	vim.cmd([[execute "normal! \<C-w>h"]])
+	vim.cmd("diffthis")
 end
 
 local function goto_diag(next, severity)
-  return function()
-    vim.diagnostic.jump({
-      count = next and 1 or -1,
-      severity = severity,
-      float = true,
-    })
-  end
+	return function()
+		vim.diagnostic.jump({
+			count = next and 1 or -1,
+			severity = severity,
+			float = true,
+		})
+	end
 end
 
 -- Better up/down (respect visual lines)
@@ -45,8 +44,12 @@ map("v", "<A-k>", ":m '<-2<cr>gv=gv", { desc = "Move selection up" })
 
 -- Search
 map({ "i", "n" }, "<esc>", "<cmd>noh<cr><esc>", { desc = "Escape and clear hlsearch" })
-map("n", "<leader>ur", "<Cmd>nohlsearch<Bar>diffupdate<Bar>normal! <C-L><CR>",
-  { desc = "Redraw / clear hlsearch / diff update" })
+map(
+	"n",
+	"<leader>ur",
+	"<Cmd>nohlsearch<Bar>diffupdate<Bar>normal! <C-L><CR>",
+	{ desc = "Redraw / clear hlsearch / diff update" }
+)
 map("n", "n", "'Nn'[v:searchforward].'zv'", { expr = true, desc = "Next search result" })
 map("x", "n", "'Nn'[v:searchforward]", { expr = true, desc = "Next search result" })
 map("o", "n", "'Nn'[v:searchforward]", { expr = true, desc = "Next search result" })
@@ -128,6 +131,25 @@ map("n", "]w", goto_diag(true, vim.diagnostic.severity.WARN), { desc = "Next war
 map("n", "[w", goto_diag(false, vim.diagnostic.severity.WARN), { desc = "Prev warning" })
 map("n", "]d", goto_diag(true, { min = vim.diagnostic.severity.WARN }), { desc = "Next diagnostic" })
 map("n", "[d", goto_diag(false, { min = vim.diagnostic.severity.WARN }), { desc = "Prev diagnostic" })
+
+-- Diagnostics list (buffer)
+map("n", "<leader>xx", function()
+	local winid = vim.fn.getloclist(0, { winid = 0 }).winid
+	if winid ~= 0 then
+		vim.cmd.lclose()
+		return
+	end
+	vim.diagnostic.setloclist({ open = true })
+end, { desc = "Buffer diagnostics" })
+
+-- Rename (global entry point; LspAttach also adds a buffer-local mapping)
+map("n", "<leader>cr", function()
+	if #vim.lsp.get_clients({ bufnr = 0 }) == 0 then
+		vim.notify("No LSP attached", vim.log.levels.WARN)
+		return
+	end
+	vim.lsp.buf.rename()
+end, { desc = "Rename symbol" })
 
 -- Paste without overwriting the yank register
 map("v", "p", '"_dP')

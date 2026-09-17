@@ -1,57 +1,118 @@
--- UI: bufferline, which-key, nvim-highlight-colors
 local map = vim.keymap.set
 
--- ── bufferline ────────────────────────────────────────────────────────
-require("bufferline").setup({
-  options = {
-    mode = "buffers",
-    numbers = "none",
-    show_buffer_close_icons = false,
-    themable = true,
-    indicator = { style = "underline" },
-    color_icons = true,
-    separator_style = "thin",
-    show_tab_indicators = false,
-    show_buffer_icons = true,
-    show_duplicate_prefix = false,
-    max_name_length = 16,
-    max_prefix_length = 10,
-    tab_size = 25,
-    truncate_names = true,
-    hover = { enabled = false },
-  },
-})
+-- ── buffer navigation ─────────────────────────────────────────────────
+map("n", "<S-l>", "<cmd>bnext<cr>", { desc = "Next buffer" })
+map("n", "<S-h>", "<cmd>bprevious<cr>", { desc = "Previous buffer" })
+-- Bufferline used these for reordering; mini.tabline doesn't reorder, so keep as navigation.
+map("n", "<S-Right>", "<cmd>bnext<cr>", { desc = "Next buffer" })
+map("n", "<S-Left>", "<cmd>bprevious<cr>", { desc = "Previous buffer" })
+map("n", "<leader>bmn", "<cmd>bnext<cr>", { desc = "Next buffer" })
+map("n", "<leader>bmp", "<cmd>bprevious<cr>", { desc = "Previous buffer" })
 
-map("n", "<S-l>", "<cmd>BufferLineCycleNext<cr>", { desc = "Next buffer" })
-map("n", "<S-h>", "<cmd>BufferLineCyclePrev<cr>", { desc = "Previous buffer" })
-map("n", "<S-Right>", "<cmd>BufferLineMoveNext<cr>", { desc = "Move buffer right" })
-map("n", "<S-Left>", "<cmd>BufferLineMovePrev<cr>", { desc = "Move buffer left" })
-map("n", "<leader>bmn", "<cmd>BufferLineMoveNext<cr>", { desc = "Move buffer right" })
-map("n", "<leader>bmp", "<cmd>BufferLineMovePrev<cr>", { desc = "Move buffer left" })
-map("n", "<leader>bp", "<cmd>BufferLineTogglePin<cr>", { desc = "Toggle pin buffer" })
-map("n", "<leader>bP", "<cmd>BufferLineGroupClose ungrouped<cr>", { desc = "Close non-pinned buffers" })
-map("n", "<leader>bo", "<cmd>BufferLineCloseOthers<cr>", { desc = "Close other buffers" })
-map("n", "<leader>br", "<cmd>BufferLineCloseRight<cr>", { desc = "Close buffers to the right" })
-map("n", "<leader>bl", "<cmd>BufferLineCloseLeft<cr>", { desc = "Close buffers to the left" })
+-- ── pinning + close helpers (keeps old keybinds) ──────────────────────
+local function pins()
+	local p = vim.g.pinned_buffers
+	if type(p) ~= "table" then p = {} end
+	return p
+end
 
--- ── which-key ─────────────────────────────────────────────────────────
-local wk = require("which-key")
-wk.setup({ preset = "helix", timeoutlen = 300 })
-wk.add({
-  { "<leader>E", desc = "Yazi cwd" },
-  { "<leader>l", group = "+lsp" },
-  { "<leader>b", group = "+buffers" },
-  { "<leader>c", group = "+code" },
-  { "<leader>e", desc = "Yazi" },
-  { "<leader>f", group = "+find" },
-  { "<leader>g", group = "+git" },
-  { "<leader>p", group = "+yanky" },
-  { "<leader>q", group = "+quickfix/session" },
-  { "<leader>s", group = "+search" },
-  { "<leader>u", group = "+ui" },
-  { "<leader>w", group = "+window" },
-  { "<leader>x", group = "+trouble" },
-})
+local function listed_buffers()
+	local res = {}
+	for _, b in ipairs(vim.fn.getbufinfo({ buflisted = 1 })) do
+		table.insert(res, b.bufnr)
+	end
+	table.sort(res)
+	return res
+end
 
--- ── nvim-highlight-colors ─────────────────────────────────────────────
-require("nvim-highlight-colors").setup({ render = "virtual" })
+local function del(bufnr)
+	if bufnr == nil or bufnr == 0 then
+		return
+	end
+	pcall(vim.api.nvim_buf_delete, bufnr, { force = false })
+end
+
+map("n", "<leader>bp", function()
+	local b = vim.api.nvim_get_current_buf()
+	local p = pins()
+	local key = tostring(b)
+	if p[key] then p[key] = nil else p[key] = true end
+	vim.g.pinned_buffers = p
+	vim.cmd.redrawtabline()
+	vim.cmd.redrawstatus()
+end, { desc = "Toggle pin buffer" })
+
+map("n", "<leader>bd", function()
+	require("mini.bufremove").delete(0, false)
+	vim.cmd.redrawtabline()
+	vim.cmd.redrawstatus()
+end, { desc = "Delete buffer" })
+
+map("n", "<leader>bD", function()
+	require("mini.bufremove").delete(0, true)
+	vim.cmd.redrawtabline()
+	vim.cmd.redrawstatus()
+end, { desc = "Delete buffer (force)" })
+
+map("n", "<leader>bP", function()
+	local cur = vim.api.nvim_get_current_buf()
+	local p = pins()
+	for _, b in ipairs(listed_buffers()) do
+		if b ~= cur and not p[tostring(b)] then
+			del(b)
+		end
+	end
+end, { desc = "Close non-pinned buffers" })
+
+map("n", "<leader>bo", function()
+	local cur = vim.api.nvim_get_current_buf()
+	for _, b in ipairs(listed_buffers()) do
+		if b ~= cur then
+			del(b)
+		end
+	end
+end, { desc = "Close other buffers" })
+
+map("n", "<leader>br", function()
+	local cur = vim.api.nvim_get_current_buf()
+	local bufs = listed_buffers()
+	local idx
+	for i, b in ipairs(bufs) do
+		if b == cur then
+			idx = i
+			break
+		end
+	end
+	if idx == nil then
+		return
+	end
+	local p = pins()
+	for i = idx + 1, #bufs do
+		local b = bufs[i]
+		if not p[tostring(b)] then
+			del(b)
+		end
+	end
+end, { desc = "Close buffers to the right" })
+
+map("n", "<leader>bl", function()
+	local cur = vim.api.nvim_get_current_buf()
+	local bufs = listed_buffers()
+	local idx
+	for i, b in ipairs(bufs) do
+		if b == cur then
+			idx = i
+			break
+		end
+	end
+	if idx == nil then
+		return
+	end
+	local p = pins()
+	for i = 1, idx - 1 do
+		local b = bufs[i]
+		if not p[tostring(b)] then
+			del(b)
+		end
+	end
+end, { desc = "Close buffers to the left" })

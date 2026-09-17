@@ -21,13 +21,22 @@
   };
 
   outputs =
-    { self, nixpkgs, neovim, ... }:
+    {
+      self,
+      nixpkgs,
+      neovim,
+      ...
+    }:
     let
-      systems = [ "x86_64-linux" "aarch64-linux" ];
+      systems = [
+        "x86_64-linux"
+        "aarch64-linux"
+      ];
       perSystem = f: nixpkgs.lib.genAttrs systems (system: f system);
     in
     {
-      packages = perSystem (system:
+      packages = perSystem (
+        system:
         let
           pkgs = import nixpkgs {
             inherit system;
@@ -62,7 +71,8 @@
             in
             pkgs.runCommand "nvim-treesitter-all-parsers" { } (
               lib.concatStringsSep "\n" (
-                builtins.map (g:
+                builtins.map (
+                  g:
                   let
                     lang = lib.removePrefix "tree-sitter-" g.pname;
                   in
@@ -112,13 +122,22 @@
             fd
             ripgrep
             git
+
+            # Clipboard helpers (Wayland/X11)
+            wl-clipboard
+            xclip
           ];
 
           nvim = pkgs.wrapNeovim neovim013 {
             # Isolate this config: separate data/state dirs, plugins and lockfile.
             wrapperArgs = [
-              "--set-default" "NVIM_APPNAME" "nvim-min"
-              "--suffix" "PATH" ":" (lib.makeBinPath tools)
+              "--set-default"
+              "NVIM_APPNAME"
+              "nvim-min"
+              "--suffix"
+              "PATH"
+              ":"
+              (lib.makeBinPath tools)
             ];
             configure.customLuaRC = ''
               vim.opt.rtp:prepend("${configDir}")
@@ -130,6 +149,7 @@
         {
           inherit nvim;
           default = nvim;
-        });
+        }
+      );
     };
 }

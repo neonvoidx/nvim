@@ -19,5 +19,6 @@ require("yazi").setup({
   show_help = "<f1>",
   floating_window_scaling_factor = 0.98,
 })
+
 map("n", "<leader>e", function() require("yazi").yazi() end, { desc = "Yazi" })
 map("n", "<leader>E", function() require("yazi").yazi(nil, vim.fn.getcwd()) end, { desc = "Yazi cwd" })
