@@ -62,28 +62,16 @@
             '';
           });
 
-          # Every nvim-treesitter grammar, prebuilt, for native 0.13 treesitter.
-          # Neovim loads parsers from `<rtp>/parser/<lang>.so` and queries from
-          # `<rtp>/queries/<lang>/*.scm`.
-          parsers =
-            let
-              allGrammars = pkgs.vimPlugins.nvim-treesitter.allGrammars;
-            in
-            pkgs.runCommand "nvim-treesitter-all-parsers" { } (
-              lib.concatStringsSep "\n" (
-                builtins.map (
-                  g:
-                  let
-                    lang = lib.removePrefix "tree-sitter-" g.pname;
-                  in
-                  ''
-                    mkdir -p $out/parser $out/queries/${lang}
-                    ln -s ${g}/parser $out/parser/${lang}.so
-                    cp -f ${g}/queries/*.scm $out/queries/${lang}/ 2>/dev/null || true
-                  ''
-                ) allGrammars
-              )
-            );
+          # Every nvim-treesitter grammar + query, prebuilt for native 0.13
+          # treesitter. `withAllGrammars.dependencies` is nixpkgs' own set of
+          # per-language plugins (grammarPlugins provide `parser/<lang>.so`,
+          # queries provide `queries/<lang>/*.scm`), so each is already a valid
+          # `runtimepath` entry and no merging is needed.
+          #
+          # Note: the nvim-treesitter plugin itself is deliberately not loaded.
+          # Its queries (rather than the raw grammar repos', which use captures
+          # Neovim doesn't map to highlight groups) are what ship here.
+          treesitterPlugins = pkgs.vimPlugins.nvim-treesitter.withAllGrammars.dependencies;
 
           # The repo's config, baked into the store.
           configDir = ./config;
@@ -139,11 +127,17 @@
               ":"
               (lib.makeBinPath tools)
             ];
-            configure.customLuaRC = ''
-              vim.opt.rtp:prepend("${configDir}")
-              vim.opt.rtp:prepend("${parsers}")
-              dofile("${configDir}/init.lua")
-            '';
+            configure = {
+              customLuaRC = ''
+                vim.opt.rtp:prepend("${configDir}")
+                dofile("${configDir}/init.lua")
+              '';
+              # `pkgs.wrapNeovim` is the legacy wrapper: it reads plugins from
+              # `configure.packages`, not a top-level `plugins` argument. Each
+              # treesitter grammar/query plugin is a self-contained runtime dir,
+              # so wrapNeovim puts them all on the packpath/rtp.
+              packages.treesitter.start = treesitterPlugins;
+            };
           };
         in
         {

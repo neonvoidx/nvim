@@ -115,27 +115,41 @@ vim.api.nvim_create_autocmd({ "InsertLeave" }, {
 
 -- Briefly highlight yanked text
 vim.api.nvim_create_autocmd("TextYankPost", {
-  group = augroup("highlight_yank"),
-  desc = "Highlight when yanking (copying) text",
-  callback = function()
-    -- 0.13+: use `vim.hl.hl_op` (avoids deprecated `vim.hl.on_yank`).
-    pcall(vim.hl.hl_op, { higroup = "IncSearch", timeout = 150 })
-  end,
+	group = augroup("highlight_yank"),
+	desc = "Highlight when yanking (copying) text",
+	callback = function()
+		-- 0.13+: use `vim.hl.hl_op` (avoids deprecated `vim.hl.on_yank`).
+		pcall(vim.hl.hl_op, { higroup = "IncSearch", timeout = 150 })
+	end,
 })
 
 -- Show the default :intro screen on empty startup
 vim.api.nvim_create_autocmd("VimEnter", {
-  group = augroup("intro"),
-  once = true,
-  callback = function()
-    if vim.fn.argc() ~= 0 then return end
-    if vim.fn.getcmdwintype() ~= "" then return end
-    if vim.api.nvim_buf_get_name(0) ~= "" then return end
-    if vim.bo.buftype ~= "" then return end
-    if vim.bo.modified then return end
-    local lines = vim.api.nvim_buf_get_lines(0, 0, 2, false)
-    if #lines > 1 then return end
-    if (lines[1] or "") ~= "" then return end
-    vim.cmd.intro()
-  end,
+	group = augroup("intro"),
+	once = true,
+	callback = function()
+		if vim.fn.argc() ~= 0 then
+			return
+		end
+		if vim.fn.getcmdwintype() ~= "" then
+			return
+		end
+		if vim.api.nvim_buf_get_name(0) ~= "" then
+			return
+		end
+		if vim.bo.buftype ~= "" then
+			return
+		end
+		if vim.bo.modified then
+			return
+		end
+		local lines = vim.api.nvim_buf_get_lines(0, 0, 2, false)
+		if #lines > 1 then
+			return
+		end
+		if (lines[1] or "") ~= "" then
+			return
+		end
+		vim.cmd.intro()
+	end,
 })

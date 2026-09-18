@@ -14,11 +14,15 @@ map("n", "<C-S-l>", require("smart-splits").resize_right)
 
 -- ── yazi ──────────────────────────────────────────────────────────────
 require("yazi").setup({
-  open_for_directories = true,
-  disable_netrw = true,
-  show_help = "<f1>",
-  floating_window_scaling_factor = 0.98,
+	open_for_directories = true,
+	disable_netrw = true,
+	show_help = "<f1>",
+	floating_window_scaling_factor = 0.80,
 })
 
-map("n", "<leader>e", function() require("yazi").yazi() end, { desc = "Yazi" })
-map("n", "<leader>E", function() require("yazi").yazi(nil, vim.fn.getcwd()) end, { desc = "Yazi cwd" })
+map("n", "<leader>e", function()
+	require("yazi").yazi()
+end, { desc = "Yazi" })
+map("n", "<leader>E", function()
+	require("yazi").yazi(nil, vim.fn.getcwd())
+end, { desc = "Yazi cwd" })

@@ -151,7 +151,11 @@ opt.fillchars = {
 	foldopen = "▾",
 	foldclose = "▸",
 	fold = " ",
-	foldsep = " ",
+	foldsep = "│",
+	-- Without this, a 1-column foldcolumn is "too narrow" for nested folds and
+	-- Neovim falls back to digits for the fold level. foldinner replaces that
+	-- fallback with a clean vertical guide.
+	foldinner = "│",
 	diff = "╱",
 	eob = " ",
 }
