@@ -203,6 +203,8 @@
     extraPackages = with pkgs; [
       ripgrep
       fd
+      cargo
+      rustc
       arduino-language-server
       arduino-cli
       clang-tools # provides clangd for arduino-language-server
