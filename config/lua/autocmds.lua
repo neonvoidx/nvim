@@ -123,33 +123,4 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 	end,
 })
 
--- Show the default :intro screen on empty startup
-vim.api.nvim_create_autocmd("VimEnter", {
-	group = augroup("intro"),
-	once = true,
-	callback = function()
-		if vim.fn.argc() ~= 0 then
-			return
-		end
-		if vim.fn.getcmdwintype() ~= "" then
-			return
-		end
-		if vim.api.nvim_buf_get_name(0) ~= "" then
-			return
-		end
-		if vim.bo.buftype ~= "" then
-			return
-		end
-		if vim.bo.modified then
-			return
-		end
-		local lines = vim.api.nvim_buf_get_lines(0, 0, 2, false)
-		if #lines > 1 then
-			return
-		end
-		if (lines[1] or "") ~= "" then
-			return
-		end
-		vim.cmd.intro()
-	end,
-})
+

@@ -22,7 +22,7 @@ add({
 	{ src = "https://github.com/nvim-lua/plenary.nvim" },
 	{ src = "https://github.com/tpope/vim-repeat" },
 	{ src = "https://github.com/kevinhwang91/promise-async" },
-	-- editing / motion
+	-- editing / motion / mini
 	{ src = "https://github.com/echasnovski/mini.nvim" },
 	{ src = "https://github.com/gbprod/yanky.nvim" },
 	-- formatting / linting
