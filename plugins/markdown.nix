@@ -1,11 +1,4 @@
-{
-  userPlugins,
-  lib,
-  ...
-}:
-let
-  presenting-nvim = userPlugins.presenting-nvim;
-in
+{ lib, ... }:
 {
   config.vim = {
     languages.markdown.extensions.render-markdown-nvim = {
@@ -39,20 +32,8 @@ in
       filetypes = [ "markdown" ];
     };
 
-    startPlugins = [
-      presenting-nvim
-    ];
-
     luaConfigRC."markdown-extra" = lib.nvim.dag.entryAnywhere /* lua */ ''
-      require("presenting").setup({})
-
       vim.keymap.set("n", "<leader>cp", "<cmd>MarkdownPreview<CR>", { desc = "Markdown preview" })
-      vim.keymap.set("n", "<leader>cP", "<cmd>Presenting<CR>", { desc = "Presentation mode toggle" })
-      vim.keymap.set("n", "<leader>cX", function()
-        if _G.Presenting ~= nil then
-          _G.Presenting.quit()
-        end
-      end, { desc = "Presentation mode stop" })
     '';
   };
 }

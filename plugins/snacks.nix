@@ -7,7 +7,10 @@
 {
   config.vim = {
     extraPackages = [ pkgs.lazygit ];
-    startPlugins = [ userPlugins.milli-nvim ];
+    startPlugins = [
+      userPlugins.milli-nvim
+      userPlugins.milli-splashes-nvim
+    ];
 
     utility.snacks-nvim = {
       enable = true;
@@ -169,6 +172,11 @@
       _G.bt  = function() Snacks.debug.backtrace() end
       vim.print = _G.dd
       require("milli").snacks({ splash = "retrocircle", loop = true })
+
+      -- Cover the editor with a live starfield after 5 minutes without a typed
+      -- key. Any key dismisses it. Run :MilliScreensaver to preview,
+      -- :MilliScreensaver off to disable.
+      require("milli").screensaver({ shader = "starfield", after = 300, bg = "#000000" })
 
       local function get_visual()
         local start_pos = vim.fn.getpos("v")

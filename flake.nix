@@ -28,12 +28,14 @@
       url = "github:noamsto/resolved.nvim";
       flake = false;
     };
-    presenting-nvim = {
-      url = "github:sotte/presenting.nvim";
-      flake = false;
-    };
     milli-nvim = {
       url = "github:Amansingh-afk/milli.nvim";
+      flake = false;
+    };
+    # Community splash registry. Only used at build time, to bake the
+    # splashes listed in `milliSplashes` into the runtimepath.
+    milli-splashes = {
+      url = "github:Amansingh-afk/milli-splashes";
       flake = false;
     };
   };
@@ -56,6 +58,9 @@
       perSystem =
         { system, ... }:
         let
+          # Community splashes to bake into the runtimepath. Add a name here to
+          # make it usable as `splash = "<name>"` without any runtime install.
+          milliSplashes = [ "retrocircle" ];
           pkgs = import nixpkgs {
             inherit system;
             config = {
@@ -85,6 +90,22 @@
               })
             ];
           };
+          # Vendored splash data, placed at lua/milli/splashes/ so milli.nvim
+          # finds it on the runtimepath exactly like a bundled splash.
+          milliSplashesSrc = pkgs.runCommand "milli-splashes" { } (
+            ''
+              mkdir -p "$out/lua/milli/splashes"
+            ''
+            + pkgs.lib.concatMapStringsSep "\n" (
+              splash: ''
+                cp ${inputs.milli-splashes}/splashes/${splash}.lua \
+                  "$out/lua/milli/splashes/"
+              ''
+            ) milliSplashes
+            + ''
+              cp ${inputs.milli-splashes}/LICENSE "$out/LICENSE"
+            ''
+          );
           userPlugins = {
             eldritch-nvim = pkgs.vimUtils.buildVimPlugin {
               name = "eldritch.nvim";
@@ -94,17 +115,23 @@
               name = "resolved.nvim";
               src = inputs.resolved-nvim;
             };
-            markdown-toc-nvim = pkgs.vimUtils.buildVimPlugin {
-              name = "markdown-toc.nvim";
-              src = inputs.markdown-toc-nvim;
-            };
-            presenting-nvim = pkgs.vimUtils.buildVimPlugin {
-              name = "presenting.nvim";
-              src = inputs.presenting-nvim;
-            };
             milli-nvim = pkgs.vimUtils.buildVimPlugin {
               name = "milli.nvim";
               src = inputs.milli-nvim;
+            };
+            # milli.nvim only bundles six splashes. The rest live in the
+            # community registry and are normally fetched at runtime with
+            # :MilliInstall, which needs curl and network on first launch.
+            # Copying the ones we want into the runtimepath here keeps the
+            # dashboard working on a fresh machine with no first-run step.
+            milli-splashes-nvim = pkgs.vimUtils.buildVimPlugin {
+              name = "milli-splashes";
+              # src is already an unpacked directory, so skip the archive
+              # sniffing that the default unpackPhase would try to do.
+              unpackPhase = ''
+                cp -r ${milliSplashesSrc}/. .
+              '';
+              src = milliSplashesSrc;
             };
           };
           neovimConfig = nvf.lib.neovimConfiguration {
