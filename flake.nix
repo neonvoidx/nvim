@@ -38,6 +38,15 @@
       url = "github:Amansingh-afk/milli-splashes";
       flake = false;
     };
+    # nvf pins smart-splits v2.1.0 via npins; backend-kitty needs v3.
+    smart-splits-nvim = {
+      url = "github:smart-splits-nvim/smart-splits.nvim?tag=v3.0.0";
+      flake = false;
+    };
+    backend-kitty = {
+      url = "github:smart-splits-nvim/backend-kitty";
+      flake = false;
+    };
   };
 
   outputs =
@@ -132,6 +141,19 @@
                 cp -r ${milliSplashesSrc}/. .
               '';
               src = milliSplashesSrc;
+            };
+            # smart-splits v3 (nvf's npins pin is v2.1.0, which predates the
+            # backend plugin architecture). pname must match the
+            # vim.lazy.plugins attr key.
+            smart-splits = pkgs.vimUtils.buildVimPlugin {
+              pname = "smart-splits";
+              version = "3.0.0";
+              src = inputs.smart-splits-nvim;
+            };
+            smart-splits-backend-kitty = pkgs.vimUtils.buildVimPlugin {
+              pname = "smart-splits-backend-kitty";
+              version = "unstable-2026-09-24";
+              src = inputs.backend-kitty;
             };
           };
           neovimConfig = nvf.lib.neovimConfiguration {

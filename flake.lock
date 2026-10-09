@@ -1,5 +1,21 @@
 {
   "nodes": {
+    "backend-kitty": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1790254232,
+        "narHash": "sha256-sV49CezLSlxn2+1uCLvehv37FUdTw5yiO/qhC0CPcGQ=",
+        "owner": "smart-splits-nvim",
+        "repo": "backend-kitty",
+        "rev": "f892244d69727b8634dd5c085fb041f4e6cc9ef3",
+        "type": "github"
+      },
+      "original": {
+        "owner": "smart-splits-nvim",
+        "repo": "backend-kitty",
+        "type": "github"
+      }
+    },
     "eldritch-nvim": {
       "flake": false,
       "locked": {
@@ -179,13 +195,31 @@
     },
     "root": {
       "inputs": {
+        "backend-kitty": "backend-kitty",
         "eldritch-nvim": "eldritch-nvim",
         "flake-parts": "flake-parts",
         "milli-nvim": "milli-nvim",
         "milli-splashes": "milli-splashes",
         "nixpkgs": "nixpkgs",
         "nvf": "nvf",
-        "resolved-nvim": "resolved-nvim"
+        "resolved-nvim": "resolved-nvim",
+        "smart-splits-nvim": "smart-splits-nvim"
+      }
+    },
+    "smart-splits-nvim": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1791484984,
+        "narHash": "sha256-1cFcjfjxSiGiRgv4uuS7ROvSHB4120WI7tjSQjA0T6k=",
+        "owner": "smart-splits-nvim",
+        "repo": "smart-splits.nvim",
+        "rev": "ef21f373203dcf553fd4bc05cd74f3e14505400a",
+        "type": "github"
+      },
+      "original": {
+        "owner": "smart-splits-nvim",
+        "repo": "smart-splits.nvim",
+        "type": "github"
       }
     }
   },
