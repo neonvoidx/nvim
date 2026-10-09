@@ -40,7 +40,7 @@
     };
     # nvf pins smart-splits v2.1.0 via npins; backend-kitty needs v3.
     smart-splits-nvim = {
-      url = "github:smart-splits-nvim/smart-splits.nvim?tag=v3.0.0";
+      url = "github:smart-splits-nvim/smart-splits.nvim?ref=v3.0.0";
       flake = false;
     };
     backend-kitty = {
