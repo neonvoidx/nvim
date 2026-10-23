@@ -3,9 +3,11 @@
   vim.utility.smart-splits = {
     enable = true;
 
-    # nvf pins smart-splits v2.1.0 via npins; backend-kitty requires v3, so
+    # nvf pins smart-splits v2.1.0 via npins; backend plugins need v3, so
     # the package is overridden below. v3 keeps the same move/resize API.
-    setupOpts.mux.backend = "smart-splits-backend-kitty";
+    # Zellij is the terminal multiplexer; the backend shells out to
+    # `zellij action move-focus` when a pane edge is reached.
+    setupOpts.mux.backend = "smart-splits-backend-zellij-lua";
 
     keymaps = {
       move_cursor_left = "<C-h>";
@@ -26,8 +28,8 @@
     # backend module), so the backend must already be on the runtimepath when
     # smart-splits loads on DeferredUIEnter. lz.n would otherwise load
     # lexicographic-order "smart-splits" first, so load this eagerly.
-    smart-splits-backend-kitty = {
-      package = userPlugins.smart-splits-backend-kitty;
+    smart-splits-backend-zellij-lua = {
+      package = userPlugins.smart-splits-backend-zellij-lua;
       lazy = false;
     };
   };
