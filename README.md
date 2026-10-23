@@ -51,7 +51,7 @@ stylua.toml    Lua formatting, used for snippet edits
 
 ## Plugins
 
-Most plugins come from nixpkgs. A handful are built from flake inputs in `flake.nix`: eldritch, resolved, milli, and the milli splash data.
+Most plugins come from nixpkgs. A handful are built from flake inputs in `flake.nix`: eldritch, resolved, milli, the milli splash data, and hjetmundsen/zellij.nvim (the nixpkgs package names a different plugin).
 
 ### Appearance
 

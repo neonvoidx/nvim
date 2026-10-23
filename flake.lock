@@ -185,7 +185,25 @@
         "milli-splashes": "milli-splashes",
         "nixpkgs": "nixpkgs",
         "nvf": "nvf",
-        "resolved-nvim": "resolved-nvim"
+        "resolved-nvim": "resolved-nvim",
+        "zellij-nvim": "zellij-nvim"
+      }
+    },
+    "zellij-nvim": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1779991371,
+        "narHash": "sha256-x5SdYWvXSZc8bcElNWTNMSn9jbZ60Gnxri9MKxV9Qw8=",
+        "owner": "hjetmundsen",
+        "repo": "zellij.nvim",
+        "rev": "1c29af287bee1190c72cc41d084f2ac2488b4e9d",
+        "type": "github"
+      },
+      "original": {
+        "owner": "hjetmundsen",
+        "repo": "zellij.nvim",
+        "rev": "1c29af287bee1190c72cc41d084f2ac2488b4e9d",
+        "type": "github"
       }
     }
   },

@@ -19,6 +19,12 @@
     nvf.url = "github:notashelf/nvf";
     flake-parts.url = "github:hercules-ci/flake-parts";
 
+    # The nixpkgs package with this name is a different, archived plugin.
+    zellij-nvim = {
+      url = "github:hjetmundsen/zellij.nvim/1c29af287bee1190c72cc41d084f2ac2488b4e9d";
+      flake = false;
+    };
+
     # Plugins not packaged in nixpkgs
     eldritch-nvim = {
       url = "github:eldritch-theme/eldritch.nvim";
@@ -96,17 +102,20 @@
             ''
               mkdir -p "$out/lua/milli/splashes"
             ''
-            + pkgs.lib.concatMapStringsSep "\n" (
-              splash: ''
-                cp ${inputs.milli-splashes}/splashes/${splash}.lua \
-                  "$out/lua/milli/splashes/"
-              ''
-            ) milliSplashes
+            + pkgs.lib.concatMapStringsSep "\n" (splash: ''
+              cp ${inputs.milli-splashes}/splashes/${splash}.lua \
+                "$out/lua/milli/splashes/"
+            '') milliSplashes
             + ''
               cp ${inputs.milli-splashes}/LICENSE "$out/LICENSE"
             ''
           );
           userPlugins = {
+            zellij-nvim = pkgs.vimUtils.buildVimPlugin {
+              pname = "zellij-nvim";
+              version = "unstable-${inputs.zellij-nvim.shortRev}";
+              src = inputs.zellij-nvim;
+            };
             eldritch-nvim = pkgs.vimUtils.buildVimPlugin {
               name = "eldritch.nvim";
               src = inputs.eldritch-nvim;
