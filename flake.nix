@@ -38,17 +38,6 @@
       url = "github:Amansingh-afk/milli-splashes";
       flake = false;
     };
-    # nvf pins smart-splits v2.1.0 via npins; backend plugins need v3.
-    smart-splits-nvim = {
-      url = "github:smart-splits-nvim/smart-splits.nvim?tag=v3.0.0";
-      flake = false;
-    };
-    # Zellij owns terminal panes now, so smart-splits talks to zellij
-    # (`zellij action move-focus`) instead of kitty splits.
-    backend-zellij = {
-      url = "github:smart-splits-nvim/backend-zellij-lua";
-      flake = false;
-    };
   };
 
   outputs =
@@ -143,19 +132,6 @@
                 cp -r ${milliSplashesSrc}/. .
               '';
               src = milliSplashesSrc;
-            };
-            # smart-splits v3 (nvf's npins pin is v2.1.0, which predates the
-            # backend plugin architecture). pname must match the
-            # vim.lazy.plugins attr key.
-            smart-splits = pkgs.vimUtils.buildVimPlugin {
-              pname = "smart-splits";
-              version = "3.0.0";
-              src = inputs.smart-splits-nvim;
-            };
-            smart-splits-backend-zellij-lua = pkgs.vimUtils.buildVimPlugin {
-              pname = "smart-splits-backend-zellij-lua";
-              version = "unstable-2026-10-23";
-              src = inputs.backend-zellij;
             };
           };
           neovimConfig = nvf.lib.neovimConfiguration {

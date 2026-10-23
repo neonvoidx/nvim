@@ -51,7 +51,7 @@ stylua.toml    Lua formatting, used for snippet edits
 
 ## Plugins
 
-Most plugins come from nixpkgs. A handful are built from flake inputs in `flake.nix`: eldritch, resolved, milli, the milli splash data, smart-splits v3 and the kitty backend.
+Most plugins come from nixpkgs. A handful are built from flake inputs in `flake.nix`: eldritch, resolved, milli, and the milli splash data.
 
 ### Appearance
 
@@ -92,7 +92,7 @@ Treesitter uses every grammar from nixpkgs, with [treesitter-context](https://gi
 - [nvim-scissors](https://github.com/chrisgrieser/nvim-scissors): edit the snippets in `snippets/`
 - [persistence.nvim](https://github.com/folke/persistence.nvim): per directory sessions
 - [nvim-ufo](https://github.com/kevinhwang91/nvim-ufo): folding, with a line count in the fold text
-- [smart-splits.nvim](https://github.com/smart-splits-nvim/smart-splits.nvim): `<C-h/j/k/l>` between splits and kitty panes, `<C-S-h/j/k/l>` to resize
+- [zellij.nvim](https://github.com/hjetmundsen/zellij.nvim): `<C-h/j/k/l>` between Neovim windows and Zellij panes with `zellij-autolock`
 
 ### Formatting and linting
 

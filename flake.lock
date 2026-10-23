@@ -1,21 +1,5 @@
 {
   "nodes": {
-    "backend-zellij": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1791398917,
-        "narHash": "sha256-QAKX3jHYd2xHjhs8uf44OB04Q+Gl+wXVZOqS09IcRSk=",
-        "owner": "smart-splits-nvim",
-        "repo": "backend-zellij-lua",
-        "rev": "4e3e588795efb95548dd2ebeaf385a7823821ceb",
-        "type": "github"
-      },
-      "original": {
-        "owner": "smart-splits-nvim",
-        "repo": "backend-zellij-lua",
-        "type": "github"
-      }
-    },
     "eldritch-nvim": {
       "flake": false,
       "locked": {
@@ -195,31 +179,13 @@
     },
     "root": {
       "inputs": {
-        "backend-zellij": "backend-zellij",
         "eldritch-nvim": "eldritch-nvim",
         "flake-parts": "flake-parts",
         "milli-nvim": "milli-nvim",
         "milli-splashes": "milli-splashes",
         "nixpkgs": "nixpkgs",
         "nvf": "nvf",
-        "resolved-nvim": "resolved-nvim",
-        "smart-splits-nvim": "smart-splits-nvim"
-      }
-    },
-    "smart-splits-nvim": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1791484984,
-        "narHash": "sha256-1cFcjfjxSiGiRgv4uuS7ROvSHB4120WI7tjSQjA0T6k=",
-        "owner": "smart-splits-nvim",
-        "repo": "smart-splits.nvim",
-        "rev": "ef21f373203dcf553fd4bc05cd74f3e14505400a",
-        "type": "github"
-      },
-      "original": {
-        "owner": "smart-splits-nvim",
-        "repo": "smart-splits.nvim",
-        "type": "github"
+        "resolved-nvim": "resolved-nvim"
       }
     }
   },

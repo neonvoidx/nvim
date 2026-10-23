@@ -20,7 +20,7 @@
     ../plugins/markdown.nix
     ../plugins/navigation.nix
     ../plugins/session.nix
-    ../plugins/smart-splits.nix
+    ../plugins/zellij-nav.nix
     ../plugins/nix-integration.nix
   ];
 }
